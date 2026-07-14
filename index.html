@@ -103,20 +103,71 @@
   .admin-btn:hover, .logout-btn:hover { background: rgba(255,255,255,0.3); }
   .admin-btn.hidden { display: none; }
   .content { padding: 30px; }
-  .summary {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px; margin-bottom: 30px;
+
+  /* ===== СВОДКА: СГРУППИРОВАННЫЕ БЛОКИ ===== */
+  .summary-grouped {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
   }
-  .summary-card {
-    background: #f8f9ff; padding: 18px; border-radius: 12px;
+  .summary-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    background: #f0f2f8;
+    padding: 12px;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  .summary-block .summary-card {
+    background: #fff;
+    padding: 14px 12px;
+    border-radius: 10px;
     border-left: 4px solid #667eea;
+    margin: 0;
   }
-  .summary-card.expense { border-left-color: #e74c3c; }
-  .summary-card.balance { border-left-color: #27ae60; }
-  .summary-card .label {
-    font-size: 12px; color: #777; text-transform: uppercase; margin-bottom: 6px;
+  .summary-block .summary-card.expense { border-left-color: #e74c3c; }
+  .summary-block .summary-card.balance { border-left-color: #27ae60; }
+  .summary-block .summary-card .label {
+    font-size: 11px;
+    color: #777;
+    text-transform: uppercase;
+    margin-bottom: 6px;
   }
-  .summary-card .value { font-size: 22px; font-weight: 700; color: #2c3e50; }
+  .summary-block .summary-card .value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2c3e50;
+  }
+
+  /* На десктопе — все 6 в ряд как было */
+  @media (min-width: 768px) {
+    .summary-grouped {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 15px;
+    }
+    .summary-block {
+      display: contents;
+      background: none;
+      padding: 0;
+      box-shadow: none;
+    }
+    .summary-block .summary-card {
+      background: #f8f9ff;
+      padding: 18px;
+      border-radius: 12px;
+    }
+  }
+
+  /* На очень маленьких экранах — 1 в ряд */
+  @media (max-width: 360px) {
+    .summary-block {
+      grid-template-columns: 1fr;
+    }
+  }
+
   .section { margin-bottom: 30px; }
   .section h2 {
     font-size: 18px; margin-bottom: 15px; color: #2c3e50;
@@ -257,17 +308,54 @@
     <header>
       <h1>💰 Бюджет родительского комитета</h1>
       <div class="header-right">
-        <div class="user-badge" id="userBadge"> Гость</div>
+        <div class="user-badge" id="userBadge">👤 Гость</div>
         <div class="month-selector">
           <select id="monthSelect"></select>
-          <button class="admin-btn" id="adminBtn" onclick="openAdmin()"> Админ</button>
+          <button class="admin-btn" id="adminBtn" onclick="openAdmin()">🔐 Админ</button>
           <button class="logout-btn" onclick="doLogout()">🚪 Выйти</button>
         </div>
       </div>
     </header>
 
     <div class="content">
-      <div class="summary" id="summary"></div>
+      <!-- СВОДКА: СГРУППИРОВАННЫЕ БЛОКИ -->
+      <div class="summary-grouped">
+        <!-- Блок 1: Остаток + Приход -->
+        <div class="summary-block">
+          <div class="summary-card balance">
+            <div class="label">Остаток с прошлого месяца</div>
+            <div class="value" id="val-prevBalance">0 ₽</div>
+          </div>
+          <div class="summary-card">
+            <div class="label">Приход (авт.)</div>
+            <div class="value" id="val-income">0 ₽</div>
+          </div>
+        </div>
+
+        <!-- Блок 2: Доп. приход + Бюджет -->
+        <div class="summary-block">
+          <div class="summary-card">
+            <div class="label">Доп. приход</div>
+            <div class="value" id="val-addIncome">0 ₽</div>
+          </div>
+          <div class="summary-card balance">
+            <div class="label">Бюджет текущего месяца</div>
+            <div class="value" id="val-budget">0 ₽</div>
+          </div>
+        </div>
+
+        <!-- Блок 3: Расход + Остаток -->
+        <div class="summary-block">
+          <div class="summary-card expense">
+            <div class="label">Расход (авт.)</div>
+            <div class="value" id="val-expense">0 ₽</div>
+          </div>
+          <div class="summary-card balance">
+            <div class="label">Остаток на конец месяца</div>
+            <div class="value" id="val-balance">0 ₽</div>
+          </div>
+        </div>
+      </div>
 
       <div class="tab-buttons">
         <button class="tab-btn active" onclick="switchTab('students', this)">👥 Ученики</button>
@@ -310,7 +398,7 @@
 
       <div id="tab-archive" class="tab-content">
         <div class="section">
-          <h2> Архив предыдущих месяцев</h2>
+          <h2>📦 Архив предыдущих месяцев</h2>
           <div id="archiveList"></div>
         </div>
       </div>
@@ -335,8 +423,8 @@
 <!-- Модалка админки -->
 <div class="modal-overlay" id="adminModal">
   <div class="modal">
-    <h2>️ Админ-панель</h2>
-    <div class="hint">💡 Все изменения сохраняются в облаке автоматически. Приход и расход считаются автоматически.</div>
+    <h2>⚙️ Админ-панель</h2>
+    <div class="hint"> Все изменения сохраняются в облаке автоматически. Приход и расход считаются автоматически.</div>
 
     <div class="tab-buttons">
       <button class="tab-btn active" onclick="switchAdminTab('edit', this)">✏️ Редактировать</button>
@@ -385,7 +473,7 @@
 
       <div style="margin-top:25px">
         <button class="btn btn-primary" onclick="saveAll()" id="saveBtn">💾 Сохранить в облако</button>
-        <button class="btn btn-success" onclick="archiveMonth()">📦 Архивировать месяц</button>
+        <button class="btn btn-success" onclick="archiveMonth()"> Архивировать месяц</button>
         <button class="btn btn-secondary" onclick="closeModal('adminModal')">Закрыть</button>
       </div>
     </div>
@@ -423,7 +511,7 @@
       <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 Импорт из JSON</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
 
-      <h3 style="margin:25px 0 10px;color:#e74c3c">⚠️ Опасная зона</h3>
+      <h3 style="margin:25px 0 10px;color:#e74c3c">️ Опасная зона</h3>
       <button class="btn btn-danger" onclick="resetData()">🗑️ Удалить все данные в базе</button>
     </div>
   </div>
@@ -443,7 +531,6 @@ const firebaseConfig = {
   appId: "1:214835144455:web:b1d91914f16c66004507a2"
 };
 
-// Инициализация Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
@@ -452,7 +539,6 @@ let data = getDefaultData();
 let currentMonthId = data.currentMonthId;
 let currentRole = null;
 let passwords = { viewPassword: '', adminPassword: 'admin123' };
-let dataLoaded = false;
 
 function getDefaultData() {
   const defaultMonth = {
@@ -491,13 +577,11 @@ function calcBalance(month) {
 // ============ ЗАГРУЗКА ДАННЫХ ИЗ FIREBASE ============
 async function loadFromFirebase() {
   try {
-    // Загружаем пароли
     const pwdDoc = await db.collection('settings').doc('passwords').get();
     if (pwdDoc.exists) {
       passwords = pwdDoc.data();
     }
 
-    // Загружаем данные
     const dataDoc = await db.collection('data').doc('main').get();
     if (dataDoc.exists) {
       const loaded = dataDoc.data();
@@ -509,7 +593,6 @@ async function loadFromFirebase() {
       currentMonthId = data.currentMonthId;
     }
 
-    dataLoaded = true;
     enableLogin();
     render();
   } catch (err) {
@@ -527,7 +610,6 @@ function enableLogin() {
   document.getElementById('loginPassword').focus();
 }
 
-// Загружаем при старте
 loadFromFirebase();
 
 // ============ СОХРАНЕНИЕ В FIREBASE ============
@@ -590,7 +672,7 @@ function enterApp() {
     userBadge.innerHTML = '👑 Администратор';
   } else {
     adminBtn.classList.add('hidden');
-    userBadge.innerHTML = '️ Гость (только просмотр)';
+    userBadge.innerHTML = '👁️ Гость (только просмотр)';
   }
 
   render();
@@ -620,7 +702,7 @@ function checkAdminPassword() {
     closeModal('adminLoginModal');
     currentRole = 'admin';
     document.getElementById('adminBtn').classList.remove('hidden');
-    document.getElementById('userBadge').innerHTML = ' Администратор';
+    document.getElementById('userBadge').innerHTML = '👑 Администратор';
     openAdminPanel();
   } else {
     alert('Неверный пароль администратора!');
@@ -657,32 +739,12 @@ function renderSummary() {
   const expense = calcExpense(m);
   const balance = calcBalance(m);
 
-  document.getElementById('summary').innerHTML = `
-    <div class="summary-card balance">
-      <div class="label">Остаток с прошлого месяца</div>
-      <div class="value">${formatMoney(m.prevBalance)} ₽</div>
-    </div>
-    <div class="summary-card">
-      <div class="label">Приход (авт.)</div>
-      <div class="value">${formatMoney(income)} ₽</div>
-    </div>
-    <div class="summary-card">
-      <div class="label">Доп. приход</div>
-      <div class="value">${formatMoney(addIncome)} ₽</div>
-    </div>
-    <div class="summary-card balance">
-      <div class="label">Бюджет текущего месяца</div>
-      <div class="value">${formatMoney(budget)} ₽</div>
-    </div>
-    <div class="summary-card expense">
-      <div class="label">Расход (авт.)</div>
-      <div class="value">${formatMoney(expense)} ₽</div>
-    </div>
-    <div class="summary-card balance">
-      <div class="label">Остаток на конец месяца</div>
-      <div class="value">${formatMoney(balance)} ₽</div>
-    </div>
-  `;
+  document.getElementById('val-prevBalance').textContent = formatMoney(m.prevBalance) + ' ₽';
+  document.getElementById('val-income').textContent = formatMoney(income) + ' ₽';
+  document.getElementById('val-addIncome').textContent = formatMoney(addIncome) + ' ₽';
+  document.getElementById('val-budget').textContent = formatMoney(budget) + ' ₽';
+  document.getElementById('val-expense').textContent = formatMoney(expense) + ' ₽';
+  document.getElementById('val-balance').textContent = formatMoney(balance) + ' ₽';
 }
 
 function renderStudents() {
@@ -1022,7 +1084,7 @@ function viewArchive(monthId) {
   html += `<p><b>Остаток на конец:</b> ${formatMoney(balance)} ₽</p>`;
   html += `<h3 style="margin-top:15px">Ученики:</h3><ul>`;
   m.students.forEach(s => {
-    if (s.name) html += `<li>${escapeHtml(s.name)} — ${formatMoney(s.amount)} ₽ ${s.paid ? '✔' : ''}</li>`;
+    if (s.name) html += `<li>${escapeHtml(s.name)} — ${formatMoney(s.amount)} ₽ ${s.paid ? '✔' : '✘'}</li>`;
   });
   html += `</ul><h3 style="margin-top:15px">Расходы:</h3><ul>`;
   m.expenses.forEach(e => {
