@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Родительский комитет — Бюджет класса</title>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -12,293 +17,164 @@
     min-height: 100vh;
     color: #333;
   }
-
-  /* ============ СТРАНИЦА ВХОДА ============ */
   .login-screen {
-    position: fixed;
-    inset: 0;
+    position: fixed; inset: 0;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    z-index: 1000;
+    display: flex; justify-content: center; align-items: center;
+    padding: 20px; z-index: 1000;
   }
   .login-screen.hidden { display: none; }
   .login-card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 40px 35px;
-    max-width: 420px;
-    width: 100%;
+    background: #fff; border-radius: 20px; padding: 40px 35px;
+    max-width: 420px; width: 100%;
     box-shadow: 0 25px 80px rgba(0,0,0,0.3);
-    text-align: center;
-    animation: slideUp 0.4s ease;
+    text-align: center; animation: slideUp 0.4s ease;
   }
   @keyframes slideUp {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
   }
   .login-icon {
-    width: 80px;
-    height: 80px;
+    width: 80px; height: 80px;
     background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 40px;
-    margin: 0 auto 20px;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 40px; margin: 0 auto 20px;
     box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
   }
-  .login-card h1 {
-    font-size: 22px;
-    color: #2c3e50;
-    margin-bottom: 8px;
-  }
-  .login-card .subtitle {
-    color: #777;
-    font-size: 14px;
-    margin-bottom: 25px;
-  }
+  .login-card h1 { font-size: 22px; color: #2c3e50; margin-bottom: 8px; }
+  .login-card .subtitle { color: #777; font-size: 14px; margin-bottom: 25px; }
   .login-card input {
-    width: 100%;
-    padding: 14px 16px;
-    border: 2px solid #e0e0e0;
-    border-radius: 10px;
-    font-size: 15px;
-    margin-bottom: 15px;
-    transition: 0.2s;
-    font-family: inherit;
+    width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0;
+    border-radius: 10px; font-size: 15px; margin-bottom: 15px;
+    transition: 0.2s; font-family: inherit;
   }
-  .login-card input:focus {
-    outline: none;
-    border-color: #667eea;
-  }
+  .login-card input:focus { outline: none; border-color: #667eea; }
   .login-card .btn-login {
-    width: 100%;
-    padding: 14px;
+    width: 100%; padding: 14px;
     background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-    margin-bottom: 10px;
+    color: #fff; border: none; border-radius: 10px;
+    font-size: 15px; font-weight: 600; cursor: pointer;
+    transition: 0.2s; margin-bottom: 10px;
   }
   .login-card .btn-login:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
   }
   .login-card .btn-guest {
-    width: 100%;
-    padding: 12px;
-    background: transparent;
-    color: #667eea;
-    border: 2px solid #667eea;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
+    width: 100%; padding: 12px; background: transparent;
+    color: #667eea; border: 2px solid #667eea; border-radius: 10px;
+    font-size: 14px; font-weight: 600; cursor: pointer; transition: 0.2s;
   }
-  .login-card .btn-guest:hover {
-    background: #f0f2ff;
-  }
+  .login-card .btn-guest:hover { background: #f0f2ff; }
   .login-error {
-    background: #fee;
-    color: #c33;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 13px;
-    margin-bottom: 15px;
-    display: none;
+    background: #fee; color: #c33; padding: 10px; border-radius: 8px;
+    font-size: 13px; margin-bottom: 15px; display: none;
   }
   .login-error.show { display: block; }
-  .login-hint {
-    margin-top: 20px;
-    font-size: 12px;
-    color: #999;
+  .login-hint { margin-top: 20px; font-size: 12px; color: #999; }
+  .login-status {
+    font-size: 12px; color: #667eea; margin-top: 10px; min-height: 18px;
   }
 
-  /* ============ ОСНОВНОЙ САЙТ ============ */
   .app { display: none; min-height: 100vh; padding: 20px; }
   .app.visible { display: block; }
   .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-    overflow: hidden;
+    max-width: 1100px; margin: 0 auto; background: #fff;
+    border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden;
   }
   header {
     background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff;
-    padding: 25px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
+    color: #fff; padding: 25px 30px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 15px;
   }
   header h1 { font-size: 24px; }
   .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
   .user-badge {
-    background: rgba(255,255,255,0.2);
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    background: rgba(255,255,255,0.2); padding: 6px 12px;
+    border-radius: 20px; font-size: 12px;
+    display: flex; align-items: center; gap: 6px;
   }
   .month-selector { display: flex; align-items: center; gap: 10px; }
   .month-selector select {
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: none;
-    background: rgba(255,255,255,0.9);
-    font-size: 14px;
-    cursor: pointer;
+    padding: 8px 12px; border-radius: 8px; border: none;
+    background: rgba(255,255,255,0.9); font-size: 14px; cursor: pointer;
   }
   .admin-btn, .logout-btn {
-    background: rgba(255,255,255,0.2);
-    color: #fff;
+    background: rgba(255,255,255,0.2); color: #fff;
     border: 1px solid rgba(255,255,255,0.4);
-    padding: 8px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: 0.2s;
+    padding: 8px 16px; border-radius: 8px;
+    cursor: pointer; font-size: 14px; transition: 0.2s;
   }
   .admin-btn:hover, .logout-btn:hover { background: rgba(255,255,255,0.3); }
   .admin-btn.hidden { display: none; }
   .content { padding: 30px; }
   .summary {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
-    margin-bottom: 30px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px; margin-bottom: 30px;
   }
   .summary-card {
-    background: #f8f9ff;
-    padding: 18px;
-    border-radius: 12px;
+    background: #f8f9ff; padding: 18px; border-radius: 12px;
     border-left: 4px solid #667eea;
   }
   .summary-card.expense { border-left-color: #e74c3c; }
   .summary-card.balance { border-left-color: #27ae60; }
   .summary-card .label {
-    font-size: 12px;
-    color: #777;
-    text-transform: uppercase;
-    margin-bottom: 6px;
+    font-size: 12px; color: #777; text-transform: uppercase; margin-bottom: 6px;
   }
-  .summary-card .value {
-    font-size: 22px;
-    font-weight: 700;
-    color: #2c3e50;
-  }
+  .summary-card .value { font-size: 22px; font-weight: 700; color: #2c3e50; }
   .section { margin-bottom: 30px; }
   .section h2 {
-    font-size: 18px;
-    margin-bottom: 15px;
-    color: #2c3e50;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    font-size: 18px; margin-bottom: 15px; color: #2c3e50;
+    display: flex; align-items: center; gap: 10px;
   }
   table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
+    width: 100%; border-collapse: collapse; background: #fff;
+    border-radius: 10px; overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   }
   th {
-    background: #f0f2f8;
-    padding: 12px;
-    text-align: left;
-    font-size: 13px;
-    color: #555;
-    text-transform: uppercase;
+    background: #f0f2f8; padding: 12px; text-align: left;
+    font-size: 13px; color: #555; text-transform: uppercase;
   }
-  td {
-    padding: 10px 12px;
-    border-top: 1px solid #eee;
-    font-size: 14px;
-  }
+  td { padding: 10px 12px; border-top: 1px solid #eee; font-size: 14px; }
   tr:hover { background: #fafbff; }
   .status-paid { color: #27ae60; font-weight: 700; font-size: 18px; }
   .status-unpaid { color: #e74c3c; font-weight: 700; font-size: 18px; }
   .amount { font-weight: 600; color: #2c3e50; }
   .empty-row { color: #aaa; font-style: italic; }
-  .totals-row {
-    background: #fffbea !important;
-    font-weight: 700;
-  }
+  .totals-row { background: #fffbea !important; font-weight: 700; }
   .totals-row td { border-top: 2px solid #ffc107; }
   .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    z-index: 100;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.6); z-index: 100;
+    justify-content: center; align-items: center; padding: 20px;
   }
   .modal-overlay.active { display: flex; }
   .modal {
-    background: #fff;
-    border-radius: 16px;
-    padding: 30px;
-    max-width: 700px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
+    background: #fff; border-radius: 16px; padding: 30px;
+    max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto;
   }
   .modal h2 { margin-bottom: 20px; color: #2c3e50; }
   .form-group { margin-bottom: 15px; }
   .form-group label {
-    display: block;
-    margin-bottom: 6px;
-    font-size: 13px;
-    color: #555;
-    font-weight: 600;
+    display: block; margin-bottom: 6px; font-size: 13px;
+    color: #555; font-weight: 600;
   }
   .form-group input, .form-group textarea, .form-group select {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: inherit;
+    width: 100%; padding: 10px 12px; border: 1px solid #ddd;
+    border-radius: 8px; font-size: 14px; font-family: inherit;
   }
   .form-group input:focus, .form-group textarea:focus {
-    outline: none;
-    border-color: #667eea;
+    outline: none; border-color: #667eea;
   }
   .form-group input[readonly] {
-    background: #f0f2f8;
-    color: #2c3e50;
-    font-weight: 700;
-    cursor: not-allowed;
+    background: #f0f2f8; color: #2c3e50; font-weight: 700; cursor: not-allowed;
   }
   .btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: 0.2s;
-    margin-right: 8px;
-    margin-bottom: 8px;
+    padding: 10px 20px; border: none; border-radius: 8px;
+    cursor: pointer; font-size: 14px; font-weight: 600;
+    transition: 0.2s; margin-right: 8px; margin-bottom: 8px;
   }
   .btn-primary { background: #667eea; color: #fff; }
   .btn-primary:hover { background: #5568d3; }
@@ -309,68 +185,50 @@
   .btn-secondary { background: #95a5a6; color: #fff; }
   .btn-secondary:hover { background: #7f8c8d; }
   .btn-small { padding: 5px 10px; font-size: 12px; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .admin-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr auto auto;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 8px;
+    display: grid; grid-template-columns: 2fr 1fr auto auto;
+    gap: 8px; align-items: center; margin-bottom: 8px;
   }
   .admin-row input { padding: 8px; }
   .tab-buttons {
-    display: flex;
-    gap: 5px;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #eee;
-    flex-wrap: wrap;
+    display: flex; gap: 5px; margin-bottom: 20px;
+    border-bottom: 2px solid #eee; flex-wrap: wrap;
   }
   .tab-btn {
-    padding: 10px 18px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    color: #777;
-    border-bottom: 3px solid transparent;
-    margin-bottom: -2px;
+    padding: 10px 18px; background: none; border: none;
+    cursor: pointer; font-size: 14px; color: #777;
+    border-bottom: 3px solid transparent; margin-bottom: -2px;
   }
   .tab-btn.active {
-    color: #667eea;
-    border-bottom-color: #667eea;
-    font-weight: 600;
+    color: #667eea; border-bottom-color: #667eea; font-weight: 600;
   }
   .tab-content { display: none; }
   .tab-content.active { display: block; }
   .archive-item {
-    background: #f8f9ff;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
+    background: #f8f9ff; padding: 15px; border-radius: 10px;
+    margin-bottom: 10px; display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 10px;
   }
   .archive-item strong { color: #2c3e50; }
   .hint {
-    background: #fff3cd;
-    border-left: 4px solid #ffc107;
-    padding: 12px 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 13px;
-    color: #856404;
+    background: #fff3cd; border-left: 4px solid #ffc107;
+    padding: 12px 15px; border-radius: 8px;
+    margin-bottom: 20px; font-size: 13px; color: #856404;
   }
   .auto-calc-info {
-    background: #e7f5ff;
-    border-left: 4px solid #339af0;
-    padding: 10px 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    font-size: 13px;
-    color: #1864ab;
+    background: #e7f5ff; border-left: 4px solid #339af0;
+    padding: 10px 15px; border-radius: 8px;
+    margin-bottom: 15px; font-size: 13px; color: #1864ab;
   }
+  .save-indicator {
+    position: fixed; bottom: 20px; right: 20px;
+    background: #27ae60; color: #fff; padding: 10px 18px;
+    border-radius: 8px; font-size: 13px; font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0; transition: opacity 0.3s; z-index: 200;
+  }
+  .save-indicator.show { opacity: 1; }
   @media (max-width: 600px) {
     .content { padding: 15px; }
     header { padding: 15px; }
@@ -383,15 +241,16 @@
 </head>
 <body>
 
-<!-- ============ СТРАНИЦА ВХОДА ============ -->
+<!-- Страница входа -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
-    <div class="login-icon">🏫</div>
+    <div class="login-icon"></div>
     <h1>Родительский комитет</h1>
     <p class="subtitle">Бюджет класса — доступ по паролю</p>
     <div class="login-error" id="loginError">Неверный пароль. Попробуйте ещё раз.</div>
-    <input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')doLogin()">
-    <button class="btn-login" onclick="doLogin()">Войти</button>
+    <div class="login-status" id="loginStatus">Загрузка...</div>
+    <input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')doLogin()" disabled>
+    <button class="btn-login" onclick="doLogin()" id="loginBtn" disabled>Войти</button>
     <button class="btn-guest" id="guestBtn" onclick="doGuestLogin()" style="display:none">
       👁️ Войти как гость (только просмотр)
     </button>
@@ -402,7 +261,7 @@
   </div>
 </div>
 
-<!-- ============ ОСНОВНОЙ САЙТ ============ -->
+<!-- Основной сайт -->
 <div class="app" id="app">
   <div class="container">
     <header>
@@ -423,7 +282,7 @@
       <div class="tab-buttons">
         <button class="tab-btn active" onclick="switchTab('students', this)">👥 Ученики</button>
         <button class="tab-btn" onclick="switchTab('expenses', this)">💸 Расходы</button>
-        <button class="tab-btn" onclick="switchTab('archive', this)">📦 Архив</button>
+        <button class="tab-btn" onclick="switchTab('archive', this)"> Архив</button>
       </div>
 
       <div id="tab-students" class="tab-content active">
@@ -469,7 +328,7 @@
   </div>
 </div>
 
-<!-- Модалка входа в админку -->
+<!-- Модалка подтверждения админа -->
 <div class="modal-overlay" id="adminLoginModal">
   <div class="modal" style="max-width:400px">
     <h2>🔐 Подтверждение администратора</h2>
@@ -487,7 +346,7 @@
 <div class="modal-overlay" id="adminModal">
   <div class="modal">
     <h2>⚙️ Админ-панель</h2>
-    <div class="hint">💡 Приход и расход считаются автоматически. Не забудьте сделать экспорт перед важными правками!</div>
+    <div class="hint">💡 Все изменения сохраняются в облаке автоматически. Приход и расход считаются автоматически.</div>
 
     <div class="tab-buttons">
       <button class="tab-btn active" onclick="switchAdminTab('edit', this)">✏️ Редактировать</button>
@@ -495,14 +354,12 @@
       <button class="tab-btn" onclick="switchAdminTab('data', this)">💾 Данные</button>
     </div>
 
-    <!-- Редактирование -->
     <div id="admin-edit" class="tab-content active">
       <h3 style="margin:15px 0 10px">Сводка месяца</h3>
       <div class="form-group">
         <label>Остаток с прошлого месяца, ₽</label>
         <input type="number" id="editPrevBalance" step="0.01">
       </div>
-
       <div class="auto-calc-info">
         📊 <b>Приход</b> считается автоматически как сумма взносов учеников со статусом «✔ сдал».
       </div>
@@ -510,12 +367,10 @@
         <label>Приход (автоматически) — <span id="autoIncomeDisplay">0</span> ₽</label>
         <input type="text" id="autoIncome" readonly value="0">
       </div>
-
       <div class="form-group">
         <label>Дополнительный приход, ₽ (вручную)</label>
         <input type="number" id="editAddIncome" step="0.01">
       </div>
-
       <div class="auto-calc-info">
         💸 <b>Расход</b> считается автоматически как сумма всех расходов ниже.
       </div>
@@ -523,7 +378,6 @@
         <label>Расход (автоматически) — <span id="autoExpenseDisplay">0</span> ₽</label>
         <input type="text" id="autoExpense" readonly value="0">
       </div>
-
       <div class="form-group">
         <label>📌 Итого бюджет месяца: <span id="autoBudgetDisplay" style="color:#27ae60;font-size:16px">0</span> ₽</label>
       </div>
@@ -540,15 +394,14 @@
       <button class="btn btn-success btn-small" onclick="addExpenseRow()">+ Добавить расход</button>
 
       <div style="margin-top:25px">
-        <button class="btn btn-primary" onclick="saveAll()">💾 Сохранить всё</button>
+        <button class="btn btn-primary" onclick="saveAll()" id="saveBtn">💾 Сохранить в облако</button>
         <button class="btn btn-success" onclick="archiveMonth()">📦 Архивировать месяц</button>
         <button class="btn btn-secondary" onclick="closeModal('adminModal')">Закрыть</button>
       </div>
     </div>
 
-    <!-- Настройки -->
     <div id="admin-settings" class="tab-content">
-      <h3 style="margin:15px 0 10px">🔐 Пароли доступа</h3>
+      <h3 style="margin:15px 0 10px"> Пароли доступа</h3>
       <p style="font-size:13px;color:#666;margin-bottom:15px">
         Задайте два разных пароля: один для родителей (только просмотр), другой для себя (полный доступ).
       </p>
@@ -571,50 +424,47 @@
       <button class="btn btn-success" onclick="createNewMonth()">➕ Создать месяц</button>
     </div>
 
-    <!-- Данные -->
     <div id="admin-data" class="tab-content">
       <h3 style="margin:15px 0 10px">Экспорт / Импорт данных</h3>
       <p style="font-size:13px;color:#666;margin-bottom:15px">
-        Экспортируйте данные в файл, чтобы делать резервные копии или переносить на другой компьютер.
+        Экспортируйте данные в файл для резервной копии.
       </p>
       <button class="btn btn-primary" onclick="exportData()">📤 Экспорт в JSON</button>
       <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 Импорт из JSON</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
 
       <h3 style="margin:25px 0 10px;color:#e74c3c">⚠️ Опасная зона</h3>
-      <button class="btn btn-danger" onclick="resetData()">🗑️ Удалить все данные</button>
+      <button class="btn btn-danger" onclick="resetData()">️ Удалить все данные в базе</button>
     </div>
   </div>
 </div>
 
+<!-- Индикатор сохранения -->
+<div class="save-indicator" id="saveIndicator">✅ Сохранено</div>
+
 <script>
-// ============ ХРАНИЛИЩЕ ============
-const STORAGE_KEY = 'parentBudget_v3';
-const VIEW_PWD_KEY = 'parentBudget_viewPassword';
-const ADMIN_PWD_KEY = 'parentBudget_adminPassword';
-const SESSION_KEY = 'parentBudget_session'; // 'admin' | 'guest'
+// ============ FIREBASE КОНФИГ ============
+const firebaseConfig = {
+  apiKey: "AIzaSyDKi0CkhA5jPr7fNkPerItkLDKNLMcLpMw",
+  authDomain: "parent-budget-70c5a.firebaseapp.com",
+  projectId: "parent-budget-70c5a",
+  storageBucket: "parent-budget-70c5a.firebasestorage.app",
+  messagingSenderId: "214835144455",
+  appId: "1:214835144455:web:b1d91914f16c66004507a2"
+};
 
-let data = loadData();
+// Инициализация Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ============ СОСТОЯНИЕ ============
+let data = getDefaultData();
 let currentMonthId = data.currentMonthId;
-let currentRole = null; // 'admin' или 'guest'
+let currentRole = null;
+let passwords = { viewPassword: '', adminPassword: 'admin123' };
+let dataLoaded = false;
 
-// Миграция со старого ключа пароля
-(function migrateOldPassword() {
-  const oldPwd = localStorage.getItem('parentBudget_password');
-  if (oldPwd && !localStorage.getItem(ADMIN_PWD_KEY)) {
-    localStorage.setItem(ADMIN_PWD_KEY, oldPwd);
-    localStorage.removeItem('parentBudget_password');
-  }
-})();
-
-function loadData() {
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    const d = JSON.parse(saved);
-    if (d.months) d.months.forEach(m => { delete m.income; });
-    if (d.archive) d.archive.forEach(m => { delete m.income; });
-    return d;
-  }
+function getDefaultData() {
   const defaultMonth = {
     id: 'month_' + Date.now(),
     name: new Date().toLocaleString('ru', { month: 'long', year: 'numeric' }),
@@ -628,10 +478,6 @@ function loadData() {
     currentMonthId: defaultMonth.id,
     archive: []
   };
-}
-
-function saveData() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
 function getCurrentMonth() {
@@ -652,26 +498,93 @@ function calcBalance(month) {
   return Number(month.prevBalance || 0) + calcBudget(month) - calcExpense(month);
 }
 
-// ============ АВТОРИЗАЦИЯ ============
-function getViewPassword() {
-  return localStorage.getItem(VIEW_PWD_KEY) || '';
-}
-function getAdminPassword() {
-  return localStorage.getItem(ADMIN_PWD_KEY) || 'admin123';
+// ============ ЗАГРУЗКА ДАННЫХ ИЗ FIREBASE ============
+async function loadFromFirebase() {
+  try {
+    // Загружаем пароли
+    const pwdDoc = await db.collection('settings').doc('passwords').get();
+    if (pwdDoc.exists) {
+      passwords = pwdDoc.data();
+    }
+
+    // Загружаем данные
+    const dataDoc = await db.collection('data').doc('main').get();
+    if (dataDoc.exists) {
+      const loaded = dataDoc.data();
+      data = {
+        months: loaded.months || getDefaultData().months,
+        currentMonthId: loaded.currentMonthId || getDefaultData().currentMonthId,
+        archive: loaded.archive || []
+      };
+      currentMonthId = data.currentMonthId;
+    }
+
+    dataLoaded = true;
+    enableLogin();
+    render();
+  } catch (err) {
+    console.error('Ошибка загрузки:', err);
+    document.getElementById('loginStatus').textContent = '❌ Ошибка подключения к базе';
+    document.getElementById('loginStatus').style.color = '#e74c3c';
+  }
 }
 
+function enableLogin() {
+  document.getElementById('loginPassword').disabled = false;
+  document.getElementById('loginBtn').disabled = false;
+  document.getElementById('loginStatus').textContent = '✅ Подключено к базе';
+  document.getElementById('loginStatus').style.color = '#27ae60';
+  document.getElementById('loginPassword').focus();
+
+  // Показываем кнопку гостя если задан пароль просмотра
+  if (passwords.viewPassword) {
+    document.getElementById('guestBtn').style.display = 'block';
+  }
+}
+
+// Загружаем при старте
+loadFromFirebase();
+
+// ============ СОХРАНЕНИЕ В FIREBASE ============
+async function saveToFirebase() {
+  try {
+    await db.collection('data').doc('main').set({
+      months: data.months,
+      currentMonthId: data.currentMonthId,
+      archive: data.archive,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    showSaveIndicator();
+  } catch (err) {
+    console.error('Ошибка сохранения:', err);
+    alert('❌ Ошибка сохранения: ' + err.message);
+  }
+}
+
+async function savePasswordsToFirebase() {
+  try {
+    await db.collection('settings').doc('passwords').set(passwords);
+    showSaveIndicator();
+  } catch (err) {
+    console.error('Ошибка сохранения паролей:', err);
+    alert('❌ Ошибка сохранения паролей: ' + err.message);
+  }
+}
+
+function showSaveIndicator() {
+  const ind = document.getElementById('saveIndicator');
+  ind.classList.add('show');
+  setTimeout(() => ind.classList.remove('show'), 2000);
+}
+
+// ============ АВТОРИЗАЦИЯ ============
 function doLogin() {
   const pwd = document.getElementById('loginPassword').value;
-  const viewPwd = getViewPassword();
-  const adminPwd = getAdminPassword();
-
-  if (pwd === adminPwd) {
+  if (pwd === passwords.adminPassword) {
     currentRole = 'admin';
-    sessionStorage.setItem(SESSION_KEY, 'admin');
     enterApp();
-  } else if (viewPwd && pwd === viewPwd) {
+  } else if (passwords.viewPassword && pwd === passwords.viewPassword) {
     currentRole = 'guest';
-    sessionStorage.setItem(SESSION_KEY, 'guest');
     enterApp();
   } else {
     document.getElementById('loginError').classList.add('show');
@@ -681,9 +594,7 @@ function doLogin() {
 }
 
 function doGuestLogin() {
-  // Быстрый вход как гость (если задан пароль просмотра)
   currentRole = 'guest';
-  sessionStorage.setItem(SESSION_KEY, 'guest');
   enterApp();
 }
 
@@ -691,45 +602,36 @@ function enterApp() {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('app').classList.add('visible');
 
-  // Обновляем UI в зависимости от роли
   const adminBtn = document.getElementById('adminBtn');
   const userBadge = document.getElementById('userBadge');
-  const guestBtn = document.getElementById('guestBtn');
 
   if (currentRole === 'admin') {
     adminBtn.classList.remove('hidden');
     userBadge.innerHTML = '👑 Администратор';
-    guestBtn.style.display = 'none';
   } else {
     adminBtn.classList.add('hidden');
     userBadge.innerHTML = '👁️ Гость (только просмотр)';
-    // Показываем кнопку "Войти как гость" только если задан пароль просмотра
-    const viewPwd = getViewPassword();
-    guestBtn.style.display = viewPwd ? 'block' : 'none';
   }
 
   render();
 }
 
 function doLogout() {
-  sessionStorage.removeItem(SESSION_KEY);
   currentRole = null;
   document.getElementById('app').classList.remove('visible');
   document.getElementById('loginScreen').classList.remove('hidden');
   document.getElementById('loginPassword').value = '';
   document.getElementById('loginError').classList.remove('show');
-  // Обновляем видимость кнопки гостя
-  const viewPwd = getViewPassword();
-  document.getElementById('guestBtn').style.display = viewPwd ? 'block' : 'none';
+  if (passwords.viewPassword) {
+    document.getElementById('guestBtn').style.display = 'block';
+  }
 }
 
 function openAdmin() {
-  // Если уже админ — сразу открываем панель
   if (currentRole === 'admin') {
     openAdminPanel();
     return;
   }
-  // Иначе просим пароль админа
   document.getElementById('adminLoginModal').classList.add('active');
   document.getElementById('adminPassword').value = '';
   setTimeout(() => document.getElementById('adminPassword').focus(), 100);
@@ -737,10 +639,9 @@ function openAdmin() {
 
 function checkAdminPassword() {
   const pwd = document.getElementById('adminPassword').value;
-  if (pwd === getAdminPassword()) {
+  if (pwd === passwords.adminPassword) {
     closeModal('adminLoginModal');
     currentRole = 'admin';
-    sessionStorage.setItem(SESSION_KEY, 'admin');
     document.getElementById('adminBtn').classList.remove('hidden');
     document.getElementById('userBadge').innerHTML = '👑 Администратор';
     openAdminPanel();
@@ -748,15 +649,6 @@ function checkAdminPassword() {
     alert('Неверный пароль администратора!');
   }
 }
-
-// Проверка сессии при загрузке
-(function checkSession() {
-  const savedSession = sessionStorage.getItem(SESSION_KEY);
-  if (savedSession === 'admin' || savedSession === 'guest') {
-    currentRole = savedSession;
-    enterApp();
-  }
-})();
 
 // ============ ОТРИСОВКА ============
 function render() {
@@ -932,10 +824,8 @@ function openAdminPanel() {
   const m = getCurrentMonth();
   document.getElementById('editPrevBalance').value = m.prevBalance;
   document.getElementById('editAddIncome').value = m.additionalIncome;
-
-  // Заполняем текущие пароли в настройках
-  document.getElementById('setViewPassword').value = getViewPassword();
-  document.getElementById('setAdminPassword').value = getAdminPassword();
+  document.getElementById('setViewPassword').value = passwords.viewPassword || '';
+  document.getElementById('setAdminPassword').value = passwords.adminPassword || 'admin123';
 
   const studentsDiv = document.getElementById('adminStudents');
   studentsDiv.innerHTML = '';
@@ -1041,14 +931,18 @@ function collectAdminData() {
   });
 }
 
-function saveAll() {
+async function saveAll() {
   collectAdminData();
-  saveData();
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Сохранение...';
+  await saveToFirebase();
   render();
-  alert('✅ Сохранено!');
+  btn.disabled = false;
+  btn.textContent = '💾 Сохранить в облако';
 }
 
-function archiveMonth() {
+async function archiveMonth() {
   if (!confirm('Архивировать текущий месяц? Он переместится в архив, а на его месте создастся новый с переносом остатка.')) return;
   collectAdminData();
   const m = getCurrentMonth();
@@ -1070,9 +964,14 @@ function archiveMonth() {
   data.months.push(newMonth);
   currentMonthId = newMonth.id;
 
-  saveData();
-  closeModal('adminModal');
+  const btn = document.getElementById('saveBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Сохранение...';
+  await saveToFirebase();
   render();
+  closeModal('adminModal');
+  btn.disabled = false;
+  btn.textContent = '💾 Сохранить в облако';
   alert('✅ Месяц архивирован. Остаток ' + formatMoney(balance) + ' ₽ перенесён в новый месяц.');
 }
 
@@ -1082,7 +981,7 @@ function getNextMonthName() {
   return d.toLocaleString('ru', { month: 'long', year: 'numeric' });
 }
 
-function createNewMonth() {
+async function createNewMonth() {
   const name = document.getElementById('newMonthName').value.trim();
   if (!name) { alert('Введите название месяца'); return; }
   const newMonth = {
@@ -1095,13 +994,13 @@ function createNewMonth() {
   };
   data.months.push(newMonth);
   currentMonthId = newMonth.id;
-  saveData();
+  await saveToFirebase();
   closeModal('adminModal');
   render();
   alert('✅ Месяц "' + name + '" создан');
 }
 
-function savePasswords() {
+async function savePasswords() {
   const viewPwd = document.getElementById('setViewPassword').value.trim();
   const adminPwd = document.getElementById('setAdminPassword').value.trim();
   if (!adminPwd || adminPwd.length < 3) {
@@ -1112,19 +1011,22 @@ function savePasswords() {
     alert('Пароли должны отличаться!');
     return;
   }
-  localStorage.setItem(VIEW_PWD_KEY, viewPwd);
-  localStorage.setItem(ADMIN_PWD_KEY, adminPwd);
-  alert('✅ Пароли сохранены!\n\n' +
+  passwords.viewPassword = viewPwd;
+  passwords.adminPassword = adminPwd;
+  await savePasswordsToFirebase();
+  alert('✅ Пароли сохранены в облаке!\n\n' +
     (viewPwd ? '🔓 Родители входят по паролю: ' + viewPwd + '\n' : '🔓 Пароль для гостей не задан\n') +
     '🔑 Пароль администратора: ' + adminPwd);
 }
 
-function resetPasswords() {
+async function resetPasswords() {
   if (!confirm('Сбросить все пароли к значению по умолчанию (admin123)?')) return;
-  localStorage.removeItem(VIEW_PWD_KEY);
-  localStorage.setItem(ADMIN_PWD_KEY, 'admin123');
+  passwords.viewPassword = '';
+  passwords.adminPassword = 'admin123';
+  await savePasswordsToFirebase();
   document.getElementById('setViewPassword').value = '';
   document.getElementById('setAdminPassword').value = 'admin123';
+  document.getElementById('guestBtn').style.display = 'none';
   alert('✅ Пароли сброшены. Новый пароль: admin123');
 }
 
@@ -1160,29 +1062,38 @@ function viewArchive(monthId) {
 
 // ============ ЭКСПОРТ / ИМПОРТ ============
 function exportData() {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const exportObj = {
+    data: data,
+    passwords: passwords,
+    exportDate: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'budget_' + new Date().toISOString().slice(0, 10) + '.json';
+  a.download = 'budget_backup_' + new Date().toISOString().slice(0, 10) + '.json';
   a.click();
   URL.revokeObjectURL(url);
 }
 
-function importData(event) {
+async function importData(event) {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = async (e) => {
     try {
       const imported = JSON.parse(e.target.result);
-      if (!imported.months) throw new Error('Неверный формат');
-      if (!confirm('Заменить все текущие данные импортированными?')) return;
-      data = imported;
+      if (!imported.data || !imported.data.months) throw new Error('Неверный формат');
+      if (!confirm('Заменить все данные в базе импортированными?')) return;
+      data = imported.data;
       currentMonthId = data.currentMonthId || data.months[0].id;
-      saveData();
+      if (imported.passwords) {
+        passwords = imported.passwords;
+        await savePasswordsToFirebase();
+      }
+      await saveToFirebase();
       render();
-      alert('✅ Данные импортированы');
+      alert('✅ Данные импортированы в облако');
     } catch (err) {
       alert('❌ Ошибка импорта: ' + err.message);
     }
@@ -1191,11 +1102,14 @@ function importData(event) {
   event.target.value = '';
 }
 
-function resetData() {
-  if (!confirm('Удалить ВСЕ данные? Это действие необратимо!')) return;
+async function resetData() {
+  if (!confirm('Удалить ВСЕ данные из базы? Это действие необратимо!')) return;
   if (!confirm('Точно-точно? Все месяцы и архив будут удалены!')) return;
-  localStorage.removeItem(STORAGE_KEY);
-  location.reload();
+  data = getDefaultData();
+  currentMonthId = data.currentMonthId;
+  await saveToFirebase();
+  render();
+  alert('✅ Данные в базе очищены');
 }
 
 // ============ УТИЛИТЫ ============
@@ -1220,8 +1134,6 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
     if (e.target === overlay) overlay.classList.remove('active');
   });
 });
-
-if (!sessionStorage.getItem(SESSION_KEY)) render();
 </script>
 </body>
 </html>
