@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Родительский комитет — Бюджет класса</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+  }
+
+  /* ============ СТРАНИЦА ВХОДА ============ */
+  .login-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 1000;
+  }
+  .login-screen.hidden { display: none; }
+  .login-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px 35px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+    text-align: center;
+    animation: slideUp 0.4s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .login-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin: 0 auto 20px;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  }
+  .login-card h1 {
+    font-size: 22px;
+    color: #2c3e50;
+    margin-bottom: 8px;
+  }
+  .login-card .subtitle {
+    color: #777;
+    font-size: 14px;
+    margin-bottom: 25px;
+  }
+  .login-card input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 15px;
+    margin-bottom: 15px;
+    transition: 0.2s;
+    font-family: inherit;
+  }
+  .login-card input:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+  .login-card .btn-login {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-bottom: 10px;
+  }
+  .login-card .btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+  }
+  .login-card .btn-guest {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: #667eea;
+    border: 2px solid #667eea;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .login-card .btn-guest:hover {
+    background: #f0f2ff;
+  }
+  .login-error {
+    background: #fee;
+    color: #c33;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 15px;
+    display: none;
+  }
+  .login-error.show { display: block; }
+  .login-hint {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #999;
+  }
+
+  /* ============ ОСНОВНОЙ САЙТ ============ */
+  .app { display: none; min-height: 100vh; padding: 20px; }
+  .app.visible { display: block; }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    overflow: hidden;
+  }
+  header {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 25px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  header h1 { font-size: 24px; }
+  .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .user-badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .month-selector { display: flex; align-items: center; gap: 10px; }
+  .month-selector select {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255,255,255,0.9);
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .admin-btn, .logout-btn {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.4);
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+  }
+  .admin-btn:hover, .logout-btn:hover { background: rgba(255,255,255,0.3); }
+  .admin-btn.hidden { display: none; }
+  .content { padding: 30px; }
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+  .summary-card {
+    background: #f8f9ff;
+    padding: 18px;
+    border-radius: 12px;
+    border-left: 4px solid #667eea;
+  }
+  .summary-card.expense { border-left-color: #e74c3c; }
+  .summary-card.balance { border-left-color: #27ae60; }
+  .summary-card .label {
+    font-size: 12px;
+    color: #777;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .summary-card .value {
+    font-size: 22px;
+    font-weight: 700;
+    color: #2c3e50;
+  }
+  .section { margin-bottom: 30px; }
+  .section h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  }
+  th {
+    background: #f0f2f8;
+    padding: 12px;
+    text-align: left;
+    font-size: 13px;
+    color: #555;
+    text-transform: uppercase;
+  }
+  td {
+    padding: 10px 12px;
+    border-top: 1px solid #eee;
+    font-size: 14px;
+  }
+  tr:hover { background: #fafbff; }
+  .status-paid { color: #27ae60; font-weight: 700; font-size: 18px; }
+  .status-unpaid { color: #e74c3c; font-weight: 700; font-size: 18px; }
+  .amount { font-weight: 600; color: #2c3e50; }
+  .empty-row { color: #aaa; font-style: italic; }
+  .totals-row {
+    background: #fffbea !important;
+    font-weight: 700;
+  }
+  .totals-row td { border-top: 2px solid #ffc107; }
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .modal-overlay.active { display: flex; }
+  .modal {
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modal h2 { margin-bottom: 20px; color: #2c3e50; }
+  .form-group { margin-bottom: 15px; }
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: #555;
+    font-weight: 600;
+  }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .form-group input:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+  .form-group input[readonly] {
+    background: #f0f2f8;
+    color: #2c3e50;
+    font-weight: 700;
+    cursor: not-allowed;
+  }
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s;
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+  .btn-primary { background: #667eea; color: #fff; }
+  .btn-primary:hover { background: #5568d3; }
+  .btn-success { background: #27ae60; color: #fff; }
+  .btn-success:hover { background: #229954; }
+  .btn-danger { background: #e74c3c; color: #fff; }
+  .btn-danger:hover { background: #c0392b; }
+  .btn-secondary { background: #95a5a6; color: #fff; }
+  .btn-secondary:hover { background: #7f8c8d; }
+  .btn-small { padding: 5px 10px; font-size: 12px; }
+  .admin-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .admin-row input { padding: 8px; }
+  .tab-buttons {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #eee;
+    flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 10px 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #777;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+  }
+  .tab-btn.active {
+    color: #667eea;
+    border-bottom-color: #667eea;
+    font-weight: 600;
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .archive-item {
+    background: #f8f9ff;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .archive-item strong { color: #2c3e50; }
+  .hint {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: #856404;
+  }
+  .auto-calc-info {
+    background: #e7f5ff;
+    border-left: 4px solid #339af0;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 13px;
+    color: #1864ab;
+  }
+  @media (max-width: 600px) {
+    .content { padding: 15px; }
+    header { padding: 15px; }
+    header h1 { font-size: 18px; }
+    .admin-row { grid-template-columns: 1fr; }
+    th, td { padding: 8px; font-size: 12px; }
+    .login-card { padding: 30px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ СТРАНИЦА ВХОДА ============ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-icon">🏫</div>
+    <h1>Родительский комитет</h1>
+    <p class="subtitle">Бюджет класса — доступ по паролю</p>
+    <div class="login-error" id="loginError">Неверный пароль. Попробуйте ещё раз.</div>
+    <input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')doLogin()">
+    <button class="btn-login" onclick="doLogin()">Войти</button>
+    <button class="btn-guest" id="guestBtn" onclick="doGuestLogin()" style="display:none">
+      👁️ Войти как гость (только просмотр)
+    </button>
+    <div class="login-hint">
+      Пароль по умолчанию: <b>admin123</b><br>
+      Его можно изменить в настройках админки
+    </div>
+  </div>
+</div>
+
+<!-- ============ ОСНОВНОЙ САЙТ ============ -->
+<div class="app" id="app">
+  <div class="container">
+    <header>
+      <h1>💰 Бюджет родительского комитета</h1>
+      <div class="header-right">
+        <div class="user-badge" id="userBadge">👤 Гость</div>
+        <div class="month-selector">
+          <select id="monthSelect"></select>
+          <button class="admin-btn" id="adminBtn" onclick="openAdmin()">🔐 Админ</button>
+          <button class="logout-btn" onclick="doLogout()">🚪 Выйти</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+      <div class="summary" id="summary"></div>
+
+      <div class="tab-buttons">
+        <button class="tab-btn active" onclick="switchTab('students', this)">👥 Ученики</button>
+        <button class="tab-btn" onclick="switchTab('expenses', this)">💸 Расходы</button>
+        <button class="tab-btn" onclick="switchTab('archive', this)">📦 Архив</button>
+      </div>
+
+      <div id="tab-students" class="tab-content active">
+        <div class="section">
+          <h2>👥 Сдача взносов</h2>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:40px">№</th>
+                <th>ФИО ученика</th>
+                <th style="width:120px">Сумма, ₽</th>
+                <th style="width:80px">Статус</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="tab-expenses" class="tab-content">
+        <div class="section">
+          <h2>💸 Расходы текущего месяца</h2>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:40px">№</th>
+                <th>На что потрачено</th>
+                <th style="width:120px">Сумма, ₽</th>
+              </tr>
+            </thead>
+            <tbody id="expensesTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="tab-archive" class="tab-content">
+        <div class="section">
+          <h2>📦 Архив предыдущих месяцев</h2>
+          <div id="archiveList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Модалка входа в админку -->
+<div class="modal-overlay" id="adminLoginModal">
+  <div class="modal" style="max-width:400px">
+    <h2>🔐 Подтверждение администратора</h2>
+    <p style="color:#666;font-size:14px;margin-bottom:15px">Введите пароль администратора для доступа к редактированию</p>
+    <div class="form-group">
+      <label>Пароль администратора</label>
+      <input type="password" id="adminPassword" placeholder="Пароль админа" onkeypress="if(event.key==='Enter')checkAdminPassword()">
+    </div>
+    <button class="btn btn-primary" onclick="checkAdminPassword()">Войти</button>
+    <button class="btn btn-secondary" onclick="closeModal('adminLoginModal')">Отмена</button>
+  </div>
+</div>
+
+<!-- Модалка админки -->
+<div class="modal-overlay" id="adminModal">
+  <div class="modal">
+    <h2>⚙️ Админ-панель</h2>
+    <div class="hint">💡 Приход и расход считаются автоматически. Не забудьте сделать экспорт перед важными правками!</div>
+
+    <div class="tab-buttons">
+      <button class="tab-btn active" onclick="switchAdminTab('edit', this)">✏️ Редактировать</button>
+      <button class="tab-btn" onclick="switchAdminTab('settings', this)">⚙️ Настройки</button>
+      <button class="tab-btn" onclick="switchAdminTab('data', this)">💾 Данные</button>
+    </div>
+
+    <!-- Редактирование -->
+    <div id="admin-edit" class="tab-content active">
+      <h3 style="margin:15px 0 10px">Сводка месяца</h3>
+      <div class="form-group">
+        <label>Остаток с прошлого месяца, ₽</label>
+        <input type="number" id="editPrevBalance" step="0.01">
+      </div>
+
+      <div class="auto-calc-info">
+        📊 <b>Приход</b> считается автоматически как сумма взносов учеников со статусом «✔ сдал».
+      </div>
+      <div class="form-group">
+        <label>Приход (автоматически) — <span id="autoIncomeDisplay">0</span> ₽</label>
+        <input type="text" id="autoIncome" readonly value="0">
+      </div>
+
+      <div class="form-group">
+        <label>Дополнительный приход, ₽ (вручную)</label>
+        <input type="number" id="editAddIncome" step="0.01">
+      </div>
+
+      <div class="auto-calc-info">
+        💸 <b>Расход</b> считается автоматически как сумма всех расходов ниже.
+      </div>
+      <div class="form-group">
+        <label>Расход (автоматически) — <span id="autoExpenseDisplay">0</span> ₽</label>
+        <input type="text" id="autoExpense" readonly value="0">
+      </div>
+
+      <div class="form-group">
+        <label>📌 Итого бюджет месяца: <span id="autoBudgetDisplay" style="color:#27ae60;font-size:16px">0</span> ₽</label>
+      </div>
+      <div class="form-group">
+        <label>📌 Итого остаток на конец месяца: <span id="autoBalanceDisplay" style="color:#2c3e50;font-size:16px">0</span> ₽</label>
+      </div>
+
+      <h3 style="margin:20px 0 10px">Ученики (до 30)</h3>
+      <div id="adminStudents"></div>
+      <button class="btn btn-success btn-small" onclick="addStudentRow()">+ Добавить ученика</button>
+
+      <h3 style="margin:20px 0 10px">Расходы</h3>
+      <div id="adminExpenses"></div>
+      <button class="btn btn-success btn-small" onclick="addExpenseRow()">+ Добавить расход</button>
+
+      <div style="margin-top:25px">
+        <button class="btn btn-primary" onclick="saveAll()">💾 Сохранить всё</button>
+        <button class="btn btn-success" onclick="archiveMonth()">📦 Архивировать месяц</button>
+        <button class="btn btn-secondary" onclick="closeModal('adminModal')">Закрыть</button>
+      </div>
+    </div>
+
+    <!-- Настройки -->
+    <div id="admin-settings" class="tab-content">
+      <h3 style="margin:15px 0 10px">🔐 Пароли доступа</h3>
+      <p style="font-size:13px;color:#666;margin-bottom:15px">
+        Задайте два разных пароля: один для родителей (только просмотр), другой для себя (полный доступ).
+      </p>
+      <div class="form-group">
+        <label>Пароль для просмотра (для родителей)</label>
+        <input type="password" id="setViewPassword" placeholder="Например: class2026">
+      </div>
+      <div class="form-group">
+        <label>Пароль администратора (для редактирования)</label>
+        <input type="password" id="setAdminPassword" placeholder="Например: secretAdmin">
+      </div>
+      <button class="btn btn-primary" onclick="savePasswords()">💾 Сохранить пароли</button>
+      <button class="btn btn-danger" onclick="resetPasswords()">🗑️ Сбросить пароли (к admin123)</button>
+
+      <h3 style="margin:25px 0 10px">📅 Создать новый месяц</h3>
+      <div class="form-group">
+        <label>Название месяца (например: "Сентябрь 2026")</label>
+        <input type="text" id="newMonthName" placeholder="Сентябрь 2026">
+      </div>
+      <button class="btn btn-success" onclick="createNewMonth()">➕ Создать месяц</button>
+    </div>
+
+    <!-- Данные -->
+    <div id="admin-data" class="tab-content">
+      <h3 style="margin:15px 0 10px">Экспорт / Импорт данных</h3>
+      <p style="font-size:13px;color:#666;margin-bottom:15px">
+        Экспортируйте данные в файл, чтобы делать резервные копии или переносить на другой компьютер.
+      </p>
+      <button class="btn btn-primary" onclick="exportData()">📤 Экспорт в JSON</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 Импорт из JSON</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+
+      <h3 style="margin:25px 0 10px;color:#e74c3c">⚠️ Опасная зона</h3>
+      <button class="btn btn-danger" onclick="resetData()">🗑️ Удалить все данные</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ ХРАНИЛИЩЕ ============
+const STORAGE_KEY = 'parentBudget_v3';
+const VIEW_PWD_KEY = 'parentBudget_viewPassword';
+const ADMIN_PWD_KEY = 'parentBudget_adminPassword';
+const SESSION_KEY = 'parentBudget_session'; // 'admin' | 'guest'
+
+let data = loadData();
+let currentMonthId = data.currentMonthId;
+let currentRole = null; // 'admin' или 'guest'
+
+// Миграция со старого ключа пароля
+(function migrateOldPassword() {
+  const oldPwd = localStorage.getItem('parentBudget_password');
+  if (oldPwd && !localStorage.getItem(ADMIN_PWD_KEY)) {
+    localStorage.setItem(ADMIN_PWD_KEY, oldPwd);
+    localStorage.removeItem('parentBudget_password');
+  }
+})();
+
+function loadData() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    const d = JSON.parse(saved);
+    if (d.months) d.months.forEach(m => { delete m.income; });
+    if (d.archive) d.archive.forEach(m => { delete m.income; });
+    return d;
+  }
+  const defaultMonth = {
+    id: 'month_' + Date.now(),
+    name: new Date().toLocaleString('ru', { month: 'long', year: 'numeric' }),
+    prevBalance: 0,
+    additionalIncome: 0,
+    students: Array.from({length: 30}, () => ({ name: '', amount: 0, paid: false })),
+    expenses: []
+  };
+  return {
+    months: [defaultMonth],
+    currentMonthId: defaultMonth.id,
+    archive: []
+  };
+}
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function getCurrentMonth() {
+  return data.months.find(m => m.id === currentMonthId) || data.months[0];
+}
+
+// ============ АВТО-ПОДСЧЁТ ============
+function calcIncome(month) {
+  return month.students.reduce((sum, s) => sum + (s.paid ? Number(s.amount || 0) : 0), 0);
+}
+function calcExpense(month) {
+  return month.expenses.reduce((sum, e) => sum + Number(e.amount || 0), 0);
+}
+function calcBudget(month) {
+  return calcIncome(month) + Number(month.additionalIncome || 0);
+}
+function calcBalance(month) {
+  return Number(month.prevBalance || 0) + calcBudget(month) - calcExpense(month);
+}
+
+// ============ АВТОРИЗАЦИЯ ============
+function getViewPassword() {
+  return localStorage.getItem(VIEW_PWD_KEY) || '';
+}
+function getAdminPassword() {
+  return localStorage.getItem(ADMIN_PWD_KEY) || 'admin123';
+}
+
+function doLogin() {
+  const pwd = document.getElementById('loginPassword').value;
+  const viewPwd = getViewPassword();
+  const adminPwd = getAdminPassword();
+
+  if (pwd === adminPwd) {
+    currentRole = 'admin';
+    sessionStorage.setItem(SESSION_KEY, 'admin');
+    enterApp();
+  } else if (viewPwd && pwd === viewPwd) {
+    currentRole = 'guest';
+    sessionStorage.setItem(SESSION_KEY, 'guest');
+    enterApp();
+  } else {
+    document.getElementById('loginError').classList.add('show');
+    document.getElementById('loginPassword').value = '';
+    document.getElementById('loginPassword').focus();
+  }
+}
+
+function doGuestLogin() {
+  // Быстрый вход как гость (если задан пароль просмотра)
+  currentRole = 'guest';
+  sessionStorage.setItem(SESSION_KEY, 'guest');
+  enterApp();
+}
+
+function enterApp() {
+  document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('app').classList.add('visible');
+
+  // Обновляем UI в зависимости от роли
+  const adminBtn = document.getElementById('adminBtn');
+  const userBadge = document.getElementById('userBadge');
+  const guestBtn = document.getElementById('guestBtn');
+
+  if (currentRole === 'admin') {
+    adminBtn.classList.remove('hidden');
+    userBadge.innerHTML = '👑 Администратор';
+    guestBtn.style.display = 'none';
+  } else {
+    adminBtn.classList.add('hidden');
+    userBadge.innerHTML = '👁️ Гость (только просмотр)';
+    // Показываем кнопку "Войти как гость" только если задан пароль просмотра
+    const viewPwd = getViewPassword();
+    guestBtn.style.display = viewPwd ? 'block' : 'none';
+  }
+
+  render();
+}
+
+function doLogout() {
+  sessionStorage.removeItem(SESSION_KEY);
+  currentRole = null;
+  document.getElementById('app').classList.remove('visible');
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('loginPassword').value = '';
+  document.getElementById('loginError').classList.remove('show');
+  // Обновляем видимость кнопки гостя
+  const viewPwd = getViewPassword();
+  document.getElementById('guestBtn').style.display = viewPwd ? 'block' : 'none';
+}
+
+function openAdmin() {
+  // Если уже админ — сразу открываем панель
+  if (currentRole === 'admin') {
+    openAdminPanel();
+    return;
+  }
+  // Иначе просим пароль админа
+  document.getElementById('adminLoginModal').classList.add('active');
+  document.getElementById('adminPassword').value = '';
+  setTimeout(() => document.getElementById('adminPassword').focus(), 100);
+}
+
+function checkAdminPassword() {
+  const pwd = document.getElementById('adminPassword').value;
+  if (pwd === getAdminPassword()) {
+    closeModal('adminLoginModal');
+    currentRole = 'admin';
+    sessionStorage.setItem(SESSION_KEY, 'admin');
+    document.getElementById('adminBtn').classList.remove('hidden');
+    document.getElementById('userBadge').innerHTML = '👑 Администратор';
+    openAdminPanel();
+  } else {
+    alert('Неверный пароль администратора!');
+  }
+}
+
+// Проверка сессии при загрузке
+(function checkSession() {
+  const savedSession = sessionStorage.getItem(SESSION_KEY);
+  if (savedSession === 'admin' || savedSession === 'guest') {
+    currentRole = savedSession;
+    enterApp();
+  }
+})();
+
+// ============ ОТРИСОВКА ============
+function render() {
+  renderMonthSelector();
+  renderSummary();
+  renderStudents();
+  renderExpenses();
+  renderArchive();
+}
+
+function renderMonthSelector() {
+  const sel = document.getElementById('monthSelect');
+  sel.innerHTML = '';
+  data.months.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = m.name;
+    if (m.id === currentMonthId) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  sel.onchange = (e) => { currentMonthId = e.target.value; render(); };
+}
+
+function renderSummary() {
+  const m = getCurrentMonth();
+  const income = calcIncome(m);
+  const addIncome = Number(m.additionalIncome || 0);
+  const budget = calcBudget(m);
+  const expense = calcExpense(m);
+  const balance = calcBalance(m);
+
+  document.getElementById('summary').innerHTML = `
+    <div class="summary-card balance">
+      <div class="label">Остаток с прошлого месяца</div>
+      <div class="value">${formatMoney(m.prevBalance)} ₽</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Приход (авт.)</div>
+      <div class="value">${formatMoney(income)} ₽</div>
+    </div>
+    <div class="summary-card">
+      <div class="label">Доп. приход</div>
+      <div class="value">${formatMoney(addIncome)} ₽</div>
+    </div>
+    <div class="summary-card balance">
+      <div class="label">Бюджет текущего месяца</div>
+      <div class="value">${formatMoney(budget)} ₽</div>
+    </div>
+    <div class="summary-card expense">
+      <div class="label">Расход (авт.)</div>
+      <div class="value">${formatMoney(expense)} ₽</div>
+    </div>
+    <div class="summary-card balance">
+      <div class="label">Остаток на конец месяца</div>
+      <div class="value">${formatMoney(balance)} ₽</div>
+    </div>
+  `;
+}
+
+function renderStudents() {
+  const m = getCurrentMonth();
+  const tbody = document.getElementById('studentsTable');
+  tbody.innerHTML = '';
+  let totalPaid = 0, totalExpected = 0, paidCount = 0, totalCount = 0;
+
+  m.students.forEach((s, i) => {
+    if (!s.name && !s.amount) return;
+    totalCount++;
+    totalExpected += Number(s.amount || 0);
+    if (s.paid) { paidCount++; totalPaid += Number(s.amount || 0); }
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td>${escapeHtml(s.name) || '<span class="empty-row">—</span>'}</td>
+      <td class="amount">${s.amount ? formatMoney(s.amount) + ' ₽' : '—'}</td>
+      <td class="${s.paid ? 'status-paid' : 'status-unpaid'}">${s.paid ? '✔' : '✘'}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  if (totalCount > 0) {
+    const tr = document.createElement('tr');
+    tr.className = 'totals-row';
+    tr.innerHTML = `
+      <td colspan="2"><b>ИТОГО:</b> сдали ${paidCount} из ${totalCount}</td>
+      <td class="amount"><b>${formatMoney(totalPaid)} ₽</b></td>
+      <td><small style="color:#777">ожидалось ${formatMoney(totalExpected)} ₽</small></td>
+    `;
+    tbody.appendChild(tr);
+  }
+
+  if (totalCount === 0) {
+    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#aaa;padding:20px">Нет данных</td></tr>';
+  }
+}
+
+function renderExpenses() {
+  const m = getCurrentMonth();
+  const tbody = document.getElementById('expensesTable');
+  tbody.innerHTML = '';
+  let total = 0;
+  m.expenses.forEach((e, i) => {
+    total += Number(e.amount || 0);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td>${escapeHtml(e.description) || '<span class="empty-row">—</span>'}</td>
+      <td class="amount">${e.amount ? formatMoney(e.amount) + ' ₽' : '—'}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  if (m.expenses.length > 0) {
+    const tr = document.createElement('tr');
+    tr.className = 'totals-row';
+    tr.innerHTML = `<td colspan="2"><b>ИТОГО РАСХОД:</b></td><td class="amount"><b>${formatMoney(total)} ₽</b></td>`;
+    tbody.appendChild(tr);
+  }
+  if (m.expenses.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:#aaa;padding:20px">Расходов нет</td></tr>';
+  }
+}
+
+function renderArchive() {
+  const list = document.getElementById('archiveList');
+  if (!data.archive || data.archive.length === 0) {
+    list.innerHTML = '<p style="color:#aaa;text-align:center;padding:20px">Архив пуст</p>';
+    return;
+  }
+  list.innerHTML = '';
+  data.archive.slice().reverse().forEach(m => {
+    const income = calcIncome(m);
+    const addIncome = Number(m.additionalIncome || 0);
+    const budget = income + addIncome;
+    const expense = calcExpense(m);
+    const balance = Number(m.prevBalance || 0) + budget - expense;
+    const paidCount = m.students.filter(s => s.paid).length;
+    const totalCount = m.students.filter(s => s.name).length;
+
+    const div = document.createElement('div');
+    div.className = 'archive-item';
+    div.innerHTML = `
+      <div>
+        <strong>${escapeHtml(m.name)}</strong><br>
+        <small style="color:#666">
+          Приход: ${formatMoney(income)} ₽ · Доп: ${formatMoney(addIncome)} ₽ · 
+          Расход: ${formatMoney(expense)} ₽ · Остаток: <b>${formatMoney(balance)} ₽</b><br>
+          Сдали: ${paidCount}/${totalCount}
+        </small>
+      </div>
+      <button class="btn btn-secondary btn-small" onclick="viewArchive('${m.id}')">👁️ Посмотреть</button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+// ============ ВКЛАДКИ ============
+function switchTab(tab, btn) {
+  document.querySelectorAll('.content > .tab-buttons .tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.content > .tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+function switchAdminTab(tab, btn) {
+  document.querySelectorAll('#adminModal .tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#adminModal .tab-buttons .tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('admin-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ============ АДМИНКА ============
+function openAdminPanel() {
+  const m = getCurrentMonth();
+  document.getElementById('editPrevBalance').value = m.prevBalance;
+  document.getElementById('editAddIncome').value = m.additionalIncome;
+
+  // Заполняем текущие пароли в настройках
+  document.getElementById('setViewPassword').value = getViewPassword();
+  document.getElementById('setAdminPassword').value = getAdminPassword();
+
+  const studentsDiv = document.getElementById('adminStudents');
+  studentsDiv.innerHTML = '';
+  m.students.forEach((s, i) => addStudentRow(s, i));
+
+  const expDiv = document.getElementById('adminExpenses');
+  expDiv.innerHTML = '';
+  m.expenses.forEach(e => addExpenseRow(e));
+
+  document.getElementById('adminModal').classList.add('active');
+  recalcAdminTotals();
+}
+
+function addStudentRow(s = null, idx = null) {
+  const div = document.createElement('div');
+  div.className = 'admin-row';
+  div.dataset.idx = idx !== null ? idx : '';
+  div.innerHTML = `
+    <input type="text" placeholder="ФИО ученика" value="${s ? escapeHtml(s.name) : ''}">
+    <input type="number" placeholder="Сумма" step="0.01" value="${s ? s.amount : ''}">
+    <select>
+      <option value="false" ${s && !s.paid ? 'selected' : ''}>✘ не сдал</option>
+      <option value="true" ${s && s.paid ? 'selected' : ''}>✔ сдал</option>
+    </select>
+    <button class="btn btn-danger btn-small" onclick="this.parentElement.remove();recalcAdminTotals()">✕</button>
+  `;
+  div.querySelectorAll('input, select').forEach(el => {
+    el.addEventListener('input', recalcAdminTotals);
+    el.addEventListener('change', recalcAdminTotals);
+  });
+  document.getElementById('adminStudents').appendChild(div);
+}
+
+function addExpenseRow(e = null) {
+  const div = document.createElement('div');
+  div.className = 'admin-row';
+  div.style.gridTemplateColumns = '3fr 1fr auto';
+  div.innerHTML = `
+    <input type="text" placeholder="На что потрачено" value="${e ? escapeHtml(e.description) : ''}">
+    <input type="number" placeholder="Сумма" step="0.01" value="${e ? e.amount : ''}">
+    <button class="btn btn-danger btn-small" onclick="this.parentElement.remove();recalcAdminTotals()">✕</button>
+  `;
+  div.querySelectorAll('input').forEach(el => el.addEventListener('input', recalcAdminTotals));
+  document.getElementById('adminExpenses').appendChild(div);
+}
+
+function recalcAdminTotals() {
+  const tempStudents = [];
+  document.querySelectorAll('#adminStudents .admin-row').forEach(row => {
+    const [nameInp, amountInp, statusSel] = row.querySelectorAll('input, select');
+    tempStudents.push({
+      name: nameInp.value.trim(),
+      amount: Number(amountInp.value) || 0,
+      paid: statusSel.value === 'true'
+    });
+  });
+  const tempExpenses = [];
+  document.querySelectorAll('#adminExpenses .admin-row').forEach(row => {
+    const [descInp, amountInp] = row.querySelectorAll('input');
+    tempExpenses.push({
+      description: descInp.value.trim(),
+      amount: Number(amountInp.value) || 0
+    });
+  });
+
+  const prevBalance = Number(document.getElementById('editPrevBalance').value) || 0;
+  const addIncome = Number(document.getElementById('editAddIncome').value) || 0;
+
+  const income = tempStudents.reduce((sum, s) => sum + (s.paid ? s.amount : 0), 0);
+  const expense = tempExpenses.reduce((sum, e) => sum + e.amount, 0);
+  const budget = income + addIncome;
+  const balance = prevBalance + budget - expense;
+
+  document.getElementById('autoIncome').value = formatMoney(income);
+  document.getElementById('autoIncomeDisplay').textContent = formatMoney(income);
+  document.getElementById('autoExpense').value = formatMoney(expense);
+  document.getElementById('autoExpenseDisplay').textContent = formatMoney(expense);
+  document.getElementById('autoBudgetDisplay').textContent = formatMoney(budget);
+  document.getElementById('autoBalanceDisplay').textContent = formatMoney(balance);
+}
+
+function collectAdminData() {
+  const m = getCurrentMonth();
+  m.prevBalance = Number(document.getElementById('editPrevBalance').value) || 0;
+  m.additionalIncome = Number(document.getElementById('editAddIncome').value) || 0;
+
+  m.students = [];
+  document.querySelectorAll('#adminStudents .admin-row').forEach(row => {
+    const [nameInp, amountInp, statusSel] = row.querySelectorAll('input, select');
+    const name = nameInp.value.trim();
+    const amount = Number(amountInp.value) || 0;
+    const paid = statusSel.value === 'true';
+    if (name || amount) m.students.push({ name, amount, paid });
+  });
+  while (m.students.length < 30) m.students.push({ name: '', amount: 0, paid: false });
+
+  m.expenses = [];
+  document.querySelectorAll('#adminExpenses .admin-row').forEach(row => {
+    const [descInp, amountInp] = row.querySelectorAll('input');
+    const description = descInp.value.trim();
+    const amount = Number(amountInp.value) || 0;
+    if (description || amount) m.expenses.push({ description, amount });
+  });
+}
+
+function saveAll() {
+  collectAdminData();
+  saveData();
+  render();
+  alert('✅ Сохранено!');
+}
+
+function archiveMonth() {
+  if (!confirm('Архивировать текущий месяц? Он переместится в архив, а на его месте создастся новый с переносом остатка.')) return;
+  collectAdminData();
+  const m = getCurrentMonth();
+  const balance = calcBalance(m);
+
+  data.archive.push({ ...m, students: [...m.students], expenses: [...m.expenses] });
+  data.months = data.months.filter(x => x.id !== m.id);
+  const nextMonthName = prompt('Название нового месяца:', getNextMonthName());
+  if (!nextMonthName) return;
+
+  const newMonth = {
+    id: 'month_' + Date.now(),
+    name: nextMonthName,
+    prevBalance: balance,
+    additionalIncome: 0,
+    students: Array.from({length: 30}, () => ({ name: '', amount: 0, paid: false })),
+    expenses: []
+  };
+  data.months.push(newMonth);
+  currentMonthId = newMonth.id;
+
+  saveData();
+  closeModal('adminModal');
+  render();
+  alert('✅ Месяц архивирован. Остаток ' + formatMoney(balance) + ' ₽ перенесён в новый месяц.');
+}
+
+function getNextMonthName() {
+  const d = new Date();
+  d.setMonth(d.getMonth() + 1);
+  return d.toLocaleString('ru', { month: 'long', year: 'numeric' });
+}
+
+function createNewMonth() {
+  const name = document.getElementById('newMonthName').value.trim();
+  if (!name) { alert('Введите название месяца'); return; }
+  const newMonth = {
+    id: 'month_' + Date.now(),
+    name: name,
+    prevBalance: 0,
+    additionalIncome: 0,
+    students: Array.from({length: 30}, () => ({ name: '', amount: 0, paid: false })),
+    expenses: []
+  };
+  data.months.push(newMonth);
+  currentMonthId = newMonth.id;
+  saveData();
+  closeModal('adminModal');
+  render();
+  alert('✅ Месяц "' + name + '" создан');
+}
+
+function savePasswords() {
+  const viewPwd = document.getElementById('setViewPassword').value.trim();
+  const adminPwd = document.getElementById('setAdminPassword').value.trim();
+  if (!adminPwd || adminPwd.length < 3) {
+    alert('Пароль администратора должен быть минимум 3 символа');
+    return;
+  }
+  if (viewPwd && viewPwd === adminPwd) {
+    alert('Пароли должны отличаться!');
+    return;
+  }
+  localStorage.setItem(VIEW_PWD_KEY, viewPwd);
+  localStorage.setItem(ADMIN_PWD_KEY, adminPwd);
+  alert('✅ Пароли сохранены!\n\n' +
+    (viewPwd ? '🔓 Родители входят по паролю: ' + viewPwd + '\n' : '🔓 Пароль для гостей не задан\n') +
+    '🔑 Пароль администратора: ' + adminPwd);
+}
+
+function resetPasswords() {
+  if (!confirm('Сбросить все пароли к значению по умолчанию (admin123)?')) return;
+  localStorage.removeItem(VIEW_PWD_KEY);
+  localStorage.setItem(ADMIN_PWD_KEY, 'admin123');
+  document.getElementById('setViewPassword').value = '';
+  document.getElementById('setAdminPassword').value = 'admin123';
+  alert('✅ Пароли сброшены. Новый пароль: admin123');
+}
+
+function viewArchive(monthId) {
+  const m = data.archive.find(x => x.id === monthId);
+  if (!m) return;
+  const income = calcIncome(m);
+  const addIncome = Number(m.additionalIncome || 0);
+  const budget = income + addIncome;
+  const expense = calcExpense(m);
+  const balance = Number(m.prevBalance || 0) + budget - expense;
+
+  let html = `<h2>📦 ${escapeHtml(m.name)}</h2>`;
+  html += `<p><b>Остаток с прошлого месяца:</b> ${formatMoney(m.prevBalance)} ₽</p>`;
+  html += `<p><b>Приход (авт.):</b> ${formatMoney(income)} ₽ | <b>Доп. приход:</b> ${formatMoney(addIncome)} ₽</p>`;
+  html += `<p><b>Бюджет:</b> ${formatMoney(budget)} ₽ | <b>Расход (авт.):</b> ${formatMoney(expense)} ₽</p>`;
+  html += `<p><b>Остаток на конец:</b> ${formatMoney(balance)} ₽</p>`;
+  html += `<h3 style="margin-top:15px">Ученики:</h3><ul>`;
+  m.students.forEach(s => {
+    if (s.name) html += `<li>${escapeHtml(s.name)} — ${formatMoney(s.amount)} ₽ ${s.paid ? '✔' : '✘'}</li>`;
+  });
+  html += `</ul><h3 style="margin-top:15px">Расходы:</h3><ul>`;
+  m.expenses.forEach(e => {
+    html += `<li>${escapeHtml(e.description)} — ${formatMoney(e.amount)} ₽</li>`;
+  });
+  html += `</ul>`;
+
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay active';
+  modal.innerHTML = `<div class="modal">${html}<button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">Закрыть</button></div>`;
+  document.body.appendChild(modal);
+}
+
+// ============ ЭКСПОРТ / ИМПОРТ ============
+function exportData() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'budget_' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importData(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!imported.months) throw new Error('Неверный формат');
+      if (!confirm('Заменить все текущие данные импортированными?')) return;
+      data = imported;
+      currentMonthId = data.currentMonthId || data.months[0].id;
+      saveData();
+      render();
+      alert('✅ Данные импортированы');
+    } catch (err) {
+      alert('❌ Ошибка импорта: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function resetData() {
+  if (!confirm('Удалить ВСЕ данные? Это действие необратимо!')) return;
+  if (!confirm('Точно-точно? Все месяцы и архив будут удалены!')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+// ============ УТИЛИТЫ ============
+function closeModal(id) {
+  document.getElementById(id).classList.remove('active');
+}
+
+function formatMoney(n) {
+  return Number(n || 0).toLocaleString('ru-RU', { maximumFractionDigits: 2 });
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+document.getElementById('editPrevBalance').addEventListener('input', recalcAdminTotals);
+document.getElementById('editAddIncome').addEventListener('input', recalcAdminTotals);
+
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.classList.remove('active');
+  });
+});
+
+if (!sessionStorage.getItem(SESSION_KEY)) render();
+</script>
+</body>
+</html>
