@@ -2,7 +2,11 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Бюджет Группы">
+<meta name="theme-color" content="#667eea">
 <title>Родительский комитет — Бюджет группы</title>
 
 <!-- Firebase SDK -->
@@ -11,12 +15,29 @@
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    overscroll-behavior-y: none; /* Убирает "пружинящий" эффект на iOS */
+    -webkit-overflow-scrolling: touch;
+  }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     color: #333;
+    -webkit-tap-highlight-color: transparent; /* Убирает серый фон при тапе */
   }
+  
+  /* Запрет выделения текста на элементах интерфейса (как в приложении) */
+  button, .tab-btn, .btn, .summary-card, .committee-card, .news-card {
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  input, textarea, select {
+    user-select: text;
+    -webkit-user-select: text;
+  }
+
   .login-screen {
     position: fixed; inset: 0;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -56,21 +77,16 @@
     font-size: 15px; font-weight: 600; cursor: pointer;
     transition: 0.2s; margin-bottom: 10px;
   }
-  .login-card .btn-login:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-  }
+  .login-card .btn-login:active { transform: scale(0.98); }
   .login-error {
     background: #fee; color: #c33; padding: 10px; border-radius: 8px;
     font-size: 13px; margin-bottom: 15px; display: none;
   }
   .login-error.show { display: block; }
   .login-hint { margin-top: 20px; font-size: 12px; color: #999; }
-  .login-status {
-    font-size: 12px; color: #667eea; margin-top: 10px; min-height: 18px;
-  }
+  .login-status { font-size: 12px; color: #667eea; margin-top: 10px; min-height: 18px; }
 
-  .app { display: none; min-height: 100vh; padding: 20px; }
+  .app { display: none; min-height: 100vh; padding: 20px; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
   .app.visible { display: block; }
   .container {
     max-width: 1100px; margin: 0 auto; background: #fff;
@@ -100,9 +116,9 @@
     padding: 8px 16px; border-radius: 8px;
     cursor: pointer; font-size: 14px; transition: 0.2s;
   }
-  .admin-btn:hover, .logout-btn:hover { background: rgba(255,255,255,0.3); }
+  .admin-btn:active, .logout-btn:active { background: rgba(255,255,255,0.4); }
   .admin-btn.hidden { display: none; }
-  .content { padding: 30px; }
+  .content { padding: 30px; padding-bottom: 40px; }
 
   .summary-grouped {
     display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;
@@ -136,7 +152,6 @@
       background: #f8f9ff; padding: 18px; border-radius: 12px;
     }
   }
-
   @media (max-width: 360px) {
     .summary-block { grid-template-columns: 1fr; }
   }
@@ -156,7 +171,7 @@
     font-size: 13px; color: #555; text-transform: uppercase;
   }
   td { padding: 10px 12px; border-top: 1px solid #eee; font-size: 14px; }
-  tr:hover { background: #fafbff; }
+  tr:active { background: #f0f2f8; }
   .status-paid { color: #27ae60; font-weight: 700; font-size: 18px; }
   .status-unpaid { color: #e74c3c; font-weight: 700; font-size: 18px; }
   .amount { font-weight: 600; color: #2c3e50; }
@@ -164,10 +179,7 @@
   .totals-row { background: #fffbea !important; font-weight: 700; }
   .totals-row td { border-top: 2px solid #ffc107; }
 
-  /* ===== НОВОСТИ ===== */
-  .news-container {
-    margin-bottom: 30px;
-  }
+  .news-container { margin-bottom: 30px; }
   .news-card {
     background: linear-gradient(135deg, #667eea15, #764ba215);
     border-left: 4px solid #667eea;
@@ -180,30 +192,11 @@
     border-left-color: #e74c3c;
     background: linear-gradient(135deg, #e74c3c15, #c0392b15);
   }
-  .news-card .news-date {
-    font-size: 12px;
-    color: #777;
-    margin-bottom: 8px;
-  }
-  .news-card .news-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 8px;
-  }
-  .news-card .news-text {
-    font-size: 14px;
-    color: #555;
-    line-height: 1.5;
-  }
-  .news-empty {
-    text-align: center;
-    color: #aaa;
-    padding: 30px;
-    font-style: italic;
-  }
+  .news-card .news-date { font-size: 12px; color: #777; margin-bottom: 8px; }
+  .news-card .news-title { font-size: 16px; font-weight: 700; color: #2c3e50; margin-bottom: 8px; }
+  .news-card .news-text { font-size: 14px; color: #555; line-height: 1.5; }
+  .news-empty { text-align: center; color: #aaa; padding: 30px; font-style: italic; }
 
-  /* ===== КОМИТЕТ ===== */
   .committee-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -216,76 +209,56 @@
   }
   .committee-card.chair { border-left-color: #e74c3c; }
   .committee-card.treasurer { border-left-color: #27ae60; }
-  .committee-card .member-name {
-    font-size: 16px; font-weight: 700; color: #2c3e50; margin-bottom: 6px;
-  }
-  .committee-card .member-role {
-    font-size: 13px; color: #667eea; font-weight: 600; margin-bottom: 6px;
-  }
+  .committee-card .member-name { font-size: 16px; font-weight: 700; color: #2c3e50; margin-bottom: 6px; }
+  .committee-card .member-role { font-size: 13px; color: #667eea; font-weight: 600; margin-bottom: 6px; }
   .committee-card .member-phone { font-size: 13px; color: #777; }
   .committee-card .member-phone a { color: #667eea; text-decoration: none; }
-  .committee-card .member-phone a:hover { text-decoration: underline; }
-  .committee-empty {
-    text-align: center; color: #aaa; padding: 30px; font-style: italic;
-  }
+  .committee-empty { text-align: center; color: #aaa; padding: 30px; font-style: italic; }
 
   .modal-overlay {
     display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.6); z-index: 100;
+    background: rgba(0,0,0,0.6); z-index: 200;
     justify-content: center; align-items: center; padding: 20px;
+    backdrop-filter: blur(4px);
   }
   .modal-overlay.active { display: flex; }
   .modal {
     background: #fff; border-radius: 16px; padding: 30px;
     max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto;
+    animation: slideUp 0.3s ease;
   }
   .modal h2 { margin-bottom: 20px; color: #2c3e50; }
   .form-group { margin-bottom: 15px; }
-  .form-group label {
-    display: block; margin-bottom: 6px; font-size: 13px;
-    color: #555; font-weight: 600;
-  }
+  .form-group label { display: block; margin-bottom: 6px; font-size: 13px; color: #555; font-weight: 600; }
   .form-group input, .form-group textarea, .form-group select {
     width: 100%; padding: 10px 12px; border: 1px solid #ddd;
     border-radius: 8px; font-size: 14px; font-family: inherit;
   }
   .form-group textarea { min-height: 80px; resize: vertical; }
-  .form-group input:focus, .form-group textarea:focus {
-    outline: none; border-color: #667eea;
-  }
-  .form-group input[readonly] {
-    background: #f0f2f8; color: #2c3e50; font-weight: 700; cursor: not-allowed;
-  }
+  .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #667eea; }
+  .form-group input[readonly] { background: #f0f2f8; color: #2c3e50; font-weight: 700; cursor: not-allowed; }
+  
   .btn {
     padding: 10px 20px; border: none; border-radius: 8px;
     cursor: pointer; font-size: 14px; font-weight: 600;
     transition: 0.2s; margin-right: 8px; margin-bottom: 8px;
   }
+  .btn:active { transform: scale(0.96); }
   .btn-primary { background: #667eea; color: #fff; }
-  .btn-primary:hover { background: #5568d3; }
   .btn-success { background: #27ae60; color: #fff; }
-  .btn-success:hover { background: #229954; }
   .btn-danger { background: #e74c3c; color: #fff; }
-  .btn-danger:hover { background: #c0392b; }
   .btn-secondary { background: #95a5a6; color: #fff; }
-  .btn-secondary:hover { background: #7f8c8d; }
   .btn-small { padding: 5px 10px; font-size: 12px; }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-  .admin-row {
-    display: grid; grid-template-columns: 2fr 1fr auto auto;
-    gap: 8px; align-items: center; margin-bottom: 8px;
-  }
+  
+  .admin-row { display: grid; grid-template-columns: 2fr 1fr auto auto; gap: 8px; align-items: center; margin-bottom: 8px; }
   .admin-row input { padding: 8px; }
-  .admin-row-committee {
-    display: grid; grid-template-columns: 2fr 1.5fr 1fr auto;
-    gap: 8px; align-items: center; margin-bottom: 8px;
-  }
+  .admin-row-committee { display: grid; grid-template-columns: 2fr 1.5fr 1fr auto; gap: 8px; align-items: center; margin-bottom: 8px; }
   .admin-row-committee input { padding: 8px; }
-  .admin-row-news {
-    display: grid; grid-template-columns: 2fr 1fr auto auto auto;
-    gap: 8px; align-items: center; margin-bottom: 8px;
-  }
+  .admin-row-news { display: grid; grid-template-columns: 2fr 1fr auto auto auto; gap: 8px; align-items: center; margin-bottom: 8px; }
   .admin-row-news input, .admin-row-news select { padding: 8px; }
+
+  /* === ВКЛАДКИ (ДЕСКТОП) === */
   .tab-buttons {
     display: flex; gap: 5px; margin-bottom: 20px;
     border-bottom: 2px solid #eee; flex-wrap: wrap;
@@ -294,12 +267,18 @@
     padding: 10px 18px; background: none; border: none;
     cursor: pointer; font-size: 14px; color: #777;
     border-bottom: 3px solid transparent; margin-bottom: -2px;
+    display: flex; align-items: center; gap: 6px;
   }
-  .tab-btn.active {
-    color: #667eea; border-bottom-color: #667eea; font-weight: 600;
-  }
-  .tab-content { display: none; }
+  .tab-btn.active { color: #667eea; border-bottom-color: #667eea; font-weight: 600; }
+  
+  /* Анимация переключения вкладок */
+  .tab-content { display: none; animation: fadeIn 0.3s ease; }
   .tab-content.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   .archive-item {
     background: #f8f9ff; padding: 15px; border-radius: 10px;
     margin-bottom: 10px; display: flex; justify-content: space-between;
@@ -321,11 +300,50 @@
     background: #27ae60; color: #fff; padding: 10px 18px;
     border-radius: 8px; font-size: 13px; font-weight: 600;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    opacity: 0; transition: opacity 0.3s; z-index: 200;
+    opacity: 0; transition: opacity 0.3s; z-index: 300;
   }
   .save-indicator.show { opacity: 1; }
-  @media (max-width: 600px) {
-    .content { padding: 15px; }
+
+  /* === МОБИЛЬНОЕ ПРИЛОЖЕНИЕ: НИЖНЯЯ НАВИГАЦИЯ === */
+  @media (max-width: 768px) {
+    .main-tabs {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-top: 1px solid #e0e0e0;
+      margin: 0;
+      padding: 8px 0 calc(8px + env(safe-area-inset-bottom)) 0;
+      display: flex;
+      justify-content: space-around;
+      z-index: 100;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+    }
+    .main-tabs .tab-btn {
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 2px;
+      font-size: 11px;
+      color: #999;
+      border-bottom: none !important;
+      gap: 4px;
+    }
+    .main-tabs .tab-btn .tab-icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+    .main-tabs .tab-btn .tab-text {
+      font-weight: 500;
+    }
+    .main-tabs .tab-btn.active {
+      color: #667eea;
+    }
+    .content {
+      padding: 15px 15px 90px 15px; /* Отступ снизу для навигации */
+    }
     header { padding: 15px; }
     header h1 { font-size: 18px; }
     .admin-row, .admin-row-committee, .admin-row-news { grid-template-columns: 1fr; }
@@ -339,16 +357,14 @@
 <!-- Страница входа -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
-    <div class="login-icon"></div>
+    <div class="login-icon">🏫</div>
     <h1>Родительский комитет</h1>
     <p class="subtitle">Бюджет группы — доступ по паролю</p>
     <div class="login-error" id="loginError">Неверный пароль. Попробуйте ещё раз.</div>
     <div class="login-status" id="loginStatus">Загрузка...</div>
     <input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')doLogin()" disabled>
     <button class="btn-login" onclick="doLogin()" id="loginBtn" disabled>Войти</button>
-    <div class="login-hint">
-      Доступ по паролю. Пароль выдаёт администратор.
-    </div>
+    <div class="login-hint">Доступ по паролю. Пароль выдаёт администратор.</div>
   </div>
 </div>
 
@@ -356,7 +372,7 @@
 <div class="app" id="app">
   <div class="container">
     <header>
-      <h1>💰 Бюджет родительского комитета</h1>
+      <h1>💰 Бюджет группы</h1>
       <div class="header-right">
         <div class="user-badge" id="userBadge">👤 Гость</div>
         <div class="month-selector">
@@ -402,13 +418,28 @@
         </div>
       </div>
 
-      <!-- ВКЛАДКИ: Новости, Взносы, Расходы, Комитет, Архив -->
-      <div class="tab-buttons">
-        <button class="tab-btn active" onclick="switchTab('news', this)">📰 Новости</button>
-        <button class="tab-btn" onclick="switchTab('contributions', this)">💰 Взносы</button>
-        <button class="tab-btn" onclick="switchTab('expenses', this)">💸 Расходы</button>
-        <button class="tab-btn" onclick="switchTab('committee', this)">👥 Комитет</button>
-        <button class="tab-btn" onclick="switchTab('archive', this)">📦 Архив</button>
+      <!-- ВКЛАДКИ (main-tabs для мобильной нижней навигации) -->
+      <div class="tab-buttons main-tabs">
+        <button class="tab-btn active" onclick="switchTab('news', this)">
+          <span class="tab-icon">📰</span>
+          <span class="tab-text">Новости</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('contributions', this)">
+          <span class="tab-icon">💰</span>
+          <span class="tab-text">Взносы</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('expenses', this)">
+          <span class="tab-icon">💸</span>
+          <span class="tab-text">Расходы</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('committee', this)">
+          <span class="tab-icon">👥</span>
+          <span class="tab-text">Комитет</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('archive', this)">
+          <span class="tab-icon">📦</span>
+          <span class="tab-text">Архив</span>
+        </button>
       </div>
 
       <!-- ВКЛАДКА: НОВОСТИ -->
@@ -440,7 +471,7 @@
       <!-- ВКЛАДКА: РАСХОДЫ -->
       <div id="tab-expenses" class="tab-content">
         <div class="section">
-          <h2> Расходы текущего месяца</h2>
+          <h2>💸 Расходы текущего месяца</h2>
           <table>
             <thead>
               <tr>
@@ -457,7 +488,7 @@
       <!-- ВКЛАДКА: КОМИТЕТ -->
       <div id="tab-committee" class="tab-content">
         <div class="section">
-          <h2> Состав родительского комитета</h2>
+          <h2>👥 Состав родительского комитета</h2>
           <div id="committeeList" class="committee-grid"></div>
         </div>
       </div>
@@ -465,7 +496,7 @@
       <!-- ВКЛАДКА: АРХИВ -->
       <div id="tab-archive" class="tab-content">
         <div class="section">
-          <h2> Архив предыдущих месяцев</h2>
+          <h2>📦 Архив предыдущих месяцев</h2>
           <div id="archiveList"></div>
         </div>
       </div>
@@ -476,7 +507,7 @@
 <!-- Модалка подтверждения админа -->
 <div class="modal-overlay" id="adminLoginModal">
   <div class="modal" style="max-width:400px">
-    <h2> Подтверждение администратора</h2>
+    <h2>🔐 Подтверждение администратора</h2>
     <p style="color:#666;font-size:14px;margin-bottom:15px">Введите пароль администратора для доступа к редактированию</p>
     <div class="form-group">
       <label>Пароль администратора</label>
@@ -491,7 +522,7 @@
 <div class="modal-overlay" id="adminModal">
   <div class="modal">
     <h2>⚙️ Админ-панель</h2>
-    <div class="hint">💡 Все изменения сохраняются в облаке автоматически. Приход и расход считаются автоматически.</div>
+    <div class="hint">💡 Все изменения сохраняются в облаке автоматически.</div>
 
     <div class="tab-buttons">
       <button class="tab-btn active" onclick="switchAdminTab('news', this)">📰 Новости</button>
@@ -504,12 +535,8 @@
     <!-- НОВОСТИ -->
     <div id="admin-news" class="tab-content active">
       <h3 style="margin:15px 0 10px">📰 Новости и объявления</h3>
-      <p style="font-size:13px;color:#666;margin-bottom:15px">
-        Добавьте новости. Они будут видны всем родителям на главной странице.
-      </p>
       <div id="adminNews"></div>
       <button class="btn btn-success btn-small" onclick="addNewsRow()">+ Добавить новость</button>
-
       <div style="margin-top:25px">
         <button class="btn btn-primary" onclick="saveAll()">💾 Сохранить в облако</button>
         <button class="btn btn-secondary" onclick="closeModal('adminModal')">Закрыть</button>
@@ -523,9 +550,7 @@
         <label>Остаток с прошлого месяца, ₽</label>
         <input type="number" id="editPrevBalance" step="0.01">
       </div>
-      <div class="auto-calc-info">
-        📊 <b>Приход</b> считается автоматически как сумма взносов со статусом «✔ сдал».
-      </div>
+      <div class="auto-calc-info">📊 <b>Приход</b> считается автоматически как сумма взносов со статусом «✔ сдал».</div>
       <div class="form-group">
         <label>Приход (автоматически) — <span id="autoIncomeDisplay">0</span> ₽</label>
         <input type="text" id="autoIncome" readonly value="0">
@@ -534,9 +559,7 @@
         <label>Дополнительный приход, ₽ (вручную)</label>
         <input type="number" id="editAddIncome" step="0.01">
       </div>
-      <div class="auto-calc-info">
-        💸 <b>Расход</b> считается автоматически как сумма всех расходов ниже.
-      </div>
+      <div class="auto-calc-info">💸 <b>Расход</b> считается автоматически как сумма всех расходов ниже.</div>
       <div class="form-group">
         <label>Расход (автоматически) — <span id="autoExpenseDisplay">0</span> ₽</label>
         <input type="text" id="autoExpense" readonly value="0">
@@ -566,12 +589,8 @@
     <!-- РЕДАКТИРОВАНИЕ КОМИТЕТА -->
     <div id="admin-committee" class="tab-content">
       <h3 style="margin:15px 0 10px">👥 Состав родительского комитета</h3>
-      <p style="font-size:13px;color:#666;margin-bottom:15px">
-        Добавьте членов комитета. Этот список видят все родители.
-      </p>
       <div id="adminCommittee"></div>
       <button class="btn btn-success btn-small" onclick="addCommitteeRow()">+ Добавить члена комитета</button>
-
       <div style="margin-top:25px">
         <button class="btn btn-primary" onclick="saveAll()">💾 Сохранить в облако</button>
         <button class="btn btn-secondary" onclick="closeModal('adminModal')">Закрыть</button>
@@ -581,9 +600,6 @@
     <!-- НАСТРОЙКИ -->
     <div id="admin-settings" class="tab-content">
       <h3 style="margin:15px 0 10px">🔐 Пароли доступа</h3>
-      <p style="font-size:13px;color:#666;margin-bottom:15px">
-        Задайте два разных пароля: один для родителей (только просмотр), другой для себя (полный доступ).
-      </p>
       <div class="form-group">
         <label>Пароль для просмотра (для родителей)</label>
         <input type="password" id="setViewPassword" placeholder="Например: group2026">
@@ -593,7 +609,7 @@
         <input type="password" id="setAdminPassword" placeholder="Например: secretAdmin">
       </div>
       <button class="btn btn-primary" onclick="savePasswords()">💾 Сохранить пароли</button>
-      <button class="btn btn-danger" onclick="resetPasswords()">️ Сбросить пароли (к admin123)</button>
+      <button class="btn btn-danger" onclick="resetPasswords()">🗑️ Сбросить пароли (к admin123)</button>
 
       <h3 style="margin:25px 0 10px">📅 Создать новый месяц</h3>
       <div class="form-group">
@@ -606,13 +622,9 @@
     <!-- ДАННЫЕ -->
     <div id="admin-data" class="tab-content">
       <h3 style="margin:15px 0 10px">Экспорт / Импорт данных</h3>
-      <p style="font-size:13px;color:#666;margin-bottom:15px">
-        Экспортируйте данные в файл для резервной копии.
-      </p>
       <button class="btn btn-primary" onclick="exportData()">📤 Экспорт в JSON</button>
       <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 Импорт из JSON</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-
       <h3 style="margin:25px 0 10px;color:#e74c3c">⚠️ Опасная зона</h3>
       <button class="btn btn-danger" onclick="resetData()">🗑️ Удалить все данные в базе</button>
     </div>
@@ -648,7 +660,7 @@ function getDefaultData() {
     name: new Date().toLocaleString('ru', { month: 'long', year: 'numeric' }),
     prevBalance: 0,
     additionalIncome: 0,
-    students: [], // Начинаем с пустого списка
+    students: [],
     expenses: []
   };
   return {
@@ -656,7 +668,7 @@ function getDefaultData() {
     currentMonthId: defaultMonth.id,
     archive: [],
     committee: [],
-    news: [] // Новости
+    news: []
   };
 }
 
@@ -696,7 +708,6 @@ async function loadFromFirebase() {
       };
       currentMonthId = data.currentMonthId;
     }
-
     enableLogin();
     render();
   } catch (err) {
@@ -769,10 +780,8 @@ function doLogin() {
 function enterApp() {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('app').classList.add('visible');
-
   const adminBtn = document.getElementById('adminBtn');
   const userBadge = document.getElementById('userBadge');
-
   if (currentRole === 'admin') {
     adminBtn.classList.remove('hidden');
     userBadge.innerHTML = '👑 Администратор';
@@ -780,7 +789,6 @@ function enterApp() {
     adminBtn.classList.add('hidden');
     userBadge.innerHTML = '👁️ Гость (только просмотр)';
   }
-
   render();
 }
 
@@ -808,7 +816,7 @@ function checkAdminPassword() {
     closeModal('adminLoginModal');
     currentRole = 'admin';
     document.getElementById('adminBtn').classList.remove('hidden');
-    document.getElementById('userBadge').innerHTML = ' Администратор';
+    document.getElementById('userBadge').innerHTML = '👑 Администратор';
     openAdminPanel();
   } else {
     alert('Неверный пароль администратора!');
@@ -855,47 +863,31 @@ function renderSummary() {
   document.getElementById('val-balance').textContent = formatMoney(balance) + ' ₽';
 }
 
-// ===== РЕНДЕР НОВОСТЕЙ =====
 function renderNews() {
   const container = document.getElementById('newsList');
-  
   if (!data.news || data.news.length === 0) {
     container.innerHTML = '<div class="news-empty">Новостей пока нет</div>';
     return;
   }
-
   container.innerHTML = '';
-  // Сортируем: новые сверху
   const sortedNews = [...data.news].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
-  
   sortedNews.forEach(news => {
     if (!news.title && !news.text) return;
-    
     const card = document.createElement('div');
     card.className = 'news-card' + (news.urgent ? ' urgent' : '');
-    
     const dateStr = news.date ? new Date(news.date).toLocaleString('ru-RU', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+      day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
     }) : '';
-    
     card.innerHTML = `
-      <div class="news-date">${news.urgent ? ' СРОЧНО • ' : ''}${dateStr}</div>
+      <div class="news-date">${news.urgent ? '🔴 СРОЧНО • ' : ''}${dateStr}</div>
       <div class="news-title">${escapeHtml(news.title || 'Без заголовка')}</div>
       <div class="news-text">${escapeHtml(news.text || '')}</div>
     `;
     container.appendChild(card);
   });
-
-  if (container.children.length === 0) {
-    container.innerHTML = '<div class="news-empty">Новостей пока нет</div>';
-  }
+  if (container.children.length === 0) container.innerHTML = '<div class="news-empty">Новостей пока нет</div>';
 }
 
-// ===== РЕНДЕР ВЗНОСОВ =====
 function renderContributions() {
   const m = getCurrentMonth();
   const tbody = document.getElementById('studentsTable');
@@ -927,13 +919,11 @@ function renderContributions() {
     `;
     tbody.appendChild(tr);
   }
-
   if (totalCount === 0) {
     tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#aaa;padding:20px">Нет данных</td></tr>';
   }
 }
 
-// ===== РЕНДЕР РАСХОДОВ =====
 function renderExpenses() {
   const m = getCurrentMonth();
   const tbody = document.getElementById('expensesTable');
@@ -960,35 +950,26 @@ function renderExpenses() {
   }
 }
 
-// ===== РЕНДЕР КОМИТЕТА =====
 function renderCommittee() {
   const container = document.getElementById('committeeList');
-  
   if (!data.committee || data.committee.length === 0) {
     container.innerHTML = '<div class="committee-empty">Состав комитета ещё не заполнен</div>';
     return;
   }
-
   container.innerHTML = '';
   data.committee.forEach(member => {
     if (!member.name) return;
-    
     const card = document.createElement('div');
     card.className = 'committee-card';
-    
     const role = (member.role || '').toLowerCase();
-    if (role.includes('председатель')) {
-      card.classList.add('chair');
-    } else if (role.includes('казначей') || role.includes('бухгалтер') || role.includes('финанс')) {
-      card.classList.add('treasurer');
-    }
+    if (role.includes('председатель')) card.classList.add('chair');
+    else if (role.includes('казначей') || role.includes('бухгалтер') || role.includes('финанс')) card.classList.add('treasurer');
     
     let phoneHtml = '';
     if (member.phone) {
       const cleanPhone = member.phone.replace(/[^\d+]/g, '');
-      phoneHtml = `<div class="member-phone"> <a href="tel:${cleanPhone}">${escapeHtml(member.phone)}</a></div>`;
+      phoneHtml = `<div class="member-phone">📞 <a href="tel:${cleanPhone}">${escapeHtml(member.phone)}</a></div>`;
     }
-    
     card.innerHTML = `
       <div class="member-name">${escapeHtml(member.name)}</div>
       <div class="member-role">${escapeHtml(member.role || 'Член комитета')}</div>
@@ -996,10 +977,7 @@ function renderCommittee() {
     `;
     container.appendChild(card);
   });
-
-  if (container.children.length === 0) {
-    container.innerHTML = '<div class="committee-empty">Состав комитета ещё не заполнен</div>';
-  }
+  if (container.children.length === 0) container.innerHTML = '<div class="committee-empty">Состав комитета ещё не заполнен</div>';
 }
 
 function renderArchive() {
@@ -1037,7 +1015,7 @@ function renderArchive() {
 
 // ============ ВКЛАДКИ ============
 function switchTab(tab, btn) {
-  document.querySelectorAll('.content > .tab-buttons .tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.main-tabs .tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.content > .tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
   btn.classList.add('active');
@@ -1058,35 +1036,26 @@ function openAdminPanel() {
   document.getElementById('setViewPassword').value = passwords.viewPassword || '';
   document.getElementById('setAdminPassword').value = passwords.adminPassword || 'admin123';
 
-  // Новости
   const newsDiv = document.getElementById('adminNews');
   newsDiv.innerHTML = '';
-  if (data.news && data.news.length > 0) {
-    data.news.forEach(n => addNewsRow(n));
-  }
+  if (data.news && data.news.length > 0) data.news.forEach(n => addNewsRow(n));
 
-  // Взносы
   const studentsDiv = document.getElementById('adminStudents');
   studentsDiv.innerHTML = '';
   m.students.forEach((s, i) => addStudentRow(s, i));
 
-  // Расходы
   const expDiv = document.getElementById('adminExpenses');
   expDiv.innerHTML = '';
   m.expenses.forEach(e => addExpenseRow(e));
 
-  // Комитет
   const committeeDiv = document.getElementById('adminCommittee');
   committeeDiv.innerHTML = '';
-  if (data.committee && data.committee.length > 0) {
-    data.committee.forEach(c => addCommitteeRow(c));
-  }
+  if (data.committee && data.committee.length > 0) data.committee.forEach(c => addCommitteeRow(c));
 
   document.getElementById('adminModal').classList.add('active');
   recalcAdminTotals();
 }
 
-// ===== ДОБАВЛЕНИЕ НОВОСТИ =====
 function addNewsRow(n = null) {
   const div = document.createElement('div');
   div.className = 'admin-row-news';
@@ -1129,7 +1098,7 @@ function addExpenseRow(e = null) {
   div.innerHTML = `
     <input type="text" placeholder="На что потрачено" value="${e ? escapeHtml(e.description) : ''}">
     <input type="number" placeholder="Сумма" step="0.01" value="${e ? e.amount : ''}">
-    <button class="btn btn-danger btn-small" onclick="this.parentElement.remove();recalcAdminTotals()"></button>
+    <button class="btn btn-danger btn-small" onclick="this.parentElement.remove();recalcAdminTotals()">✕</button>
   `;
   div.querySelectorAll('input').forEach(el => el.addEventListener('input', recalcAdminTotals));
   document.getElementById('adminExpenses').appendChild(div);
@@ -1151,24 +1120,16 @@ function recalcAdminTotals() {
   const tempStudents = [];
   document.querySelectorAll('#adminStudents .admin-row').forEach(row => {
     const [nameInp, amountInp, statusSel] = row.querySelectorAll('input, select');
-    tempStudents.push({
-      name: nameInp.value.trim(),
-      amount: Number(amountInp.value) || 0,
-      paid: statusSel.value === 'true'
-    });
+    tempStudents.push({ name: nameInp.value.trim(), amount: Number(amountInp.value) || 0, paid: statusSel.value === 'true' });
   });
   const tempExpenses = [];
   document.querySelectorAll('#adminExpenses .admin-row').forEach(row => {
     const [descInp, amountInp] = row.querySelectorAll('input');
-    tempExpenses.push({
-      description: descInp.value.trim(),
-      amount: Number(amountInp.value) || 0
-    });
+    tempExpenses.push({ description: descInp.value.trim(), amount: Number(amountInp.value) || 0 });
   });
 
   const prevBalance = Number(document.getElementById('editPrevBalance').value) || 0;
   const addIncome = Number(document.getElementById('editAddIncome').value) || 0;
-
   const income = tempStudents.reduce((sum, s) => sum + (s.paid ? s.amount : 0), 0);
   const expense = tempExpenses.reduce((sum, e) => sum + e.amount, 0);
   const budget = income + addIncome;
@@ -1187,7 +1148,6 @@ function collectAdminData() {
   m.prevBalance = Number(document.getElementById('editPrevBalance').value) || 0;
   m.additionalIncome = Number(document.getElementById('editAddIncome').value) || 0;
 
-  // Собираем взносы
   m.students = [];
   document.querySelectorAll('#adminStudents .admin-row').forEach(row => {
     const [nameInp, amountInp, statusSel] = row.querySelectorAll('input, select');
@@ -1197,7 +1157,6 @@ function collectAdminData() {
     if (name || amount) m.students.push({ name, amount, paid });
   });
 
-  // Собираем расходы
   m.expenses = [];
   document.querySelectorAll('#adminExpenses .admin-row').forEach(row => {
     const [descInp, amountInp] = row.querySelectorAll('input');
@@ -1206,7 +1165,6 @@ function collectAdminData() {
     if (description || amount) m.expenses.push({ description, amount });
   });
 
-  // Собираем комитет
   data.committee = [];
   document.querySelectorAll('#adminCommittee .admin-row-committee').forEach(row => {
     const [nameInp, roleInp, phoneInp] = row.querySelectorAll('input');
@@ -1216,37 +1174,23 @@ function collectAdminData() {
     if (name) data.committee.push({ name, role, phone });
   });
 
-  // Собираем новости
   data.news = [];
   document.querySelectorAll('#adminNews .admin-row-news').forEach(row => {
     const inputs = row.querySelectorAll('input, select');
     const title = inputs[0].value.trim();
     const text = inputs[1].value.trim();
     const urgent = inputs[2].value === 'true';
-    if (title || text) {
-      data.news.push({
-        title,
-        text,
-        urgent,
-        date: new Date().toISOString()
-      });
-    }
+    if (title || text) data.news.push({ title, text, urgent, date: new Date().toISOString() });
   });
 }
 
 async function saveAll() {
   collectAdminData();
   const btn = document.getElementById('saveBtn');
-  if (btn) {
-    btn.disabled = true;
-    btn.textContent = '⏳ Сохранение...';
-  }
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Сохранение...'; }
   await saveToFirebase();
   render();
-  if (btn) {
-    btn.disabled = false;
-    btn.textContent = '💾 Сохранить в облако';
-  }
+  if (btn) { btn.disabled = false; btn.textContent = '💾 Сохранить в облако'; }
 }
 
 async function archiveMonth() {
@@ -1254,46 +1198,25 @@ async function archiveMonth() {
   collectAdminData();
   const m = getCurrentMonth();
   const balance = calcBalance(m);
-
   data.archive.push({ ...m, students: [...m.students], expenses: [...m.expenses] });
   data.months = data.months.filter(x => x.id !== m.id);
-  const nextMonthName = prompt('Название нового месяца:', getNextMonthName());
+  const nextMonthName = prompt('Название нового месяца:', new Date().toLocaleString('ru', { month: 'long', year: 'numeric' }));
   if (!nextMonthName) return;
-
   const newMonth = {
-    id: 'month_' + Date.now(),
-    name: nextMonthName,
-    prevBalance: balance,
-    additionalIncome: 0,
-    students: [], // Начинаем с пустого списка
-    expenses: []
+    id: 'month_' + Date.now(), name: nextMonthName, prevBalance: balance, additionalIncome: 0, students: [], expenses: []
   };
   data.months.push(newMonth);
   currentMonthId = newMonth.id;
-
   await saveToFirebase();
   render();
   closeModal('adminModal');
   alert('✅ Месяц архивирован. Остаток ' + formatMoney(balance) + ' ₽ перенесён в новый месяц.');
 }
 
-function getNextMonthName() {
-  const d = new Date();
-  d.setMonth(d.getMonth() + 1);
-  return d.toLocaleString('ru', { month: 'long', year: 'numeric' });
-}
-
 async function createNewMonth() {
   const name = document.getElementById('newMonthName').value.trim();
   if (!name) { alert('Введите название месяца'); return; }
-  const newMonth = {
-    id: 'month_' + Date.now(),
-    name: name,
-    prevBalance: 0,
-    additionalIncome: 0,
-    students: [],
-    expenses: []
-  };
+  const newMonth = { id: 'month_' + Date.now(), name: name, prevBalance: 0, additionalIncome: 0, students: [], expenses: [] };
   data.months.push(newMonth);
   currentMonthId = newMonth.id;
   await saveToFirebase();
@@ -1305,20 +1228,12 @@ async function createNewMonth() {
 async function savePasswords() {
   const viewPwd = document.getElementById('setViewPassword').value.trim();
   const adminPwd = document.getElementById('setAdminPassword').value.trim();
-  if (!adminPwd || adminPwd.length < 3) {
-    alert('Пароль администратора должен быть минимум 3 символа');
-    return;
-  }
-  if (viewPwd && viewPwd === adminPwd) {
-    alert('Пароли должны отличаться!');
-    return;
-  }
+  if (!adminPwd || adminPwd.length < 3) { alert('Пароль администратора должен быть минимум 3 символа'); return; }
+  if (viewPwd && viewPwd === adminPwd) { alert('Пароли должны отличаться!'); return; }
   passwords.viewPassword = viewPwd;
   passwords.adminPassword = adminPwd;
   await savePasswordsToFirebase();
-  alert('✅ Пароли сохранены в облаке!\n\n' +
-    (viewPwd ? '🔓 Родители входят по паролю: ' + viewPwd + '\n' : '🔓 Пароль для гостей не задан\n') +
-    '🔑 Пароль администратора: ' + adminPwd);
+  alert('✅ Пароли сохранены в облаке!\n\n' + (viewPwd ? '🔓 Родители входят по паролю: ' + viewPwd + '\n' : '🔓 Пароль для гостей не задан\n') + '🔑 Пароль администратора: ' + adminPwd);
 }
 
 async function resetPasswords() {
@@ -1339,35 +1254,18 @@ function viewArchive(monthId) {
   const budget = income + addIncome;
   const expense = calcExpense(m);
   const balance = Number(m.prevBalance || 0) + budget - expense;
-
   let html = `<h2>📦 ${escapeHtml(m.name)}</h2>`;
   html += `<p><b>Остаток с прошлого месяца:</b> ${formatMoney(m.prevBalance)} ₽</p>`;
-  html += `<p><b>Приход (авт.):</b> ${formatMoney(income)} ₽ | <b>Доп. приход:</b> ${formatMoney(addIncome)} ₽</p>`;
-  html += `<p><b>Бюджет:</b> ${formatMoney(budget)} ₽ | <b>Расход (авт.):</b> ${formatMoney(expense)} ₽</p>`;
-  html += `<p><b>Остаток на конец:</b> ${formatMoney(balance)} ₽</p>`;
-  html += `<h3 style="margin-top:15px">Взносы:</h3><ul>`;
-  m.students.forEach(s => {
-    if (s.name) html += `<li>${escapeHtml(s.name)} — ${formatMoney(s.amount)} ₽ ${s.paid ? '✔' : ''}</li>`;
-  });
-  html += `</ul><h3 style="margin-top:15px">Расходы:</h3><ul>`;
-  m.expenses.forEach(e => {
-    html += `<li>${escapeHtml(e.description)} — ${formatMoney(e.amount)} ₽</li>`;
-  });
-  html += `</ul>`;
-
+  html += `<p><b>Приход:</b> ${formatMoney(income)} ₽ | <b>Доп:</b> ${formatMoney(addIncome)} ₽</p>`;
+  html += `<p><b>Расход:</b> ${formatMoney(expense)} ₽ | <b>Остаток:</b> ${formatMoney(balance)} ₽</p>`;
   const modal = document.createElement('div');
   modal.className = 'modal-overlay active';
   modal.innerHTML = `<div class="modal">${html}<button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">Закрыть</button></div>`;
   document.body.appendChild(modal);
 }
 
-// ============ ЭКСПОРТ / ИМПОРТ ============
 function exportData() {
-  const exportObj = {
-    data: data,
-    passwords: passwords,
-    exportDate: new Date().toISOString()
-  };
+  const exportObj = { data: data, passwords: passwords, exportDate: new Date().toISOString() };
   const blob = new Blob([JSON.stringify(exportObj, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1388,10 +1286,7 @@ async function importData(event) {
       if (!confirm('Заменить все данные в базе импортированными?')) return;
       data = imported.data;
       currentMonthId = data.currentMonthId || data.months[0].id;
-      if (imported.passwords) {
-        passwords = imported.passwords;
-        await savePasswordsToFirebase();
-      }
+      if (imported.passwords) { passwords = imported.passwords; await savePasswordsToFirebase(); }
       await saveToFirebase();
       render();
       alert('✅ Данные импортированы в облако');
@@ -1413,7 +1308,6 @@ async function resetData() {
   alert('✅ Данные в базе очищены');
 }
 
-// ============ УТИЛИТЫ ============
 function closeModal(id) {
   document.getElementById(id).classList.remove('active');
 }
