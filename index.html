@@ -3,10 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#667eea">
+
+<!-- PWA Мета-теги -->
+<link rel="manifest" href="./manifest.json">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Бюджет Группы">
-<meta name="theme-color" content="#667eea">
+<link rel="apple-touch-icon" href="./icon-192.png">
+
 <title>Родительский комитет — Бюджет группы</title>
 
 <!-- Firebase SDK -->
@@ -16,7 +21,7 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
-    overscroll-behavior-y: none; /* Убирает "пружинящий" эффект на iOS */
+    overscroll-behavior-y: none;
     -webkit-overflow-scrolling: touch;
   }
   body {
@@ -24,10 +29,8 @@
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     color: #333;
-    -webkit-tap-highlight-color: transparent; /* Убирает серый фон при тапе */
+    -webkit-tap-highlight-color: transparent;
   }
-  
-  /* Запрет выделения текста на элементах интерфейса (как в приложении) */
   button, .tab-btn, .btn, .summary-card, .committee-card, .news-card {
     user-select: none;
     -webkit-user-select: none;
@@ -258,7 +261,6 @@
   .admin-row-news { display: grid; grid-template-columns: 2fr 1fr auto auto auto; gap: 8px; align-items: center; margin-bottom: 8px; }
   .admin-row-news input, .admin-row-news select { padding: 8px; }
 
-  /* === ВКЛАДКИ (ДЕСКТОП) === */
   .tab-buttons {
     display: flex; gap: 5px; margin-bottom: 20px;
     border-bottom: 2px solid #eee; flex-wrap: wrap;
@@ -271,7 +273,6 @@
   }
   .tab-btn.active { color: #667eea; border-bottom-color: #667eea; font-weight: 600; }
   
-  /* Анимация переключения вкладок */
   .tab-content { display: none; animation: fadeIn 0.3s ease; }
   .tab-content.active { display: block; }
   @keyframes fadeIn {
@@ -304,7 +305,6 @@
   }
   .save-indicator.show { opacity: 1; }
 
-  /* === МОБИЛЬНОЕ ПРИЛОЖЕНИЕ: НИЖНЯЯ НАВИГАЦИЯ === */
   @media (max-width: 768px) {
     .main-tabs {
       position: fixed;
@@ -342,7 +342,7 @@
       color: #667eea;
     }
     .content {
-      padding: 15px 15px 90px 15px; /* Отступ снизу для навигации */
+      padding: 15px 15px 90px 15px;
     }
     header { padding: 15px; }
     header h1 { font-size: 18px; }
@@ -384,7 +384,6 @@
     </header>
 
     <div class="content">
-      <!-- СВОДКА -->
       <div class="summary-grouped">
         <div class="summary-block">
           <div class="summary-card balance">
@@ -418,7 +417,6 @@
         </div>
       </div>
 
-      <!-- ВКЛАДКИ (main-tabs для мобильной нижней навигации) -->
       <div class="tab-buttons main-tabs">
         <button class="tab-btn active" onclick="switchTab('news', this)">
           <span class="tab-icon">📰</span>
@@ -442,7 +440,6 @@
         </button>
       </div>
 
-      <!-- ВКЛАДКА: НОВОСТИ -->
       <div id="tab-news" class="tab-content active">
         <div class="section">
           <h2>📰 Новости и объявления</h2>
@@ -450,7 +447,6 @@
         </div>
       </div>
 
-      <!-- ВКЛАДКА: ВЗНОСЫ -->
       <div id="tab-contributions" class="tab-content">
         <div class="section">
           <h2>💰 Сдача взносов</h2>
@@ -468,7 +464,6 @@
         </div>
       </div>
 
-      <!-- ВКЛАДКА: РАСХОДЫ -->
       <div id="tab-expenses" class="tab-content">
         <div class="section">
           <h2>💸 Расходы текущего месяца</h2>
@@ -485,7 +480,6 @@
         </div>
       </div>
 
-      <!-- ВКЛАДКА: КОМИТЕТ -->
       <div id="tab-committee" class="tab-content">
         <div class="section">
           <h2>👥 Состав родительского комитета</h2>
@@ -493,7 +487,6 @@
         </div>
       </div>
 
-      <!-- ВКЛАДКА: АРХИВ -->
       <div id="tab-archive" class="tab-content">
         <div class="section">
           <h2>📦 Архив предыдущих месяцев</h2>
@@ -528,13 +521,12 @@
       <button class="tab-btn active" onclick="switchAdminTab('news', this)">📰 Новости</button>
       <button class="tab-btn" onclick="switchAdminTab('edit', this)">✏️ Редактировать</button>
       <button class="tab-btn" onclick="switchAdminTab('committee', this)">👥 Комитет</button>
-      <button class="tab-btn" onclick="switchAdminTab('settings', this)">⚙️ Настройки</button>
+      <button class="tab-btn" onclick="switchAdminTab('settings', this)">️ Настройки</button>
       <button class="tab-btn" onclick="switchAdminTab('data', this)">💾 Данные</button>
     </div>
 
-    <!-- НОВОСТИ -->
     <div id="admin-news" class="tab-content active">
-      <h3 style="margin:15px 0 10px">📰 Новости и объявления</h3>
+      <h3 style="margin:15px 0 10px"> Новости и объявления</h3>
       <div id="adminNews"></div>
       <button class="btn btn-success btn-small" onclick="addNewsRow()">+ Добавить новость</button>
       <div style="margin-top:25px">
@@ -543,7 +535,6 @@
       </div>
     </div>
 
-    <!-- РЕДАКТИРОВАНИЕ -->
     <div id="admin-edit" class="tab-content">
       <h3 style="margin:15px 0 10px">Сводка месяца</h3>
       <div class="form-group">
@@ -586,7 +577,6 @@
       </div>
     </div>
 
-    <!-- РЕДАКТИРОВАНИЕ КОМИТЕТА -->
     <div id="admin-committee" class="tab-content">
       <h3 style="margin:15px 0 10px">👥 Состав родительского комитета</h3>
       <div id="adminCommittee"></div>
@@ -597,7 +587,6 @@
       </div>
     </div>
 
-    <!-- НАСТРОЙКИ -->
     <div id="admin-settings" class="tab-content">
       <h3 style="margin:15px 0 10px">🔐 Пароли доступа</h3>
       <div class="form-group">
@@ -611,7 +600,7 @@
       <button class="btn btn-primary" onclick="savePasswords()">💾 Сохранить пароли</button>
       <button class="btn btn-danger" onclick="resetPasswords()">🗑️ Сбросить пароли (к admin123)</button>
 
-      <h3 style="margin:25px 0 10px">📅 Создать новый месяц</h3>
+      <h3 style="margin:25px 0 10px"> Создать новый месяц</h3>
       <div class="form-group">
         <label>Название месяца (например: "Сентябрь 2026")</label>
         <input type="text" id="newMonthName" placeholder="Сентябрь 2026">
@@ -619,11 +608,10 @@
       <button class="btn btn-success" onclick="createNewMonth()">➕ Создать месяц</button>
     </div>
 
-    <!-- ДАННЫЕ -->
     <div id="admin-data" class="tab-content">
       <h3 style="margin:15px 0 10px">Экспорт / Импорт данных</h3>
       <button class="btn btn-primary" onclick="exportData()">📤 Экспорт в JSON</button>
-      <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 Импорт из JSON</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()"> Импорт из JSON</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
       <h3 style="margin:25px 0 10px;color:#e74c3c">⚠️ Опасная зона</h3>
       <button class="btn btn-danger" onclick="resetData()">🗑️ Удалить все данные в базе</button>
@@ -631,7 +619,6 @@
   </div>
 </div>
 
-<!-- Индикатор сохранения -->
 <div class="save-indicator" id="saveIndicator">✅ Сохранено</div>
 
 <script>
@@ -690,7 +677,7 @@ function calcBalance(month) {
   return Number(month.prevBalance || 0) + calcBudget(month) - calcExpense(month);
 }
 
-// ============ ЗАГРУЗКА ДАННЫХ ИЗ FIREBASE ============
+// ============ ЗАГРУЗКА ДАННЫХ ИЗ FIREBASE + ПРОВЕРКА СЕССИИ ============
 async function loadFromFirebase() {
   try {
     const pwdDoc = await db.collection('settings').doc('passwords').get();
@@ -708,6 +695,30 @@ async function loadFromFirebase() {
       };
       currentMonthId = data.currentMonthId;
     }
+
+    // Проверяем сохраненную сессию
+    const savedSession = localStorage.getItem('parentBudgetSession');
+    if (savedSession) {
+      try {
+        const session = JSON.parse(savedSession);
+        if (session.role) {
+          currentRole = session.role;
+          // Автоматический вход без запроса пароля
+          document.getElementById('loginStatus').textContent = '✅ Авто-вход...';
+          document.getElementById('loginStatus').style.color = '#27ae60';
+          setTimeout(() => {
+            enableLogin();
+            render();
+            enterApp();
+          }, 500);
+          return;
+        }
+      } catch (e) {
+        // Если сессия повреждена — очищаем
+        localStorage.removeItem('parentBudgetSession');
+      }
+    }
+
     enableLogin();
     render();
   } catch (err) {
@@ -720,8 +731,10 @@ async function loadFromFirebase() {
 function enableLogin() {
   document.getElementById('loginPassword').disabled = false;
   document.getElementById('loginBtn').disabled = false;
-  document.getElementById('loginStatus').textContent = '✅ Подключено к базе';
-  document.getElementById('loginStatus').style.color = '#27ae60';
+  if (document.getElementById('loginStatus').textContent === 'Загрузка...') {
+    document.getElementById('loginStatus').textContent = '✅ Подключено к базе';
+    document.getElementById('loginStatus').style.color = '#27ae60';
+  }
   document.getElementById('loginPassword').focus();
 }
 
@@ -780,8 +793,10 @@ function doLogin() {
 function enterApp() {
   document.getElementById('loginScreen').classList.add('hidden');
   document.getElementById('app').classList.add('visible');
+  
   const adminBtn = document.getElementById('adminBtn');
   const userBadge = document.getElementById('userBadge');
+  
   if (currentRole === 'admin') {
     adminBtn.classList.remove('hidden');
     userBadge.innerHTML = '👑 Администратор';
@@ -789,15 +804,26 @@ function enterApp() {
     adminBtn.classList.add('hidden');
     userBadge.innerHTML = '👁️ Гость (только просмотр)';
   }
+  
+  // Сохраняем сессию в localStorage
+  localStorage.setItem('parentBudgetSession', JSON.stringify({
+    role: currentRole,
+    loginTime: new Date().toISOString()
+  }));
+  
   render();
 }
 
 function doLogout() {
   currentRole = null;
+  // Очищаем сохраненную сессию
+  localStorage.removeItem('parentBudgetSession');
   document.getElementById('app').classList.remove('visible');
   document.getElementById('loginScreen').classList.remove('hidden');
   document.getElementById('loginPassword').value = '';
   document.getElementById('loginError').classList.remove('show');
+  document.getElementById('loginStatus').textContent = '✅ Подключено к базе';
+  document.getElementById('loginStatus').style.color = '#27ae60';
 }
 
 function openAdmin() {
@@ -817,6 +843,11 @@ function checkAdminPassword() {
     currentRole = 'admin';
     document.getElementById('adminBtn').classList.remove('hidden');
     document.getElementById('userBadge').innerHTML = '👑 Администратор';
+    // Обновляем сессию
+    localStorage.setItem('parentBudgetSession', JSON.stringify({
+      role: currentRole,
+      loginTime: new Date().toISOString()
+    }));
     openAdminPanel();
   } else {
     alert('Неверный пароль администратора!');
@@ -968,7 +999,7 @@ function renderCommittee() {
     let phoneHtml = '';
     if (member.phone) {
       const cleanPhone = member.phone.replace(/[^\d+]/g, '');
-      phoneHtml = `<div class="member-phone">📞 <a href="tel:${cleanPhone}">${escapeHtml(member.phone)}</a></div>`;
+      phoneHtml = `<div class="member-phone"> <a href="tel:${cleanPhone}">${escapeHtml(member.phone)}</a></div>`;
     }
     card.innerHTML = `
       <div class="member-name">${escapeHtml(member.name)}</div>
@@ -1187,10 +1218,10 @@ function collectAdminData() {
 async function saveAll() {
   collectAdminData();
   const btn = document.getElementById('saveBtn');
-  if (btn) { btn.disabled = true; btn.textContent = '⏳ Сохранение...'; }
+  if (btn) { btn.disabled = true; btn.textContent = ' Сохранение...'; }
   await saveToFirebase();
   render();
-  if (btn) { btn.disabled = false; btn.textContent = '💾 Сохранить в облако'; }
+  if (btn) { btn.disabled = false; btn.textContent = ' Сохранить в облако'; }
 }
 
 async function archiveMonth() {
@@ -1329,6 +1360,17 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
     if (e.target === overlay) overlay.classList.remove('active');
   });
 });
+
+// ==========================================
+// 🚀 РЕГИСТРАЦИЯ SERVICE WORKER (ДЛЯ PWA)
+// ==========================================
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js')
+      .then(registration => console.log('✅ Service Worker зарегистрирован:', registration.scope))
+      .catch(error => console.log('❌ Ошибка регистрации Service Worker:', error));
+  });
+}
 </script>
 </body>
 </html>
