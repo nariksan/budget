@@ -41,59 +41,122 @@
     -webkit-user-select: text;
   }
 
+  /* === ЭКРАН ВХОДА (ФОН — ФОТО bg.jpg, АДАПТИВНЫЙ) === */
   .login-screen {
     position: fixed; inset: 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: #667eea;
+    background-image:
+      linear-gradient(135deg, rgba(102,126,234,0.72) 0%, rgba(118,75,162,0.72) 100%),
+      url('bg.jpg');
+    background-size: cover, cover;
+    background-position: center center, center center;
+    background-repeat: no-repeat, no-repeat;
     display: flex; justify-content: center; align-items: center;
     padding: 20px; z-index: 1000;
+    overflow-y: auto;
   }
   .login-screen.hidden { display: none; }
+
+  /* ПРОЗРАЧНАЯ КАРТОЧКА ВХОДА (эффект стекла) */
   .login-card {
-    background: #fff; border-radius: 20px; padding: 40px 35px;
-    max-width: 420px; width: 100%;
-    box-shadow: 0 25px 80px rgba(0,0,0,0.3);
-    text-align: center; animation: slideUp 0.4s ease;
+    background: rgba(255, 255, 255, 0.15);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 24px; padding: 40px 35px;
+    max-width: 400px; width: 100%;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+    text-align: center; animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
   @keyframes slideUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translateY(40px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
-  .login-icon {
-    width: 80px; height: 80px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-size: 40px; margin: 0 auto 20px;
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  .login-icon-svg {
+    width: 100px; height: 100px; margin: 0 auto 20px;
+    filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.35));
   }
-  .login-card h1 { font-size: 22px; color: #2c3e50; margin-bottom: 8px; }
-  .login-card .subtitle { color: #777; font-size: 14px; margin-bottom: 25px; }
+  .login-card h1 {
+    font-size: 24px; color: #fff; margin-bottom: 8px; font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+  }
+  .login-card .subtitle { color: rgba(255,255,255,0.85); font-size: 15px; margin-bottom: 30px; }
   .login-card input {
-    width: 100%; padding: 14px 16px; border: 2px solid #e0e0e0;
-    border-radius: 10px; font-size: 15px; margin-bottom: 15px;
-    transition: 0.2s; font-family: inherit;
+    width: 100%; padding: 16px; border: 2px solid rgba(255,255,255,0.5);
+    background: rgba(255,255,255,0.92); border-radius: 12px; font-size: 16px;
+    transition: all 0.2s; font-family: inherit; margin-bottom: 15px;
   }
-  .login-card input:focus { outline: none; border-color: #667eea; }
+  .login-card input:focus { outline: none; border-color: #fff; background: #fff; }
   .login-card .btn-login {
-    width: 100%; padding: 14px;
+    width: 100%; padding: 16px;
     background: linear-gradient(135deg, #667eea, #764ba2);
-    color: #fff; border: none; border-radius: 10px;
-    font-size: 15px; font-weight: 600; cursor: pointer;
-    transition: 0.2s; margin-bottom: 10px;
+    color: #fff; border: none; border-radius: 12px;
+    font-size: 16px; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; margin-bottom: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
   }
   .login-card .btn-login:active { transform: scale(0.98); }
   .login-error {
-    background: #fee; color: #c33; padding: 10px; border-radius: 8px;
-    font-size: 13px; margin-bottom: 15px; display: none;
+    background: #fef2f2; color: #dc2626; padding: 12px; border-radius: 10px;
+    font-size: 14px; margin-bottom: 15px; display: none; border: 1px solid #fecaca;
   }
-  .login-error.show { display: block; }
-  .login-hint { margin-top: 20px; font-size: 12px; color: #999; }
-  .login-status { font-size: 12px; color: #667eea; margin-top: 10px; min-height: 18px; }
+  .login-error.show { display: block; animation: shake 0.3s; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+  .login-hint { margin-top: 20px; font-size: 13px; color: rgba(255,255,255,0.7); }
+  .login-status {
+    font-size: 13px; color: #fff; margin-top: 10px; min-height: 18px; font-weight: 500;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.4);
+  }
+
+  /* === ЭКРАН ТЕХНИЧЕСКИХ РАБОТ (ФОН — ФОТО bg.jpg, АДАПТИВНЫЙ) === */
+  .maintenance-screen {
+    position: fixed; inset: 0;
+    background-color: #667eea;
+    background-image:
+      linear-gradient(135deg, rgba(102,126,234,0.80) 0%, rgba(118,75,162,0.80) 100%),
+      url('bg.jpg');
+    background-size: cover, cover;
+    background-position: center center, center center;
+    background-repeat: no-repeat, no-repeat;
+    display: none; justify-content: center; align-items: center;
+    padding: 20px; z-index: 999; text-align: center; color: #fff;
+    overflow-y: auto;
+  }
+  .maintenance-screen.visible { display: flex; }
+  .maintenance-card {
+    background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 40px; border-radius: 24px; max-width: 400px;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .maintenance-icon { font-size: 60px; margin-bottom: 20px; }
+  .maintenance-admin-btn {
+    margin-top: 25px; padding: 12px 20px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #fff; border-radius: 10px;
+    font-size: 14px; font-weight: 600; cursor: pointer;
+    transition: 0.2s;
+  }
+  .maintenance-admin-btn:active { background: rgba(255,255,255,0.3); transform: scale(0.98); }
+
+  /* Адаптация фона под вертикальные экраны (телефоны) */
+  @media (orientation: portrait) {
+    .login-screen, .maintenance-screen {
+      background-size: cover, 100% auto;
+      background-position: center, top center;
+    }
+  }
 
   .app { display: none; min-height: 100vh; padding: 20px; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
   .app.visible { display: block; }
   .container {
     max-width: 1100px; margin: 0 auto; background: #fff;
-    border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden;
+    border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden;
   }
   header {
     background: linear-gradient(135deg, #667eea, #764ba2);
@@ -122,6 +185,19 @@
   .admin-btn:active, .logout-btn:active { background: rgba(255,255,255,0.4); }
   .admin-btn.hidden { display: none; }
   .content { padding: 30px; padding-bottom: 40px; }
+
+  /* Главная страница */
+  .home-dashboard {
+    text-align: center; padding: 20px 0;
+  }
+  .home-balance-card {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff; padding: 30px; border-radius: 20px;
+    margin-bottom: 30px; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+  }
+  .home-balance-card .label { font-size: 14px; opacity: 0.9; margin-bottom: 10px; }
+  .home-balance-card .value { font-size: 42px; font-weight: 800; }
+  .home-balance-card .month { font-size: 16px; opacity: 0.8; margin-top: 10px; }
 
   .summary-grouped {
     display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px;
@@ -226,7 +302,7 @@
   }
   .modal-overlay.active { display: flex; }
   .modal {
-    background: #fff; border-radius: 16px; padding: 30px;
+    background: #fff; border-radius: 20px; padding: 30px;
     max-width: 700px; width: 100%; max-height: 90vh; overflow-y: auto;
     animation: slideUp 0.3s ease;
   }
@@ -331,19 +407,10 @@
       border-bottom: none !important;
       gap: 4px;
     }
-    .main-tabs .tab-btn .tab-icon {
-      font-size: 22px;
-      line-height: 1;
-    }
-    .main-tabs .tab-btn .tab-text {
-      font-weight: 500;
-    }
-    .main-tabs .tab-btn.active {
-      color: #667eea;
-    }
-    .content {
-      padding: 15px 15px 90px 15px;
-    }
+    .main-tabs .tab-btn .tab-icon { font-size: 22px; line-height: 1; }
+    .main-tabs .tab-btn .tab-text { font-weight: 500; }
+    .main-tabs .tab-btn.active { color: #667eea; }
+    .content { padding: 15px 15px 90px 15px; }
     header { padding: 15px; }
     header h1 { font-size: 18px; }
     .admin-row, .admin-row-committee, .admin-row-news { grid-template-columns: 1fr; }
@@ -354,17 +421,37 @@
 </head>
 <body>
 
+<!-- Экран технических работ -->
+<div class="maintenance-screen" id="maintenanceScreen">
+  <div class="maintenance-card">
+    <div class="maintenance-icon">🛠️</div>
+    <h2>Ведутся технические работы</h2>
+    <p style="margin-top: 15px; opacity: 0.9;">Сайт временно обновляется. Пожалуйста, зайдите позже.</p>
+    <button class="maintenance-admin-btn" onclick="openAdminLoginFromMaintenance()">🔐 Вход для администратора</button>
+  </div>
+</div>
+
 <!-- Страница входа -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
-    <div class="login-icon">🏫</div>
+    <div class="login-icon-svg">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 575 492">
+        <path fill="#667eea" d="M287.5 0L0 143.75v348.25h575V143.75z"/>
+        <path fill="#764ba2" d="M287.5 0v492H575V143.75z"/>
+        <path fill="#fff" d="M287.5 80L100 173.75V492h375V173.75z"/>
+        <path fill="#e2e8f0" d="M287.5 80v412H475V173.75z"/>
+        <path fill="#667eea" d="M237.5 350h100v142h-100z"/>
+        <path fill="#764ba2" d="M287.5 350h50v142h-50z"/>
+        <path fill="#e74c3c" d="M287.5 180c-30 0-55 25-55 55 0 40 55 85 55 85s55-45 55-85c0-30-25-55-55-55z"/>
+      </svg>
+    </div>
     <h1>Родительский комитет</h1>
-    <p class="subtitle">Бюджет группы — доступ по паролю</p>
+    <p class="subtitle">Бюджет группы — безопасный доступ</p>
     <div class="login-error" id="loginError">Неверный пароль. Попробуйте ещё раз.</div>
-    <div class="login-status" id="loginStatus">Загрузка...</div>
+    <div class="login-status" id="loginStatus">Подключение к базе...</div>
     <input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')doLogin()" disabled>
-    <button class="btn-login" onclick="doLogin()" id="loginBtn" disabled>Войти</button>
-    <div class="login-hint">Доступ по паролю. Пароль выдаёт администратор.</div>
+    <button class="btn-login" onclick="doLogin()" id="loginBtn" disabled>Войти в систему</button>
+    <div class="login-hint">Доступ предоставляется администратором.</div>
   </div>
 </div>
 
@@ -377,48 +464,69 @@
         <div class="user-badge" id="userBadge">👤 Гость</div>
         <div class="month-selector">
           <select id="monthSelect"></select>
-          <button class="admin-btn" id="adminBtn" onclick="openAdmin()">🔐 Админ</button>
+          <button class="admin-btn" id="adminBtn" onclick="openAdmin()">⚙️ Админ</button>
           <button class="logout-btn" onclick="doLogout()">🚪 Выйти</button>
         </div>
       </div>
     </header>
 
     <div class="content">
-      <div class="summary-grouped">
-        <div class="summary-block">
-          <div class="summary-card balance">
-            <div class="label">Остаток с прошлого месяца</div>
-            <div class="value" id="val-prevBalance">0 ₽</div>
+      <!-- ВКЛАДКА: ГЛАВНАЯ -->
+      <div id="tab-home" class="tab-content active">
+        <div class="home-dashboard">
+          <div class="home-balance-card">
+            <div class="label">Текущий остаток средств</div>
+            <div class="value" id="home-balance">0 ₽</div>
+            <div class="month" id="home-month">Текущий месяц</div>
           </div>
-          <div class="summary-card">
-            <div class="label">Приход (авт.)</div>
-            <div class="value" id="val-income">0 ₽</div>
+          <div class="section">
+            <h2>📌 Быстрая сводка</h2>
+            <div class="summary-grouped">
+              <div class="summary-block">
+                <div class="summary-card balance">
+                  <div class="label">Остаток с прошлого мес.</div>
+                  <div class="value" id="val-prevBalance">0 ₽</div>
+                </div>
+                <div class="summary-card">
+                  <div class="label">Приход (авт.)</div>
+                  <div class="value" id="val-income">0 ₽</div>
+                </div>
+              </div>
+              <div class="summary-block">
+                <div class="summary-card">
+                  <div class="label">Доп. приход</div>
+                  <div class="value" id="val-addIncome">0 ₽</div>
+                </div>
+                <div class="summary-card balance">
+                  <div class="label">Бюджет текущего мес.</div>
+                  <div class="value" id="val-budget">0 ₽</div>
+                </div>
+              </div>
+              <div class="summary-block">
+                <div class="summary-card expense">
+                  <div class="label">Расход (авт.)</div>
+                  <div class="value" id="val-expense">0 ₽</div>
+                </div>
+                <div class="summary-card balance">
+                  <div class="label">Остаток на конец мес.</div>
+                  <div class="value" id="val-balance">0 ₽</div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="summary-block">
-          <div class="summary-card">
-            <div class="label">Доп. приход</div>
-            <div class="value" id="val-addIncome">0 ₽</div>
-          </div>
-          <div class="summary-card balance">
-            <div class="label">Бюджет текущего месяца</div>
-            <div class="value" id="val-budget">0 ₽</div>
-          </div>
-        </div>
-        <div class="summary-block">
-          <div class="summary-card expense">
-            <div class="label">Расход (авт.)</div>
-            <div class="value" id="val-expense">0 ₽</div>
-          </div>
-          <div class="summary-card balance">
-            <div class="label">Остаток на конец месяца</div>
-            <div class="value" id="val-balance">0 ₽</div>
+          <div class="section">
+            <h2>📰 Последние новости</h2>
+            <div id="homeNewsList" class="news-container"></div>
           </div>
         </div>
       </div>
 
       <div class="tab-buttons main-tabs">
-        <button class="tab-btn active" onclick="switchTab('news', this)">
+        <button class="tab-btn active" onclick="switchTab('home', this)">
+          <span class="tab-icon">🏠</span>
+          <span class="tab-text">Главная</span>
+        </button>
+        <button class="tab-btn" onclick="switchTab('news', this)">
           <span class="tab-icon">📰</span>
           <span class="tab-text">Новости</span>
         </button>
@@ -440,9 +548,9 @@
         </button>
       </div>
 
-      <div id="tab-news" class="tab-content active">
+      <div id="tab-news" class="tab-content">
         <div class="section">
-          <h2>📰 Новости и объявления</h2>
+          <h2>📰 Все новости и объявления</h2>
           <div id="newsList" class="news-container"></div>
         </div>
       </div>
@@ -501,7 +609,7 @@
 <div class="modal-overlay" id="adminLoginModal">
   <div class="modal" style="max-width:400px">
     <h2>🔐 Подтверждение администратора</h2>
-    <p style="color:#666;font-size:14px;margin-bottom:15px">Введите пароль администратора для доступа к редактированию</p>
+    <p style="color:#666;font-size:14px;margin-bottom:15px">Введите пароль для доступа к редактированию</p>
     <div class="form-group">
       <label>Пароль администратора</label>
       <input type="password" id="adminPassword" placeholder="Пароль админа" onkeypress="if(event.key==='Enter')checkAdminPassword()">
@@ -514,19 +622,19 @@
 <!-- Модалка админки -->
 <div class="modal-overlay" id="adminModal">
   <div class="modal">
-    <h2>⚙️ Админ-панель</h2>
+    <h2>⚙️ Панель администратора</h2>
     <div class="hint">💡 Все изменения сохраняются в облаке автоматически.</div>
 
     <div class="tab-buttons">
       <button class="tab-btn active" onclick="switchAdminTab('news', this)">📰 Новости</button>
       <button class="tab-btn" onclick="switchAdminTab('edit', this)">✏️ Редактировать</button>
       <button class="tab-btn" onclick="switchAdminTab('committee', this)">👥 Комитет</button>
-      <button class="tab-btn" onclick="switchAdminTab('settings', this)">️ Настройки</button>
+      <button class="tab-btn" onclick="switchAdminTab('settings', this)">⚙️ Настройки</button>
       <button class="tab-btn" onclick="switchAdminTab('data', this)">💾 Данные</button>
     </div>
 
     <div id="admin-news" class="tab-content active">
-      <h3 style="margin:15px 0 10px"> Новости и объявления</h3>
+      <h3 style="margin:15px 0 10px">Новости и объявления</h3>
       <div id="adminNews"></div>
       <button class="btn btn-success btn-small" onclick="addNewsRow()">+ Добавить новость</button>
       <div style="margin-top:25px">
@@ -588,7 +696,7 @@
     </div>
 
     <div id="admin-settings" class="tab-content">
-      <h3 style="margin:15px 0 10px">🔐 Пароли доступа</h3>
+      <h3 style="margin:15px 0 10px">🔐 Пароли и доступ</h3>
       <div class="form-group">
         <label>Пароль для просмотра (для родителей)</label>
         <input type="password" id="setViewPassword" placeholder="Например: group2026">
@@ -597,10 +705,21 @@
         <label>Пароль администратора (для редактирования)</label>
         <input type="password" id="setAdminPassword" placeholder="Например: secretAdmin">
       </div>
-      <button class="btn btn-primary" onclick="savePasswords()">💾 Сохранить пароли</button>
-      <button class="btn btn-danger" onclick="resetPasswords()">🗑️ Сбросить пароли (к admin123)</button>
+      
+      <div class="form-group" style="display:flex; align-items:center; gap:10px; margin-top:20px; padding:15px; background:#fff3cd; border-radius:8px;">
+        <input type="checkbox" id="maintenanceToggle" style="width:20px; height:20px; cursor:pointer;">
+        <label for="maintenanceToggle" style="margin:0; font-size:14px; color:#856404; cursor:pointer;">
+          <b>Включить режим технических работ</b><br>
+          <span style="font-size:12px; font-weight:400;">Обычные пользователи увидят заглушку. Администраторы смогут войти.</span>
+        </label>
+      </div>
 
-      <h3 style="margin:25px 0 10px"> Создать новый месяц</h3>
+      <div style="margin-top:20px">
+        <button class="btn btn-primary" onclick="savePasswords()">💾 Сохранить настройки</button>
+        <button class="btn btn-danger" onclick="resetPasswords()">🗑️ Сбросить пароли</button>
+      </div>
+
+      <h3 style="margin:25px 0 10px">📅 Создать новый месяц</h3>
       <div class="form-group">
         <label>Название месяца (например: "Сентябрь 2026")</label>
         <input type="text" id="newMonthName" placeholder="Сентябрь 2026">
@@ -611,7 +730,7 @@
     <div id="admin-data" class="tab-content">
       <h3 style="margin:15px 0 10px">Экспорт / Импорт данных</h3>
       <button class="btn btn-primary" onclick="exportData()">📤 Экспорт в JSON</button>
-      <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()"> Импорт из JSON</button>
+      <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📥 Импорт из JSON</button>
       <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
       <h3 style="margin:25px 0 10px;color:#e74c3c">⚠️ Опасная зона</h3>
       <button class="btn btn-danger" onclick="resetData()">🗑️ Удалить все данные в базе</button>
@@ -639,7 +758,7 @@ const db = firebase.firestore();
 let data = getDefaultData();
 let currentMonthId = data.currentMonthId;
 let currentRole = null;
-let passwords = { viewPassword: '', adminPassword: 'admin123' };
+let passwords = { viewPassword: '', adminPassword: 'admin123', maintenanceMode: false };
 
 function getDefaultData() {
   const defaultMonth = {
@@ -677,11 +796,18 @@ function calcBalance(month) {
   return Number(month.prevBalance || 0) + calcBudget(month) - calcExpense(month);
 }
 
-// ============ ЗАГРУЗКА ДАННЫХ ИЗ FIREBASE + ПРОВЕРКА СЕССИИ ============
+// ============ ЗАГРУЗКА ДАННЫХ ИЗ FIREBASE ============
 async function loadFromFirebase() {
   try {
     const pwdDoc = await db.collection('settings').doc('passwords').get();
-    if (pwdDoc.exists) passwords = pwdDoc.data();
+    if (pwdDoc.exists) {
+      const pData = pwdDoc.data();
+      passwords = {
+        viewPassword: pData.viewPassword || '',
+        adminPassword: pData.adminPassword || 'admin123',
+        maintenanceMode: pData.maintenanceMode || false
+      };
+    }
 
     const dataDoc = await db.collection('data').doc('main').get();
     if (dataDoc.exists) {
@@ -696,46 +822,69 @@ async function loadFromFirebase() {
       currentMonthId = data.currentMonthId;
     }
 
-    // Проверяем сохраненную сессию
+    // Проверка сохранённой сессии
+    let savedRole = null;
     const savedSession = localStorage.getItem('parentBudgetSession');
     if (savedSession) {
       try {
         const session = JSON.parse(savedSession);
-        if (session.role) {
-          currentRole = session.role;
-          // Автоматический вход без запроса пароля
-          document.getElementById('loginStatus').textContent = '✅ Авто-вход...';
-          document.getElementById('loginStatus').style.color = '#27ae60';
-          setTimeout(() => {
-            enableLogin();
-            render();
-            enterApp();
-          }, 500);
-          return;
-        }
+        if (session && session.role) savedRole = session.role;
       } catch (e) {
-        // Если сессия повреждена — очищаем
         localStorage.removeItem('parentBudgetSession');
       }
+    }
+
+    // АДМИНИСТРАТОР входит всегда — даже в режиме тех. работ
+    if (savedRole === 'admin') {
+      currentRole = 'admin';
+      enableLogin();
+      render();
+      enterApp();
+      return;
+    }
+
+    // РЕЖИМ ТЕХНИЧЕСКИХ РАБОТ: всем остальным показываем заглушку
+    if (passwords.maintenanceMode) {
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('maintenanceScreen').classList.add('visible');
+      return;
+    }
+
+    // Обычный режим: гость с сохранённой сессией входит автоматически
+    if (savedRole === 'guest') {
+      currentRole = 'guest';
+      enableLogin();
+      render();
+      enterApp();
+      return;
     }
 
     enableLogin();
     render();
   } catch (err) {
     console.error('Ошибка загрузки:', err);
-    document.getElementById('loginStatus').textContent = '❌ Ошибка подключения к базе';
-    document.getElementById('loginStatus').style.color = '#e74c3c';
+    document.getElementById('loginStatus').textContent = '❌ Ошибка подключения';
+    document.getElementById('loginStatus').style.color = '#ffb3b3';
   }
 }
 
 function enableLogin() {
   document.getElementById('loginPassword').disabled = false;
   document.getElementById('loginBtn').disabled = false;
-  if (document.getElementById('loginStatus').textContent === 'Загрузка...') {
-    document.getElementById('loginStatus').textContent = '✅ Подключено к базе';
-    document.getElementById('loginStatus').style.color = '#27ae60';
+  if (document.getElementById('loginStatus').textContent === 'Подключение к базе...') {
+    document.getElementById('loginStatus').textContent = '✅ Готово к входу';
+    document.getElementById('loginStatus').style.color = '#7bed9f';
   }
   document.getElementById('loginPassword').focus();
+}
+
+// Кнопка на экране тех. работ — открывает форму входа для администратора
+function openAdminLoginFromMaintenance() {
+  document.getElementById('maintenanceScreen').classList.remove('visible');
+  document.getElementById('loginScreen').classList.remove('hidden');
+  document.getElementById('loginStatus').textContent = '🔐 Вход для администратора';
+  document.getElementById('loginStatus').style.color = '#ffffff';
+  enableLogin();
 }
 
 loadFromFirebase();
@@ -763,8 +912,8 @@ async function savePasswordsToFirebase() {
     await db.collection('settings').doc('passwords').set(passwords);
     showSaveIndicator();
   } catch (err) {
-    console.error('Ошибка сохранения паролей:', err);
-    alert('❌ Ошибка сохранения паролей: ' + err.message);
+    console.error('Ошибка сохранения настроек:', err);
+    alert('❌ Ошибка сохранения: ' + err.message);
   }
 }
 
@@ -791,7 +940,15 @@ function doLogin() {
 }
 
 function enterApp() {
+  // Если включены тех. работы и вошёл НЕ админ — показываем заглушку
+  if (passwords.maintenanceMode && currentRole !== 'admin') {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('maintenanceScreen').classList.add('visible');
+    return;
+  }
+
   document.getElementById('loginScreen').classList.add('hidden');
+  document.getElementById('maintenanceScreen').classList.remove('visible');
   document.getElementById('app').classList.add('visible');
   
   const adminBtn = document.getElementById('adminBtn');
@@ -802,10 +959,9 @@ function enterApp() {
     userBadge.innerHTML = '👑 Администратор';
   } else {
     adminBtn.classList.add('hidden');
-    userBadge.innerHTML = '👁️ Гость (только просмотр)';
+    userBadge.innerHTML = '👁️ Гость';
   }
   
-  // Сохраняем сессию в localStorage
   localStorage.setItem('parentBudgetSession', JSON.stringify({
     role: currentRole,
     loginTime: new Date().toISOString()
@@ -816,14 +972,20 @@ function enterApp() {
 
 function doLogout() {
   currentRole = null;
-  // Очищаем сохраненную сессию
   localStorage.removeItem('parentBudgetSession');
   document.getElementById('app').classList.remove('visible');
-  document.getElementById('loginScreen').classList.remove('hidden');
   document.getElementById('loginPassword').value = '';
   document.getElementById('loginError').classList.remove('show');
-  document.getElementById('loginStatus').textContent = '✅ Подключено к базе';
-  document.getElementById('loginStatus').style.color = '#27ae60';
+
+  if (passwords.maintenanceMode) {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('maintenanceScreen').classList.add('visible');
+  } else {
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('maintenanceScreen').classList.remove('visible');
+    document.getElementById('loginStatus').textContent = '✅ Готово к входу';
+    document.getElementById('loginStatus').style.color = '#7bed9f';
+  }
 }
 
 function openAdmin() {
@@ -843,7 +1005,6 @@ function checkAdminPassword() {
     currentRole = 'admin';
     document.getElementById('adminBtn').classList.remove('hidden');
     document.getElementById('userBadge').innerHTML = '👑 Администратор';
-    // Обновляем сессию
     localStorage.setItem('parentBudgetSession', JSON.stringify({
       role: currentRole,
       loginTime: new Date().toISOString()
@@ -857,6 +1018,7 @@ function checkAdminPassword() {
 // ============ ОТРИСОВКА ============
 function render() {
   renderMonthSelector();
+  renderHome();
   renderSummary();
   renderNews();
   renderContributions();
@@ -876,6 +1038,34 @@ function renderMonthSelector() {
     sel.appendChild(opt);
   });
   sel.onchange = (e) => { currentMonthId = e.target.value; render(); };
+}
+
+function renderHome() {
+  const m = getCurrentMonth();
+  const balance = calcBalance(m);
+  document.getElementById('home-balance').textContent = formatMoney(balance) + ' ₽';
+  document.getElementById('home-month').textContent = m.name;
+
+  const homeNewsContainer = document.getElementById('homeNewsList');
+  const sortedNews = [...data.news].sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0)).slice(0, 2);
+  
+  if (sortedNews.length === 0) {
+    homeNewsContainer.innerHTML = '<div class="news-empty">Новостей пока нет</div>';
+  } else {
+    homeNewsContainer.innerHTML = '';
+    sortedNews.forEach(news => {
+      if (!news.title && !news.text) return;
+      const card = document.createElement('div');
+      card.className = 'news-card' + (news.urgent ? ' urgent' : '');
+      const dateStr = news.date ? new Date(news.date).toLocaleString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
+      card.innerHTML = `
+        <div class="news-date">${news.urgent ? '🔴 СРОЧНО • ' : ''}${dateStr}</div>
+        <div class="news-title">${escapeHtml(news.title || 'Без заголовка')}</div>
+        <div class="news-text">${escapeHtml(news.text || '')}</div>
+      `;
+      homeNewsContainer.appendChild(card);
+    });
+  }
 }
 
 function renderSummary() {
@@ -916,7 +1106,6 @@ function renderNews() {
     `;
     container.appendChild(card);
   });
-  if (container.children.length === 0) container.innerHTML = '<div class="news-empty">Новостей пока нет</div>';
 }
 
 function renderContributions() {
@@ -999,7 +1188,7 @@ function renderCommittee() {
     let phoneHtml = '';
     if (member.phone) {
       const cleanPhone = member.phone.replace(/[^\d+]/g, '');
-      phoneHtml = `<div class="member-phone"> <a href="tel:${cleanPhone}">${escapeHtml(member.phone)}</a></div>`;
+      phoneHtml = `<div class="member-phone">📞 <a href="tel:${cleanPhone}">${escapeHtml(member.phone)}</a></div>`;
     }
     card.innerHTML = `
       <div class="member-name">${escapeHtml(member.name)}</div>
@@ -1008,7 +1197,6 @@ function renderCommittee() {
     `;
     container.appendChild(card);
   });
-  if (container.children.length === 0) container.innerHTML = '<div class="committee-empty">Состав комитета ещё не заполнен</div>';
 }
 
 function renderArchive() {
@@ -1066,6 +1254,7 @@ function openAdminPanel() {
   document.getElementById('editAddIncome').value = m.additionalIncome;
   document.getElementById('setViewPassword').value = passwords.viewPassword || '';
   document.getElementById('setAdminPassword').value = passwords.adminPassword || 'admin123';
+  document.getElementById('maintenanceToggle').checked = passwords.maintenanceMode || false;
 
   const newsDiv = document.getElementById('adminNews');
   newsDiv.innerHTML = '';
@@ -1218,10 +1407,10 @@ function collectAdminData() {
 async function saveAll() {
   collectAdminData();
   const btn = document.getElementById('saveBtn');
-  if (btn) { btn.disabled = true; btn.textContent = ' Сохранение...'; }
+  if (btn) { btn.disabled = true; btn.textContent = 'Сохранение...'; }
   await saveToFirebase();
   render();
-  if (btn) { btn.disabled = false; btn.textContent = ' Сохранить в облако'; }
+  if (btn) { btn.disabled = false; btn.textContent = '💾 Сохранить в облако'; }
 }
 
 async function archiveMonth() {
@@ -1259,22 +1448,35 @@ async function createNewMonth() {
 async function savePasswords() {
   const viewPwd = document.getElementById('setViewPassword').value.trim();
   const adminPwd = document.getElementById('setAdminPassword').value.trim();
+  const maintMode = document.getElementById('maintenanceToggle').checked;
+  
   if (!adminPwd || adminPwd.length < 3) { alert('Пароль администратора должен быть минимум 3 символа'); return; }
   if (viewPwd && viewPwd === adminPwd) { alert('Пароли должны отличаться!'); return; }
+  
   passwords.viewPassword = viewPwd;
   passwords.adminPassword = adminPwd;
+  passwords.maintenanceMode = maintMode;
+  
   await savePasswordsToFirebase();
-  alert('✅ Пароли сохранены в облаке!\n\n' + (viewPwd ? '🔓 Родители входят по паролю: ' + viewPwd + '\n' : '🔓 Пароль для гостей не задан\n') + '🔑 Пароль администратора: ' + adminPwd);
+  
+  let msg = '✅ Настройки сохранены!\n\n';
+  msg += (viewPwd ? '🔓 Родители входят по паролю: ' + viewPwd + '\n' : '🔓 Пароль для гостей не задан\n');
+  msg += '🔑 Пароль администратора: ' + adminPwd + '\n';
+  msg += (maintMode ? '⚠️ Режим технических работ ВКЛЮЧЕН' : '✅ Режим технических работ ВЫКЛЮЧЕН');
+  
+  alert(msg);
 }
 
 async function resetPasswords() {
-  if (!confirm('Сбросить все пароли к значению по умолчанию (admin123)?')) return;
+  if (!confirm('Сбросить все пароли и настройки доступа?')) return;
   passwords.viewPassword = '';
   passwords.adminPassword = 'admin123';
+  passwords.maintenanceMode = false;
   await savePasswordsToFirebase();
   document.getElementById('setViewPassword').value = '';
   document.getElementById('setAdminPassword').value = 'admin123';
-  alert('✅ Пароли сброшены. Новый пароль: admin123');
+  document.getElementById('maintenanceToggle').checked = false;
+  alert('✅ Настройки сброшены.');
 }
 
 function viewArchive(monthId) {
@@ -1317,7 +1519,10 @@ async function importData(event) {
       if (!confirm('Заменить все данные в базе импортированными?')) return;
       data = imported.data;
       currentMonthId = data.currentMonthId || data.months[0].id;
-      if (imported.passwords) { passwords = imported.passwords; await savePasswordsToFirebase(); }
+      if (imported.passwords) { 
+        passwords = imported.passwords; 
+        await savePasswordsToFirebase(); 
+      }
       await saveToFirebase();
       render();
       alert('✅ Данные импортированы в облако');
@@ -1361,9 +1566,6 @@ document.querySelectorAll('.modal-overlay').forEach(overlay => {
   });
 });
 
-// ==========================================
-// 🚀 РЕГИСТРАЦИЯ SERVICE WORKER (ДЛЯ PWA)
-// ==========================================
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./service-worker.js')
