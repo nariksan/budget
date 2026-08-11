@@ -57,6 +57,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .top-nav-btn { flex-shrink:0; background:none; border:none; padding:10px 12px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px; color:var(--gray); font-size:.72em; font-weight:600; white-space:nowrap; border-bottom:3px solid transparent; min-width:60px; }
 .top-nav-btn .nav-icon { font-size:1.5em; line-height:1; }
 .top-nav-btn.active { color:var(--brand-green); border-bottom-color:var(--brand-orange); }
+.top-nav-btn:active { transform:scale(0.95); }
 .top-nav-logout { flex-shrink:0; background:#fff5f5; color:var(--danger); border:none; padding:8px 12px; margin-left:auto; border-radius:var(--radius-sm); font-weight:600; cursor:pointer; font-size:.75em; display:flex; gap:4px; }
 .app-content { max-width:1200px; margin:0 auto; padding:16px; }
 .section { display:none; animation:fadeIn .3s ease; }
@@ -186,7 +187,6 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .role-badge.admin-b { background:var(--danger); }
 .pwd-chip { font-family:monospace; background:#e8f5e9; border-radius:6px; padding:2px 8px; font-size:.85em; }
 .unsaved-badge { display:none; background:var(--gold); color:#5b4300; font-size:.7em; font-weight:700; padding:4px 10px; border-radius:12px; }
-/* ✅ ИСПРАВЛЕНО: z-index 10000 — модалки теперь ПОВЕРХ формы входа (9999) */
 .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:10000; justify-content:center; align-items:center; padding:16px; backdrop-filter:blur(4px); }
 .modal-overlay.active { display:flex; }
 .modal { background:white; border-radius:var(--radius-xl); padding:24px; max-width:500px; width:100%; max-height:90vh; overflow-y:auto; }
@@ -234,7 +234,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <div class="form-group"><label>🔒 Пароль</label><input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')doLogin()" disabled></div>
 <button class="login-btn" onclick="doLogin()" id="loginBtn" disabled>Войти</button>
 <button class="btn-request" onclick="openAccessRequestModal()">📩 Отправить запрос на вход</button>
-<div class="login-hint"><br>🔐 Данные защищены Firebase Authentication</div>
+<div class="login-hint">👑 Владелец входит без выбора группы<br>🔐 Данные защищены Firebase Authentication</div>
 </div>
 </div>
 
@@ -335,6 +335,17 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 </div>
 
+<datalist id="childrenDatalist"></datalist>
+<div class="modal-overlay" id="childPickerModal">
+<div class="modal">
+<h2>👶 Выберите ребёнка</h2>
+<div id="childPickerList" style="max-height:50vh;overflow-y:auto;"></div>
+<div class="form-group" style="margin-top:12px"><label>Или введите вручную</label><input type="text" id="childPickerManual" placeholder="ФИО"></div>
+<button class="btn btn-primary btn-block" onclick="applyChildPickerManual()">✍️ Использовать введённое</button>
+<button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('childPickerModal')">Отмена</button>
+</div>
+</div>
+
 <div class="save-indicator" id="saveIndicator">✅ Сохранено</div>
 
 <script>
@@ -357,6 +368,7 @@ const WEEKDAY_NAMES = ['Воскресенье','Понедельник','Вто
 let app = null, data = null, currentGroupId = null, currentMonthId = null;
 let currentRole = null, currentUserId = null, currentUserName = null;
 let adminDirty = false, pendingRequestId = null;
+let childPickerTarget = null;
 let settings = { ownerPhone: '89146443734', ownerPassword: 'N130289s', maintenanceMode: false };
 let protectionEnabled = false;
 let publicConfig = { groups: [], maintenanceMode: false, protected: false };
@@ -565,6 +577,27 @@ function openAccessRequestModal() {
   document.getElementById('accessRequestModal').classList.add('active');
 }
 
+// ===== ВЫБОР РЕБЁНКА 👶 =====
+function openChildPicker(inputEl) {
+  childPickerTarget = inputEl;
+  const list = document.getElementById('childPickerList'); list.innerHTML = '';
+  const kids = data.children || [];
+  if (!kids.length) list.innerHTML = '<p style="color:var(--light-gray);font-size:.9em">Дети ещё не добавлены — добавьте в «👥 Люди → Дети»</p>';
+  kids.forEach(k => { if (!k.name) return; const b = document.createElement('button'); b.className = 'btn btn-sm btn-secondary'; b.style.margin = '3px'; b.textContent = (k.gender === 'girl' ? '🎀 ' : '👦 ') + k.name; b.onclick = () => { childPickerTarget.value = k.name; markDirty(); closeModal('childPickerModal'); }; list.appendChild(b); });
+  document.getElementById('childPickerManual').value = '';
+  document.getElementById('childPickerModal').classList.add('active');
+}
+function applyChildPickerManual() {
+  const v = document.getElementById('childPickerManual').value.trim();
+  if (!v) { alert('Введите имя'); return; }
+  if (childPickerTarget) { childPickerTarget.value = v; markDirty(); }
+  closeModal('childPickerModal');
+}
+function fillChildrenDatalist() {
+  const dl = document.getElementById('childrenDatalist'); if (!dl) return; dl.innerHTML = '';
+  (data.children || []).forEach(k => { if (k.name) { const o = document.createElement('option'); o.value = k.name; dl.appendChild(o); } });
+}
+
 function showSection(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   const el = document.getElementById(id); if (el) el.classList.add('active');
@@ -634,7 +667,7 @@ function renderGroup() {
   html += `</div>`;
   if ((data.teachers||[]).length) { html += `<div class="info-block-g"><h3>👩‍🏫 Наши воспитатели</h3>`; data.teachers.forEach(t => { if (!t.name) return; const ph = t.phone ? `<div class="teacher-phone">📞 <a href="tel:${t.phone.replace(/[^\d+]/g,'')}">${escapeHtml(t.phone)}</a></div>` : ''; html += `<div class="teacher-item"><div><div class="teacher-name">${escapeHtml(t.name)}</div><div class="teacher-role">${escapeHtml(t.role||'Воспитатель')}</div></div>${ph}</div>`; }); html += `</div>`; }
   if ((data.committee||[]).length) { html += `<h3 style="font-size:1.1em;color:var(--brand-green);margin:20px 0 12px;">👥 Родительский комитет</h3><div class="committee-grid">`; data.committee.forEach(mb => { if (!mb.name) return; let cls = 'committee-card'; const r = (mb.role||'').toLowerCase(); if (r.includes('председатель')) cls += ' chair'; else if (r.includes('казначей')) cls += ' treasurer'; const ph = mb.phone ? `<div class="member-phone">📞 <a href="tel:${mb.phone.replace(/[^\d+]/g,'')}">${escapeHtml(mb.phone)}</a></div>` : ''; html += `<div class="${cls}"><div class="member-name">${escapeHtml(mb.name)}</div><div class="member-role">${escapeHtml(mb.role||'Член комитета')}</div>${ph}</div>`; }); html += `</div>`; }
-  if ((data.parents||[]).length) { html += `<div class="info-block-g" style="margin-top:20px"><h3>👨‍ Родители</h3>`; data.parents.forEach(p => { if (!p.name) return; const ph = p.phone ? `<div class="teacher-phone">📞 <a href="tel:${p.phone.replace(/[^\d+]/g,'')}">${escapeHtml(p.phone)}</a></div>` : ''; html += `<div class="teacher-item"><div><div class="teacher-name">${escapeHtml(p.name)}</div></div>${ph}</div>`; }); html += `</div>`; }
+  if ((data.parents||[]).length) { html += `<div class="info-block-g" style="margin-top:20px"><h3>👨‍👩 Родители</h3>`; data.parents.forEach(p => { if (!p.name) return; const ph = p.phone ? `<div class="teacher-phone">📞 <a href="tel:${p.phone.replace(/[^\d+]/g,'')}">${escapeHtml(p.phone)}</a></div>` : ''; html += `<div class="teacher-item"><div><div class="teacher-name">${escapeHtml(p.name)}</div></div>${ph}</div>`; }); html += `</div>`; }
   c.innerHTML = html;
 }
 
@@ -644,7 +677,7 @@ function renderExpenses() { const m = getCurrentMonth(); let html = '', t = 0; h
 function renderCommittee() { const c = document.getElementById('committeeList'); if (!data.committee.length) { c.innerHTML = '<div class="news-empty">Состав комитета ещё не заполнен</div>'; return; } let html = '<div class="committee-grid">'; data.committee.forEach(mb => { if (!mb.name) return; let cls = 'committee-card'; const r = (mb.role||'').toLowerCase(); if (r.includes('председатель')) cls += ' chair'; else if (r.includes('казначей')||r.includes('бухгалтер')) cls += ' treasurer'; const ph = mb.phone ? `<div class="member-phone">📞 <a href="tel:${mb.phone.replace(/[^\d+]/g,'')}">${escapeHtml(mb.phone)}</a></div>` : ''; html += `<div class="${cls}"><div class="member-name">${escapeHtml(mb.name)}</div><div class="member-role">${escapeHtml(mb.role||'Член комитета')}</div>${ph}</div>`; }); html += '</div>'; c.innerHTML = html; }
 function renderArchive() { const c = document.getElementById('archiveList'); if (!data.archive.length) { c.innerHTML = '<div class="news-empty">Архив пуст</div>'; return; } let html = ''; data.archive.slice().reverse().forEach(m => { const inc = calcIncome(m), ai = Number(m.additionalIncome||0), exp = calcExpense(m), bal = Number(m.prevBalance||0)+inc+ai-exp; const pc = m.students.filter(s => s.paid).length, tc = m.students.filter(s => s.name).length; html += `<div class="archive-item"><div class="archive-item-info"><strong>${escapeHtml(m.name)}</strong><small>Приход: ${formatMoney(inc)} ₽ · Расход: ${formatMoney(exp)} ₽ · Остаток: <b>${formatMoney(bal)} ₽</b> · Сдали: ${pc}/${tc}</small></div></div>`; }); c.innerHTML = html; }
 
-function renderAdmin() { renderAdminSummary(); renderAdminGroupInfo(); renderAdminPeople(); renderAdminStudents(); renderAdminExpenses(); renderAdminNews(); renderAdminMonths(); renderAdminAccess(); }
+function renderAdmin() { fillChildrenDatalist(); renderAdminSummary(); renderAdminGroupInfo(); renderAdminPeople(); renderAdminStudents(); renderAdminExpenses(); renderAdminNews(); renderAdminMonths(); renderAdminAccess(); }
 function renderAdminSummary() { const m = getCurrentMonth(); document.getElementById('admin-summary').innerHTML = `<div class="admin-card"><div class="admin-card-title">📊 Сводка: ${escapeHtml(m.name)}</div><div class="admin-cards-grid">
   <div class="stat-card"><div class="stat-label">Остаток с прош. мес.</div><div class="stat-value"><input type="number" id="editPrevBalance" step="0.01" value="${m.prevBalance}" onchange="markDirty();recalcAdmin()"></div></div>
   <div class="stat-card"><div class="stat-label">Доп. приход</div><div class="stat-value"><input type="number" id="editAddIncome" step="0.01" value="${m.additionalIncome}" onchange="markDirty();recalcAdmin()"></div></div>
@@ -672,7 +705,7 @@ function addEventRow() { document.getElementById('adminEventsList').insertAdjace
 function renderAdminPeople() { let comHtml=''; (data.committee||[]).forEach(x => comHtml += committeeRowHtml(x)); let parHtml=''; (data.parents||[]).forEach(p => parHtml += parentRowHtml(p)); let chHtml=''; (data.children||[]).forEach(k => chHtml += childRowHtml(k)); let tHtml=''; (data.teachers||[]).forEach(t => tHtml += teacherRowHtml(t));
   document.getElementById('admin-people').innerHTML = `
   <div class="admin-card"><div class="admin-card-title">👥 Комитет</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addCommitteeRow();markDirty()">➕ Добавить</button></div><div id="adminCommitteeList">${comHtml}</div></div>
-  <div class="admin-card"><div class="admin-card-title">👨‍ Родители</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addParentRow();markDirty()">➕ Добавить</button></div><div id="adminParentsList">${parHtml}</div></div>
+  <div class="admin-card"><div class="admin-card-title">👨👩 Родители</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addParentRow();markDirty()">➕ Добавить</button></div><div id="adminParentsList">${parHtml}</div></div>
   <div class="admin-card"><div class="admin-card-title">👶 Дети</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addChildRow();markDirty()">➕ Добавить ребёнка</button></div><div id="adminChildrenList">${chHtml}</div></div>
   <div class="admin-card"><div class="admin-card-title">👩‍ Воспитатели</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addTeacherRow();markDirty()">➕ Добавить</button></div><div id="adminTeachersList">${tHtml}</div></div>`; }
 function committeeRowHtml(x=null){return `<div class="a-row committee-row-admin"><input type="text" class="p-name" value="${x?escapeHtml(x.name||''):''}" placeholder="ФИО"><input type="text" class="p-role" value="${x?escapeHtml(x.role||''):''}" placeholder="Роль"><input type="tel" class="p-phone" value="${x?escapeHtml(x.phone||''):''}" placeholder="Телефон"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()">🗑</button></div>`;}
@@ -683,12 +716,12 @@ function childRowHtml(k=null){return `<div class="a-row child-row-admin"><input 
 function addChildRow(){document.getElementById('adminChildrenList').insertAdjacentHTML('beforeend',childRowHtml());}
 function teacherRowHtml(t=null){return `<div class="a-row committee-row-admin"><input type="text" class="t-name" value="${t?escapeHtml(t.name||''):''}" placeholder="ФИО"><input type="text" class="t-role" value="${t?escapeHtml(t.role||''):''}" placeholder="Должность"><input type="tel" class="t-phone" value="${t?escapeHtml(t.phone||''):''}" placeholder="Телефон"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()">🗑</button></div>`;}
 function addTeacherRow(){document.getElementById('adminTeachersList').insertAdjacentHTML('beforeend',teacherRowHtml());}
-function renderAdminStudents() { const m = getCurrentMonth(); let rows = ''; m.students.forEach(s => { rows += `<div class="a-row student-row"><input type="text" class="a-name" value="${escapeHtml(s.name||'')}" placeholder="ФИО"><input type="number" class="a-amount" value="${s.amount||''}" placeholder="₽" step="0.01"><label class="switch"><input type="checkbox" class="a-paid" ${s.paid?'checked':''}><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button></div>`; });
+function renderAdminStudents() { const m = getCurrentMonth(); let rows = ''; m.students.forEach(s => { rows += `<div class="a-row student-row"><div style="display:flex;gap:4px;"><input type="text" class="a-name" list="childrenDatalist" value="${escapeHtml(s.name||'')}" placeholder="ФИО или 👶"><button class="btn btn-gold btn-sm" onclick="openChildPicker(this.previousElementSibling)">👶</button></div><input type="number" class="a-amount" value="${s.amount||''}" placeholder="₽" step="0.01"><label class="switch"><input type="checkbox" class="a-paid" ${s.paid?'checked':''}><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button></div>`; });
   document.getElementById('admin-students').innerHTML = `<div class="admin-card"><div class="admin-card-title">💰 Взносы</div><div class="admin-toolbar"><input type="text" id="studentSearch" placeholder="🔍 Поиск..." oninput="filterStudents()"><button class="btn btn-success btn-sm" onclick="addStudentRow();markDirty()">➕ Добавить</button><button class="btn btn-primary btn-sm" onclick="markAllPaid()">✅ Все сдали</button><button class="btn btn-secondary btn-sm" onclick="copyFromArchive()">📋 Копировать</button></div><div class="admin-stats" id="studentStats"></div><div id="adminStudents">${rows}</div></div>`; recalcAdmin(); }
-function addStudentRow(){const d=document.createElement('div');d.className='a-row student-row';d.innerHTML=`<input type="text" class="a-name" placeholder="ФИО"><input type="number" class="a-amount" placeholder="₽" step="0.01"><label class="switch"><input type="checkbox" class="a-paid"><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;document.getElementById('adminStudents').appendChild(d);}
+function addStudentRow(){const d=document.createElement('div');d.className='a-row student-row';d.innerHTML=`<div style="display:flex;gap:4px;"><input type="text" class="a-name" list="childrenDatalist" placeholder="ФИО или 👶"><button class="btn btn-gold btn-sm" onclick="openChildPicker(this.previousElementSibling)">👶</button></div><input type="number" class="a-amount" placeholder="₽" step="0.01"><label class="switch"><input type="checkbox" class="a-paid"><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;document.getElementById('adminStudents').appendChild(d);}
 function markAllPaid(){document.querySelectorAll('#adminStudents .a-paid').forEach(cb=>cb.checked=true);recalcAdmin();markDirty();}
 function filterStudents(){const q=(document.getElementById('studentSearch').value||'').toLowerCase();document.querySelectorAll('#adminStudents .student-row').forEach(r=>{r.style.display=r.querySelector('.a-name').value.toLowerCase().includes(q)?'':'none';});}
-function copyFromArchive(){const src=data.archive.length?data.archive[data.archive.length-1]:null;if(!src){alert('Нет архива');return;}if(!confirm('Скопировать из "'+src.name+'"?'))return;const c=document.getElementById('adminStudents');c.innerHTML='';src.students.forEach(s=>{if(s.name){const d=document.createElement('div');d.className='a-row student-row';d.innerHTML=`<input type="text" class="a-name" value="${escapeHtml(s.name)}"><input type="number" class="a-amount" value="${s.amount||''}" step="0.01"><label class="switch"><input type="checkbox" class="a-paid"><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;c.appendChild(d);}});recalcAdmin();markDirty();}
+function copyFromArchive(){const src=data.archive.length?data.archive[data.archive.length-1]:null;if(!src){alert('Нет архива');return;}if(!confirm('Скопировать из "'+src.name+'"?'))return;const c=document.getElementById('adminStudents');c.innerHTML='';src.students.forEach(s=>{if(s.name){const d=document.createElement('div');d.className='a-row student-row';d.innerHTML=`<div style="display:flex;gap:4px;"><input type="text" class="a-name" list="childrenDatalist" value="${escapeHtml(s.name)}"><button class="btn btn-gold btn-sm" onclick="openChildPicker(this.previousElementSibling)">👶</button></div><input type="number" class="a-amount" value="${s.amount||''}" step="0.01"><label class="switch"><input type="checkbox" class="a-paid"><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;c.appendChild(d);}});recalcAdmin();markDirty();}
 function renderAdminExpenses() { const m = getCurrentMonth(); let rows = ''; m.expenses.forEach(e => { rows += `<div class="a-row expense-row"><input type="text" class="a-desc" value="${escapeHtml(e.description||'')}" placeholder="На что потрачено"><input type="number" class="a-amount" value="${e.amount||''}" placeholder="₽" step="0.01"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button></div>`; }); document.getElementById('admin-expenses').innerHTML = `<div class="admin-card"><div class="admin-card-title">💸 Расходы</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addExpenseRow();markDirty()">➕ Добавить расход</button></div><div class="admin-stats" id="expenseStats"></div><div id="adminExpenses">${rows}</div></div>`; }
 function addExpenseRow(){const d=document.createElement('div');d.className='a-row expense-row';d.innerHTML=`<input type="text" class="a-desc" placeholder="На что потрачено"><input type="number" class="a-amount" placeholder="₽" step="0.01"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;document.getElementById('adminExpenses').appendChild(d);}
 function renderAdminNews() { let rows = ''; data.news.forEach(n => { rows += `<div class="a-news-card" ${n.date?`data-date="${n.date}"`:''}><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px"><label class="a-urgent-label"><input type="checkbox" class="a-news-urgent" ${n.urgent?'checked':''}> 🔴 Срочно</label><button class="btn btn-danger btn-sm" onclick="this.closest('.a-news-card').remove();markDirty()">🗑</button></div><input type="text" class="a-news-title" placeholder="Заголовок" value="${escapeHtml(n.title||'')}"><textarea class="a-news-text" placeholder="Текст">${escapeHtml(n.text||'')}</textarea></div>`; }); document.getElementById('admin-news').innerHTML = `<div class="admin-card"><div class="admin-card-title">📰 Новости</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addNewsRow();markDirty()">➕ Добавить новость</button></div><div id="adminNews">${rows}</div></div>`; }
@@ -887,7 +920,7 @@ function collectAdminData() {
   data.news=[]; document.querySelectorAll('#adminNews .a-news-card').forEach(c => { const t=c.querySelector('.a-news-title').value.trim(); const x=c.querySelector('.a-news-text').value.trim(); if(t||x)data.news.push({title:t,text:x,urgent:c.querySelector('.a-news-urgent').checked,date:c.dataset.date||new Date().toISOString()}); });
   data.currentMonthId = currentMonthId;
 }
-async function saveAll() { collectAdminData(); const btn=document.getElementById('saveBtn'); if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Сохранение...';} await saveToFirebase(); renderAll(); clearDirty(); document.getElementById('headerGroupLabel').textContent = groupLabel(getGroup(currentGroupId)); if(btn){btn.disabled=false;btn.innerHTML='💾 Сохранить';} }
+async function saveAll() { collectAdminData(); const btn=document.getElementById('saveBtn'); if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Сохранение...';} await saveToFirebase(); renderAll(); clearDirty(); fillChildrenDatalist(); document.getElementById('headerGroupLabel').textContent = groupLabel(getGroup(currentGroupId)); if(btn){btn.disabled=false;btn.innerHTML='💾 Сохранить';} }
 async function saveToFirebase() { try { await db.collection('data').doc('main').set({ ...app, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }); showSaveIndicator(); } catch(err) { console.error(err); alert('❌ Ошибка: ' + err.message); } }
 async function saveSettings() { try { await db.collection('settings').doc('passwords').set(settings); await db.collection('public').doc('config').set({ maintenanceMode: settings.maintenanceMode }, { merge: true }); showSaveIndicator(); } catch(err) { alert('❌ Ошибка: ' + err.message); } }
 
