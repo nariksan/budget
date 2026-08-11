@@ -243,12 +243,12 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <div class="header-content">
 <div class="header-top">
 <div class="header-title"><h1>💰 Бюджет группы</h1><div class="header-group-label" id="headerGroupLabel"></div></div>
-<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-<div class="month-selector-header"><select id="monthSelect" onchange="changeMonth(this.value)"></select></div>
 <div class="header-clock"><div class="clock-time" id="clockTime">--:--:--</div><div class="clock-date" id="clockDate">...</div></div>
 </div>
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap;">
+<div class="current-user-badge" id="currentUserBadge" style="display:none;"><span>👤</span><span id="currentUserName"></span><span class="role-badge-header" id="currentUserRole"></span></div>
+<div class="month-selector-header"><select id="monthSelect" onchange="changeMonth(this.value)"></select></div>
 </div>
-<div><div class="current-user-badge" id="currentUserBadge" style="display:none;"><span>👤</span><span id="currentUserName"></span><span class="role-badge-header" id="currentUserRole"></span></div></div>
 </div>
 </div>
 </header>
