@@ -230,11 +230,11 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <div class="login-error" id="loginError"></div>
 <div class="login-status" id="loginStatus">Подключение...</div>
 <div class="form-group"><label>🏫 Выберите группу <span style="color:var(--light-gray);font-weight:400">— владельцу можно не выбирать</span></label><select id="loginGroup"></select></div>
-<div class="form-group"><label>📱 Телефон</label><input type="tel" id="loginPhone" placeholder="Последние цифры" onkeypress="if(event.key==='Enter')doLogin()"></div>
+<div class="form-group"><label>📱 Телефон</label><input type="tel" id="loginPhone" placeholder="можно последние 4 цифры" onkeypress="if(event.key==='Enter')doLogin()"></div>
 <div class="form-group"><label>🔒 Пароль</label><input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')doLogin()" disabled></div>
 <button class="login-btn" onclick="doLogin()" id="loginBtn" disabled>Войти</button>
 <button class="btn-request" onclick="openAccessRequestModal()">📩 Отправить запрос на вход</button>
-<div class="login-hint">👑 Владелец входит без выбора группы<br>🔐 Данные защищены Firebase Authentication</div>
+<div class="login-hint"><br>🔐 Данные защищены Firebase Authentication</div>
 </div>
 </div>
 
@@ -314,7 +314,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <div class="form-group"><label>Имя / ФИО</label><input type="text" id="reqName" placeholder="Например: Наталья"></div>
 <div class="form-group"><label>Ваша группа</label><select id="reqGroup"></select></div>
 <div class="form-group"><label>Если группы нет — укажите</label><input type="text" id="reqGroupText" placeholder="Например: 8 Ромашка"></div>
-<div class="form-group"><label>Телефон</label><input type="tel" id="reqPhone" placeholder="Последние цифры"></div>
+<div class="form-group"><label>Телефон</label><input type="tel" id="reqPhone" placeholder="можно последние 4 цифры"></div>
 <div class="hint">💡 Заполните хотя бы имя или телефон.</div>
 <button class="btn btn-success btn-block" onclick="submitAccessRequest()">📨 Отправить</button>
 <button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('accessRequestModal')">Отмена</button>
@@ -750,7 +750,7 @@ async function renderAdminAccess() {
     <div class="admin-card"><div class="admin-card-title">➕ Добавить пользователя</div>
       <div class="hint">🔐 Пользователь получит аккаунт Firebase Auth (вход: телефон + пароль).</div>
       <div class="form-group"><label>ФИО</label><input type="text" id="newUserFullname" placeholder="Например: Наталья"></div>
-      <div class="form-group"><label>Телефон</label><input type="tel" id="newUserPhone" placeholder="Полностью или последние цифры"></div>
+      <div class="form-group"><label>Телефон</label><input type="tel" id="newUserPhone" placeholder="Полностью или последние 4 цифры"></div>
       <div class="form-group"><label>Пароль</label><div style="display:flex;gap:8px"><input type="text" id="newUserPassword"><button class="btn btn-secondary btn-sm" onclick="document.getElementById('newUserPassword').value=genPassword()">🎲</button></div></div>
       <div class="form-group"><label>Роль</label><select id="newUserRole"><option value="member">👁️ Родитель</option><option value="admin">💎 Админ</option></select></div>
       <button class="btn btn-success" onclick="addUserManual()">➕ Добавить</button></div>
