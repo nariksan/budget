@@ -920,7 +920,37 @@ function collectAdminData() {
   data.news=[]; document.querySelectorAll('#adminNews .a-news-card').forEach(c => { const t=c.querySelector('.a-news-title').value.trim(); const x=c.querySelector('.a-news-text').value.trim(); if(t||x)data.news.push({title:t,text:x,urgent:c.querySelector('.a-news-urgent').checked,date:c.dataset.date||new Date().toISOString()}); });
   data.currentMonthId = currentMonthId;
 }
-async function saveAll() { collectAdminData(); const btn=document.getElementById('saveBtn'); if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Сохранение...';} await saveToFirebase(); renderAll(); clearDirty(); fillChildrenDatalist(); document.getElementById('headerGroupLabel').textContent = groupLabel(getGroup(currentGroupId)); if(btn){btn.disabled=false;btn.innerHTML='💾 Сохранить';} }
+
+// === ИСПРАВЛЕННАЯ ФУНКЦИЯ saveAll ===
+async function saveAll() {
+  collectAdminData();
+  const btn = document.getElementById('saveBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Сохранение...'; }
+  
+  await saveToFirebase();
+  
+  // Обновляем публичный список групп для экрана входа, если включена защита
+  if (protectionEnabled) {
+    await db.collection('public').doc('config').set({
+      groups: app.groups.map(g => ({ id: g.id, number: g.number, name: g.name })),
+      maintenanceMode: settings.maintenanceMode,
+      protected: true
+    }, { merge: true });
+    publicConfig.groups = app.groups.map(g => ({ id: g.id, number: g.number, name: g.name }));
+  }
+  
+  // Обновляем выпадающий список групп на экране входа
+  fillLoginGroups();
+  
+  renderAll();
+  clearDirty();
+  fillChildrenDatalist();
+  document.getElementById('headerGroupLabel').textContent = groupLabel(getGroup(currentGroupId));
+  
+  if (btn) { btn.disabled = false; btn.innerHTML = '💾 Сохранить'; }
+}
+// ==================================
+
 async function saveToFirebase() { try { await db.collection('data').doc('main').set({ ...app, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }); showSaveIndicator(); } catch(err) { console.error(err); alert('❌ Ошибка: ' + err.message); } }
 async function saveSettings() { try { await db.collection('settings').doc('passwords').set(settings); await db.collection('public').doc('config').set({ maintenanceMode: settings.maintenanceMode }, { merge: true }); showSaveIndicator(); } catch(err) { alert('❌ Ошибка: ' + err.message); } }
 
