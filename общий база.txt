@@ -57,6 +57,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .top-nav-btn { flex-shrink:0; background:none; border:none; padding:10px 12px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px; color:var(--gray); font-size:.72em; font-weight:600; white-space:nowrap; border-bottom:3px solid transparent; min-width:60px; }
 .top-nav-btn .nav-icon { font-size:1.5em; line-height:1; }
 .top-nav-btn.active { color:var(--brand-green); border-bottom-color:var(--brand-orange); }
+.top-nav-btn:active { transform:scale(0.95); }
 .top-nav-logout { flex-shrink:0; background:#fff5f5; color:var(--danger); border:none; padding:8px 12px; margin-left:auto; border-radius:var(--radius-sm); font-weight:600; cursor:pointer; font-size:.75em; display:flex; gap:4px; }
 .app-content { max-width:1200px; margin:0 auto; padding:16px; }
 .section { display:none; animation:fadeIn .3s ease; }
@@ -186,11 +187,11 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .role-badge.admin-b { background:var(--danger); }
 .pwd-chip { font-family:monospace; background:#e8f5e9; border-radius:6px; padding:2px 8px; font-size:.85em; }
 .unsaved-badge { display:none; background:var(--gold); color:#5b4300; font-size:.7em; font-weight:700; padding:4px 10px; border-radius:12px; }
-.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:1000; justify-content:center; align-items:center; padding:16px; backdrop-filter:blur(4px); }
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:10000; justify-content:center; align-items:center; padding:16px; backdrop-filter:blur(4px); }
 .modal-overlay.active { display:flex; }
 .modal { background:white; border-radius:var(--radius-xl); padding:24px; max-width:500px; width:100%; max-height:90vh; overflow-y:auto; }
 .modal h2 { margin-bottom:16px; color:var(--brand-green); font-size:1.2em; }
-.save-indicator { position:fixed; bottom:20px; right:20px; background:var(--success); color:white; padding:10px 18px; border-radius:var(--radius-sm); font-weight:600; opacity:0; transition:opacity .3s; z-index:1300; pointer-events:none; }
+.save-indicator { position:fixed; bottom:20px; right:20px; background:var(--success); color:white; padding:10px 18px; border-radius:var(--radius-sm); font-weight:600; opacity:0; transition:opacity .3s; z-index:13000; pointer-events:none; }
 .save-indicator.show { opacity:1; }
 .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,.3); border-top-color:white; border-radius:50%; animation:spin .8s linear infinite; }
 @keyframes spin { from{transform:rotate(0);} to{transform:rotate(360deg);} }
@@ -228,12 +229,12 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 <div class="login-error" id="loginError"></div>
 <div class="login-status" id="loginStatus">Подключение...</div>
-<div class="form-group"><label>🏫 Выберите группу</label><select id="loginGroup"></select></div>
-<div class="form-group"><label>📱 Телефон</label><input type="tel" id="loginPhone" placeholder="Последние цифры" onkeypress="if(event.key==='Enter')doLogin()"></div>
+<div class="form-group"><label>🏫 Выберите группу <span style="color:var(--light-gray);font-weight:400"></span></label><select id="loginGroup"></select></div>
+<div class="form-group"><label>📱 Телефон</label><input type="tel" id="loginPhone" placeholder="можно последние 4 цифры" onkeypress="if(event.key==='Enter')doLogin()"></div>
 <div class="form-group"><label>🔒 Пароль</label><input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')doLogin()" disabled></div>
 <button class="login-btn" onclick="doLogin()" id="loginBtn" disabled>Войти</button>
 <button class="btn-request" onclick="openAccessRequestModal()">📩 Отправить запрос на вход</button>
-<div class="login-hint">🔐 Данные защищены Firebase Authentication</div>
+<div class="login-hint"><br>🔐 Данные защищены Firebase Authentication</div>
 </div>
 </div>
 
@@ -247,7 +248,10 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap;">
 <div class="current-user-badge" id="currentUserBadge" style="display:none;"><span>👤</span><span id="currentUserName"></span><span class="role-badge-header" id="currentUserRole"></span></div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+<div class="month-selector-header" id="ownerGroupSwitcher" style="display:none;"><select id="ownerGroupSelect" onchange="ownerSwitchGroup(this.value)"></select></div>
 <div class="month-selector-header"><select id="monthSelect" onchange="changeMonth(this.value)"></select></div>
+</div>
 </div>
 </div>
 </div>
@@ -301,7 +305,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <button class="btn btn-secondary" onclick="showSection('home', document.querySelector('.top-nav-btn'))">✖ На сайт</button>
 </div>
 </div>
-<div id="owner" class="section"><h2 class="section-title">👑 Панель Владельца</h2><div id="ownerContent"></div></div>
+<div id="owner" class="section"><h2 class="section-title">👑 Панель Владельца — полное управление сайтом</h2><div id="ownerContent"></div></div>
 </main>
 
 <div class="modal-overlay" id="accessRequestModal">
@@ -310,7 +314,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <div class="form-group"><label>Имя / ФИО</label><input type="text" id="reqName" placeholder="Например: Наталья"></div>
 <div class="form-group"><label>Ваша группа</label><select id="reqGroup"></select></div>
 <div class="form-group"><label>Если группы нет — укажите</label><input type="text" id="reqGroupText" placeholder="Например: 8 Ромашка"></div>
-<div class="form-group"><label>Телефон</label><input type="tel" id="reqPhone" placeholder="Последние цифры"></div>
+<div class="form-group"><label>Телефон</label><input type="tel" id="reqPhone" placeholder="можно последние 4 цифры"></div>
 <div class="hint">💡 Заполните хотя бы имя или телефон.</div>
 <button class="btn btn-success btn-block" onclick="submitAccessRequest()">📨 Отправить</button>
 <button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('accessRequestModal')">Отмена</button>
@@ -328,6 +332,17 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 <button class="btn btn-success btn-block" onclick="confirmApprove()">✅ Создать</button>
 <button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('approveModal')">Отмена</button>
+</div>
+</div>
+
+<datalist id="childrenDatalist"></datalist>
+<div class="modal-overlay" id="childPickerModal">
+<div class="modal">
+<h2>👶 Выберите ребёнка</h2>
+<div id="childPickerList" style="max-height:50vh;overflow-y:auto;"></div>
+<div class="form-group" style="margin-top:12px"><label>Или введите вручную</label><input type="text" id="childPickerManual" placeholder="ФИО"></div>
+<button class="btn btn-primary btn-block" onclick="applyChildPickerManual()">✍️ Использовать введённое</button>
+<button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('childPickerModal')">Отмена</button>
 </div>
 </div>
 
@@ -353,10 +368,10 @@ const WEEKDAY_NAMES = ['Воскресенье','Понедельник','Вто
 let app = null, data = null, currentGroupId = null, currentMonthId = null;
 let currentRole = null, currentUserId = null, currentUserName = null;
 let adminDirty = false, pendingRequestId = null;
+let childPickerTarget = null;
 let settings = { ownerPhone: '89146443734', ownerPassword: 'N130289s', maintenanceMode: false };
 let protectionEnabled = false;
 let publicConfig = { groups: [], maintenanceMode: false, protected: false };
-let authReady = false;
 
 function updateClock() {
   const now = new Date();
@@ -371,7 +386,7 @@ function genPassword() { return Math.random().toString(36).slice(-6); }
 function formatMoney(n) { return Number(n || 0).toLocaleString('ru-RU', { maximumFractionDigits: 2 }); }
 function escapeHtml(str) { if (!str) return ''; return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function groupLabel(g) { return g ? ('№ ' + g.number + ' — ' + g.name) : ''; }
-function getGroup(id) { return (app.groups || []).find(g => g.id === id) || null; }
+function getGroup(id) { return (app && app.groups || []).find(g => g.id === id) || null; }
 function getCurrentMonth() { return data.months.find(m => m.id === currentMonthId) || data.months[0]; }
 function calcIncome(m) { return m.students.reduce((s, x) => s + (x.paid ? Number(x.amount || 0) : 0), 0); }
 function calcExpense(m) { return m.expenses.reduce((s, x) => s + Number(x.amount || 0), 0); }
@@ -405,7 +420,6 @@ function bindGroupData() {
   currentMonthId = data.currentMonthId || (data.months[0] && data.months[0].id);
 }
 
-// ===== ЗАГРУЗКА =====
 async function loadFromFirebase() {
   try {
     const pub = await db.collection('public').doc('config').get();
@@ -414,13 +428,10 @@ async function loadFromFirebase() {
       const pwdDoc = await db.collection('settings').doc('passwords').get();
       if (pwdDoc.exists) { const p = pwdDoc.data(); settings = { ownerPhone: p.ownerPhone || settings.ownerPhone, ownerPassword: p.ownerPassword || settings.ownerPassword, maintenanceMode: !!p.maintenanceMode }; }
     }
-    authReady = true;
     auth.onAuthStateChanged(async fu => {
       if (fu && protectionEnabled) { await enterByAuth(fu); return; }
       if (fu && !protectionEnabled) return;
-      // не авторизован
       if (!protectionEnabled) {
-        // старый режим: автологин по localStorage
         let sess = null; const raw = localStorage.getItem('parentBudgetSession');
         if (raw) { try { sess = JSON.parse(raw); } catch(e) {} }
         if (sess && sess.role) {
@@ -432,9 +443,7 @@ async function loadFromFirebase() {
         currentGroupId = (app && app.groups && app.groups[0]) ? app.groups[0].id : null;
         if (app) bindGroupData();
         fillLoginGroups(); enableLogin();
-      } else {
-        fillLoginGroups(); enableLogin();
-      }
+      } else { fillLoginGroups(); enableLogin(); }
     });
     if (!protectionEnabled) await loadMainData();
   } catch(err) { console.error(err); document.getElementById('loginStatus').textContent = '❌ Ошибка подключения'; }
@@ -456,8 +465,9 @@ async function enterByAuth(fu) {
     const role = al.data().role;
     if (role === 'owner') {
       currentRole = 'owner'; currentUserName = 'Владелец'; currentUserId = null;
-      currentGroupId = app.groups[0].id; bindGroupData(); afterAuth(); return;
+      currentGroupId = currentGroupId || app.groups[0].id; bindGroupData(); afterAuth(); return;
     }
+    if (!currentGroupId) { alert('⛔ Выберите группу для входа'); auth.signOut(); return; }
     const u = app.users.find(x => x.uid === fu.uid);
     if (!u) { alert('⛔ Пользователь не найден в базе.'); auth.signOut(); return; }
     currentRole = u.role; currentUserId = u.id; currentUserName = u.name || u.phone; currentGroupId = u.groupId;
@@ -490,7 +500,6 @@ function openAdminLoginFromMaintenance() {
   enableLogin();
 }
 
-// ===== ВХОД =====
 async function doLogin() {
   const groupId = document.getElementById('loginGroup').value;
   const phone = normalizePhone(document.getElementById('loginPhone').value);
@@ -498,14 +507,10 @@ async function doLogin() {
   const errEl = document.getElementById('loginError');
   errEl.classList.remove('show');
   if (protectionEnabled) {
-    if (!groupId) { errEl.textContent = 'Выберите группу'; errEl.classList.add('show'); return; }
-    try {
-      await auth.signInWithEmailAndPassword(emailFromPhone(phone), pwd);
-      currentGroupId = groupId; // enterByAuth продолжит
-    } catch(e) { errEl.textContent = '❌ Неверный телефон или пароль'; errEl.classList.add('show'); }
+    try { await auth.signInWithEmailAndPassword(emailFromPhone(phone), pwd); currentGroupId = groupId || null; }
+    catch(e) { errEl.textContent = '❌ Неверный телефон или пароль'; errEl.classList.add('show'); }
     return;
   }
-  // старый режим
   if (phone === normalizePhone(settings.ownerPhone) && pwd === settings.ownerPassword) {
     currentRole = 'owner'; currentUserId = null; currentUserName = 'Владелец';
     currentGroupId = groupId || app.groups[0].id; bindGroupData(); enterApp(); return;
@@ -537,6 +542,12 @@ function enterApp() {
   document.getElementById('currentUserRole').textContent = roleText;
   document.getElementById('navAdminBtn').style.display = (currentRole === 'admin' || currentRole === 'owner') ? '' : 'none';
   document.getElementById('navOwnerBtn').style.display = currentRole === 'owner' ? '' : 'none';
+  const ogs = document.getElementById('ownerGroupSwitcher');
+  if (currentRole === 'owner') {
+    ogs.style.display = '';
+    const sel = document.getElementById('ownerGroupSelect'); sel.innerHTML = '';
+    app.groups.forEach(g => { const o = document.createElement('option'); o.value = g.id; o.textContent = '🏫 ' + groupLabel(g); if (g.id === currentGroupId) o.selected = true; sel.appendChild(o); });
+  } else ogs.style.display = 'none';
   if (!protectionEnabled) localStorage.setItem('parentBudgetSession', JSON.stringify({ role: currentRole, userId: currentUserId, groupId: currentGroupId }));
   renderAll();
 }
@@ -555,7 +566,38 @@ async function doLogout() {
   else { document.getElementById('loginScreen').classList.remove('hidden'); enableLogin(); }
 }
 
-// ===== НАВИГАЦИЯ / РЕНДЕР (как раньше) =====
+function openAccessRequestModal() {
+  const sel = document.getElementById('reqGroup');
+  sel.innerHTML = '<option value="">— Выберите группу —</option>';
+  const src = protectionEnabled ? (publicConfig.groups || []) : (app ? app.groups || [] : []);
+  src.forEach(g => { const o = document.createElement('option'); o.value = g.id; o.textContent = groupLabel(g); sel.appendChild(o); });
+  document.getElementById('reqName').value = '';
+  document.getElementById('reqGroupText').value = '';
+  document.getElementById('reqPhone').value = '';
+  document.getElementById('accessRequestModal').classList.add('active');
+}
+
+// ===== ВЫБОР РЕБЁНКА 👶 =====
+function openChildPicker(inputEl) {
+  childPickerTarget = inputEl;
+  const list = document.getElementById('childPickerList'); list.innerHTML = '';
+  const kids = data.children || [];
+  if (!kids.length) list.innerHTML = '<p style="color:var(--light-gray);font-size:.9em">Дети ещё не добавлены — добавьте в «👥 Люди → Дети»</p>';
+  kids.forEach(k => { if (!k.name) return; const b = document.createElement('button'); b.className = 'btn btn-sm btn-secondary'; b.style.margin = '3px'; b.textContent = (k.gender === 'girl' ? '🎀 ' : '👦 ') + k.name; b.onclick = () => { childPickerTarget.value = k.name; markDirty(); closeModal('childPickerModal'); }; list.appendChild(b); });
+  document.getElementById('childPickerManual').value = '';
+  document.getElementById('childPickerModal').classList.add('active');
+}
+function applyChildPickerManual() {
+  const v = document.getElementById('childPickerManual').value.trim();
+  if (!v) { alert('Введите имя'); return; }
+  if (childPickerTarget) { childPickerTarget.value = v; markDirty(); }
+  closeModal('childPickerModal');
+}
+function fillChildrenDatalist() {
+  const dl = document.getElementById('childrenDatalist'); if (!dl) return; dl.innerHTML = '';
+  (data.children || []).forEach(k => { if (k.name) { const o = document.createElement('option'); o.value = k.name; dl.appendChild(o); } });
+}
+
 function showSection(id, btn) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   const el = document.getElementById(id); if (el) el.classList.add('active');
@@ -623,9 +665,9 @@ function renderGroup() {
   if (!events.length) html += `<p style="color:var(--light-gray);font-size:.9em">Событий пока нет</p>`;
   else events.forEach(ev => { html += `<div class="event-card-g${isPastDate(ev.date)?' past':''}"><span class="event-date-badge">📅 ${formatDateRu(ev.date)}</span><div class="event-title-g">${escapeHtml(ev.title)}</div>${ev.description?`<div class="event-desc-g">${escapeHtml(ev.description)}</div>`:''}</div>`; });
   html += `</div>`;
-  if ((data.teachers||[]).length) { html += `<div class="info-block-g"><h3>👩‍ Наши воспитатели</h3>`; data.teachers.forEach(t => { if (!t.name) return; const ph = t.phone ? `<div class="teacher-phone">📞 <a href="tel:${t.phone.replace(/[^\d+]/g,'')}">${escapeHtml(t.phone)}</a></div>` : ''; html += `<div class="teacher-item"><div><div class="teacher-name">${escapeHtml(t.name)}</div><div class="teacher-role">${escapeHtml(t.role||'Воспитатель')}</div></div>${ph}</div>`; }); html += `</div>`; }
+  if ((data.teachers||[]).length) { html += `<div class="info-block-g"><h3>👩‍🏫 Наши воспитатели</h3>`; data.teachers.forEach(t => { if (!t.name) return; const ph = t.phone ? `<div class="teacher-phone">📞 <a href="tel:${t.phone.replace(/[^\d+]/g,'')}">${escapeHtml(t.phone)}</a></div>` : ''; html += `<div class="teacher-item"><div><div class="teacher-name">${escapeHtml(t.name)}</div><div class="teacher-role">${escapeHtml(t.role||'Воспитатель')}</div></div>${ph}</div>`; }); html += `</div>`; }
   if ((data.committee||[]).length) { html += `<h3 style="font-size:1.1em;color:var(--brand-green);margin:20px 0 12px;">👥 Родительский комитет</h3><div class="committee-grid">`; data.committee.forEach(mb => { if (!mb.name) return; let cls = 'committee-card'; const r = (mb.role||'').toLowerCase(); if (r.includes('председатель')) cls += ' chair'; else if (r.includes('казначей')) cls += ' treasurer'; const ph = mb.phone ? `<div class="member-phone">📞 <a href="tel:${mb.phone.replace(/[^\d+]/g,'')}">${escapeHtml(mb.phone)}</a></div>` : ''; html += `<div class="${cls}"><div class="member-name">${escapeHtml(mb.name)}</div><div class="member-role">${escapeHtml(mb.role||'Член комитета')}</div>${ph}</div>`; }); html += `</div>`; }
-  if ((data.parents||[]).length) { html += `<div class="info-block-g" style="margin-top:20px"><h3>👨👩‍ Родители</h3>`; data.parents.forEach(p => { if (!p.name) return; const ph = p.phone ? `<div class="teacher-phone">📞 <a href="tel:${p.phone.replace(/[^\d+]/g,'')}">${escapeHtml(p.phone)}</a></div>` : ''; html += `<div class="teacher-item"><div><div class="teacher-name">${escapeHtml(p.name)}</div></div>${ph}</div>`; }); html += `</div>`; }
+  if ((data.parents||[]).length) { html += `<div class="info-block-g" style="margin-top:20px"><h3>👨‍👩 Родители</h3>`; data.parents.forEach(p => { if (!p.name) return; const ph = p.phone ? `<div class="teacher-phone">📞 <a href="tel:${p.phone.replace(/[^\d+]/g,'')}">${escapeHtml(p.phone)}</a></div>` : ''; html += `<div class="teacher-item"><div><div class="teacher-name">${escapeHtml(p.name)}</div></div>${ph}</div>`; }); html += `</div>`; }
   c.innerHTML = html;
 }
 
@@ -635,8 +677,7 @@ function renderExpenses() { const m = getCurrentMonth(); let html = '', t = 0; h
 function renderCommittee() { const c = document.getElementById('committeeList'); if (!data.committee.length) { c.innerHTML = '<div class="news-empty">Состав комитета ещё не заполнен</div>'; return; } let html = '<div class="committee-grid">'; data.committee.forEach(mb => { if (!mb.name) return; let cls = 'committee-card'; const r = (mb.role||'').toLowerCase(); if (r.includes('председатель')) cls += ' chair'; else if (r.includes('казначей')||r.includes('бухгалтер')) cls += ' treasurer'; const ph = mb.phone ? `<div class="member-phone">📞 <a href="tel:${mb.phone.replace(/[^\d+]/g,'')}">${escapeHtml(mb.phone)}</a></div>` : ''; html += `<div class="${cls}"><div class="member-name">${escapeHtml(mb.name)}</div><div class="member-role">${escapeHtml(mb.role||'Член комитета')}</div>${ph}</div>`; }); html += '</div>'; c.innerHTML = html; }
 function renderArchive() { const c = document.getElementById('archiveList'); if (!data.archive.length) { c.innerHTML = '<div class="news-empty">Архив пуст</div>'; return; } let html = ''; data.archive.slice().reverse().forEach(m => { const inc = calcIncome(m), ai = Number(m.additionalIncome||0), exp = calcExpense(m), bal = Number(m.prevBalance||0)+inc+ai-exp; const pc = m.students.filter(s => s.paid).length, tc = m.students.filter(s => s.name).length; html += `<div class="archive-item"><div class="archive-item-info"><strong>${escapeHtml(m.name)}</strong><small>Приход: ${formatMoney(inc)} ₽ · Расход: ${formatMoney(exp)} ₽ · Остаток: <b>${formatMoney(bal)} ₽</b> · Сдали: ${pc}/${tc}</small></div></div>`; }); c.innerHTML = html; }
 
-// ===== АДМИН =====
-function renderAdmin() { renderAdminSummary(); renderAdminGroupInfo(); renderAdminPeople(); renderAdminStudents(); renderAdminExpenses(); renderAdminNews(); renderAdminMonths(); renderAdminAccess(); }
+function renderAdmin() { fillChildrenDatalist(); renderAdminSummary(); renderAdminGroupInfo(); renderAdminPeople(); renderAdminStudents(); renderAdminExpenses(); renderAdminNews(); renderAdminMonths(); renderAdminAccess(); }
 function renderAdminSummary() { const m = getCurrentMonth(); document.getElementById('admin-summary').innerHTML = `<div class="admin-card"><div class="admin-card-title">📊 Сводка: ${escapeHtml(m.name)}</div><div class="admin-cards-grid">
   <div class="stat-card"><div class="stat-label">Остаток с прош. мес.</div><div class="stat-value"><input type="number" id="editPrevBalance" step="0.01" value="${m.prevBalance}" onchange="markDirty();recalcAdmin()"></div></div>
   <div class="stat-card"><div class="stat-label">Доп. приход</div><div class="stat-value"><input type="number" id="editAddIncome" step="0.01" value="${m.additionalIncome}" onchange="markDirty();recalcAdmin()"></div></div>
@@ -664,7 +705,7 @@ function addEventRow() { document.getElementById('adminEventsList').insertAdjace
 function renderAdminPeople() { let comHtml=''; (data.committee||[]).forEach(x => comHtml += committeeRowHtml(x)); let parHtml=''; (data.parents||[]).forEach(p => parHtml += parentRowHtml(p)); let chHtml=''; (data.children||[]).forEach(k => chHtml += childRowHtml(k)); let tHtml=''; (data.teachers||[]).forEach(t => tHtml += teacherRowHtml(t));
   document.getElementById('admin-people').innerHTML = `
   <div class="admin-card"><div class="admin-card-title">👥 Комитет</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addCommitteeRow();markDirty()">➕ Добавить</button></div><div id="adminCommitteeList">${comHtml}</div></div>
-  <div class="admin-card"><div class="admin-card-title">👨‍👩 Родители</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addParentRow();markDirty()">➕ Добавить</button></div><div id="adminParentsList">${parHtml}</div></div>
+  <div class="admin-card"><div class="admin-card-title">👨👩 Родители</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addParentRow();markDirty()">➕ Добавить</button></div><div id="adminParentsList">${parHtml}</div></div>
   <div class="admin-card"><div class="admin-card-title">👶 Дети</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addChildRow();markDirty()">➕ Добавить ребёнка</button></div><div id="adminChildrenList">${chHtml}</div></div>
   <div class="admin-card"><div class="admin-card-title">👩‍ Воспитатели</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addTeacherRow();markDirty()">➕ Добавить</button></div><div id="adminTeachersList">${tHtml}</div></div>`; }
 function committeeRowHtml(x=null){return `<div class="a-row committee-row-admin"><input type="text" class="p-name" value="${x?escapeHtml(x.name||''):''}" placeholder="ФИО"><input type="text" class="p-role" value="${x?escapeHtml(x.role||''):''}" placeholder="Роль"><input type="tel" class="p-phone" value="${x?escapeHtml(x.phone||''):''}" placeholder="Телефон"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()">🗑</button></div>`;}
@@ -675,30 +716,25 @@ function childRowHtml(k=null){return `<div class="a-row child-row-admin"><input 
 function addChildRow(){document.getElementById('adminChildrenList').insertAdjacentHTML('beforeend',childRowHtml());}
 function teacherRowHtml(t=null){return `<div class="a-row committee-row-admin"><input type="text" class="t-name" value="${t?escapeHtml(t.name||''):''}" placeholder="ФИО"><input type="text" class="t-role" value="${t?escapeHtml(t.role||''):''}" placeholder="Должность"><input type="tel" class="t-phone" value="${t?escapeHtml(t.phone||''):''}" placeholder="Телефон"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()">🗑</button></div>`;}
 function addTeacherRow(){document.getElementById('adminTeachersList').insertAdjacentHTML('beforeend',teacherRowHtml());}
-function renderAdminStudents() { const m = getCurrentMonth(); let rows = ''; m.students.forEach(s => { rows += `<div class="a-row student-row"><input type="text" class="a-name" value="${escapeHtml(s.name||'')}" placeholder="ФИО"><input type="number" class="a-amount" value="${s.amount||''}" placeholder="₽" step="0.01"><label class="switch"><input type="checkbox" class="a-paid" ${s.paid?'checked':''}><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button></div>`; });
+function renderAdminStudents() { const m = getCurrentMonth(); let rows = ''; m.students.forEach(s => { rows += `<div class="a-row student-row"><div style="display:flex;gap:4px;"><input type="text" class="a-name" list="childrenDatalist" value="${escapeHtml(s.name||'')}" placeholder="ФИО или 👶"><button class="btn btn-gold btn-sm" onclick="openChildPicker(this.previousElementSibling)">👶</button></div><input type="number" class="a-amount" value="${s.amount||''}" placeholder="₽" step="0.01"><label class="switch"><input type="checkbox" class="a-paid" ${s.paid?'checked':''}><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button></div>`; });
   document.getElementById('admin-students').innerHTML = `<div class="admin-card"><div class="admin-card-title">💰 Взносы</div><div class="admin-toolbar"><input type="text" id="studentSearch" placeholder="🔍 Поиск..." oninput="filterStudents()"><button class="btn btn-success btn-sm" onclick="addStudentRow();markDirty()">➕ Добавить</button><button class="btn btn-primary btn-sm" onclick="markAllPaid()">✅ Все сдали</button><button class="btn btn-secondary btn-sm" onclick="copyFromArchive()">📋 Копировать</button></div><div class="admin-stats" id="studentStats"></div><div id="adminStudents">${rows}</div></div>`; recalcAdmin(); }
-function addStudentRow(){const d=document.createElement('div');d.className='a-row student-row';d.innerHTML=`<input type="text" class="a-name" placeholder="ФИО"><input type="number" class="a-amount" placeholder="₽" step="0.01"><label class="switch"><input type="checkbox" class="a-paid"><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;document.getElementById('adminStudents').appendChild(d);}
+function addStudentRow(){const d=document.createElement('div');d.className='a-row student-row';d.innerHTML=`<div style="display:flex;gap:4px;"><input type="text" class="a-name" list="childrenDatalist" placeholder="ФИО или 👶"><button class="btn btn-gold btn-sm" onclick="openChildPicker(this.previousElementSibling)">👶</button></div><input type="number" class="a-amount" placeholder="₽" step="0.01"><label class="switch"><input type="checkbox" class="a-paid"><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;document.getElementById('adminStudents').appendChild(d);}
 function markAllPaid(){document.querySelectorAll('#adminStudents .a-paid').forEach(cb=>cb.checked=true);recalcAdmin();markDirty();}
 function filterStudents(){const q=(document.getElementById('studentSearch').value||'').toLowerCase();document.querySelectorAll('#adminStudents .student-row').forEach(r=>{r.style.display=r.querySelector('.a-name').value.toLowerCase().includes(q)?'':'none';});}
-function copyFromArchive(){const src=data.archive.length?data.archive[data.archive.length-1]:null;if(!src){alert('Нет архива');return;}if(!confirm('Скопировать из "'+src.name+'"?'))return;const c=document.getElementById('adminStudents');c.innerHTML='';src.students.forEach(s=>{if(s.name){const d=document.createElement('div');d.className='a-row student-row';d.innerHTML=`<input type="text" class="a-name" value="${escapeHtml(s.name)}"><input type="number" class="a-amount" value="${s.amount||''}" step="0.01"><label class="switch"><input type="checkbox" class="a-paid"><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;c.appendChild(d);}});recalcAdmin();markDirty();}
+function copyFromArchive(){const src=data.archive.length?data.archive[data.archive.length-1]:null;if(!src){alert('Нет архива');return;}if(!confirm('Скопировать из "'+src.name+'"?'))return;const c=document.getElementById('adminStudents');c.innerHTML='';src.students.forEach(s=>{if(s.name){const d=document.createElement('div');d.className='a-row student-row';d.innerHTML=`<div style="display:flex;gap:4px;"><input type="text" class="a-name" list="childrenDatalist" value="${escapeHtml(s.name)}"><button class="btn btn-gold btn-sm" onclick="openChildPicker(this.previousElementSibling)">👶</button></div><input type="number" class="a-amount" value="${s.amount||''}" step="0.01"><label class="switch"><input type="checkbox" class="a-paid"><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;c.appendChild(d);}});recalcAdmin();markDirty();}
 function renderAdminExpenses() { const m = getCurrentMonth(); let rows = ''; m.expenses.forEach(e => { rows += `<div class="a-row expense-row"><input type="text" class="a-desc" value="${escapeHtml(e.description||'')}" placeholder="На что потрачено"><input type="number" class="a-amount" value="${e.amount||''}" placeholder="₽" step="0.01"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button></div>`; }); document.getElementById('admin-expenses').innerHTML = `<div class="admin-card"><div class="admin-card-title">💸 Расходы</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addExpenseRow();markDirty()">➕ Добавить расход</button></div><div class="admin-stats" id="expenseStats"></div><div id="adminExpenses">${rows}</div></div>`; }
 function addExpenseRow(){const d=document.createElement('div');d.className='a-row expense-row';d.innerHTML=`<input type="text" class="a-desc" placeholder="На что потрачено"><input type="number" class="a-amount" placeholder="₽" step="0.01"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;document.getElementById('adminExpenses').appendChild(d);}
 function renderAdminNews() { let rows = ''; data.news.forEach(n => { rows += `<div class="a-news-card" ${n.date?`data-date="${n.date}"`:''}><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px"><label class="a-urgent-label"><input type="checkbox" class="a-news-urgent" ${n.urgent?'checked':''}> 🔴 Срочно</label><button class="btn btn-danger btn-sm" onclick="this.closest('.a-news-card').remove();markDirty()">🗑</button></div><input type="text" class="a-news-title" placeholder="Заголовок" value="${escapeHtml(n.title||'')}"><textarea class="a-news-text" placeholder="Текст">${escapeHtml(n.text||'')}</textarea></div>`; }); document.getElementById('admin-news').innerHTML = `<div class="admin-card"><div class="admin-card-title">📰 Новости</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addNewsRow();markDirty()">➕ Добавить новость</button></div><div id="adminNews">${rows}</div></div>`; }
 function addNewsRow(){const d=document.createElement('div');d.className='a-news-card';d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px"><label class="a-urgent-label"><input type="checkbox" class="a-news-urgent"> 🔴 Срочно</label><button class="btn btn-danger btn-sm" onclick="this.closest('.a-news-card').remove();markDirty()">🗑</button></div><input type="text" class="a-news-title" placeholder="Заголовок"><textarea class="a-news-text" placeholder="Текст"></textarea>`;document.getElementById('adminNews').appendChild(d);}
 function renderAdminMonths() { let html = `<div class="admin-card"><div class="admin-card-title">➕ Создать месяц</div><div class="form-group"><label>Название</label><input type="text" id="newMonthName" placeholder="Например: Сентябрь 2026"></div><button class="btn btn-success" onclick="createNewMonth()">➕ Создать</button></div><div class="admin-card"><div class="admin-card-title">📅 Список месяцев</div><div id="monthsList">`; data.months.forEach(m => { const cur = m.id === currentMonthId; html += `<div class="month-item${cur?' is-current':''}"><div><strong>${escapeHtml(m.name)}</strong>${cur?'<span class="month-current-badge">⭐ текущий</span>':''}<small style="display:block;color:var(--gray);margin-top:4px">Остаток: <b>${formatMoney(calcBalance(m))} ₽</b></small></div><div class="month-item-actions">${cur?'':`<button class="btn btn-primary btn-sm" onclick="setCurrentMonth('${m.id}')">⭐</button>`}<button class="btn btn-secondary btn-sm" onclick="renameMonth('${m.id}')">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteMonth('${m.id}')">🗑</button></div></div>`; }); html += '</div></div>'; document.getElementById('admin-months').innerHTML = html; }
 
-// ===== ДОСТУП + AUTH =====
 async function renderAdminAccess() {
   let reqs = [];
-  if (protectionEnabled) {
-    try { const snap = await db.collection('inbox').get(); reqs = snap.docs.map(d => ({ id: d.id, ...d.data() })); } catch(e) {}
-  } else {
-    reqs = currentRole === 'owner' ? app.requests : app.requests.filter(r => r.groupId === currentGroupId);
-  }
+  if (protectionEnabled) { try { const snap = await db.collection('inbox').get(); reqs = snap.docs.map(d => ({ id: d.id, ...d.data() })); } catch(e) {} }
+  else { reqs = currentRole === 'owner' ? app.requests : app.requests.filter(r => r.groupId === currentGroupId); }
   let reqHtml = '';
   if (!reqs.length) reqHtml = '<p style="color:var(--light-gray);font-size:.85em">Запросов нет.</p>';
   reqs.forEach(r => { const g = r.groupId ? getGroup(r.groupId) : null; reqHtml += `<div class="request-card"><div><b>${escapeHtml(r.name||r.phone)}</b><br><small style="color:var(--gray)">📞 ${escapeHtml(r.phone||'')} · 🏢 ${g?groupLabel(g):escapeHtml(r.groupText||'')}</small></div><div><button class="btn btn-success btn-sm" onclick="openApprove('${r.id}')">✅</button><button class="btn btn-danger btn-sm" onclick="rejectRequest('${r.id}')">❌</button></div></div>`; });
-
   const users = app.users.filter(u => u.groupId === currentGroupId);
   let usersHtml = '';
   if (!users.length) usersHtml = '<p style="color:var(--light-gray);font-size:.85em">Нет пользователей.</p>';
@@ -714,7 +750,7 @@ async function renderAdminAccess() {
     <div class="admin-card"><div class="admin-card-title">➕ Добавить пользователя</div>
       <div class="hint">🔐 Пользователь получит аккаунт Firebase Auth (вход: телефон + пароль).</div>
       <div class="form-group"><label>ФИО</label><input type="text" id="newUserFullname" placeholder="Например: Наталья"></div>
-      <div class="form-group"><label>Телефон</label><input type="tel" id="newUserPhone" placeholder="Полностью или последние цифры"></div>
+      <div class="form-group"><label>Телефон</label><input type="tel" id="newUserPhone" placeholder="Полностью или последние 4 цифры"></div>
       <div class="form-group"><label>Пароль</label><div style="display:flex;gap:8px"><input type="text" id="newUserPassword"><button class="btn btn-secondary btn-sm" onclick="document.getElementById('newUserPassword').value=genPassword()">🎲</button></div></div>
       <div class="form-group"><label>Роль</label><select id="newUserRole"><option value="member">👁️ Родитель</option><option value="admin">💎 Админ</option></select></div>
       <button class="btn btn-success" onclick="addUserManual()">➕ Добавить</button></div>
@@ -724,7 +760,6 @@ async function renderAdminAccess() {
 }
 
 function getSecondaryAuth() { const name = 'sec' + Date.now(); const sec = firebase.initializeApp(firebaseConfig, name); return sec.auth(); }
-
 async function createAuthAccount(phone, password) {
   const sa = getSecondaryAuth();
   try { const c = await sa.createUserWithEmailAndPassword(emailFromPhone(phone), password); const uid = c.user.uid; await sa.signOut(); return uid; }
@@ -808,7 +843,7 @@ async function submitAccessRequest() {
 
 function openApprove(id) {
   pendingRequestId = id;
-  let r = app.requests.find(x => x.id === id);
+  const r = (app.requests || []).find(x => x.id === id);
   document.getElementById('approveInfo').innerHTML = `<b>Запрос одобряется</b>`;
   const gbox = document.getElementById('approveGroupBox');
   if (r && r.groupId) gbox.style.display = 'none';
@@ -824,7 +859,7 @@ async function confirmApprove() {
   if (!pwd) { alert('Задайте пароль'); return; }
   let r = null, fromInbox = false;
   if (protectionEnabled) { try { const d = await db.collection('inbox').doc(pendingRequestId).get(); if (d.exists) { r = d.data(); fromInbox = true; } } catch(e) {} }
-  if (!r) r = app.requests.find(x => x.id === pendingRequestId);
+  if (!r) r = (app.requests || []).find(x => x.id === pendingRequestId);
   if (!r) { alert('Запрос не найден'); return; }
   if (!normalizePhone(r.phone)) { alert('🔐 Для защищённого режима у запроса должен быть телефон'); return; }
   let uid = null;
@@ -848,7 +883,6 @@ async function rejectRequest(id) {
   renderAdminAccess();
 }
 
-// ===== ВКЛЮЧЕНИЕ ЗАЩИТЫ (владелец) =====
 async function enableProtection() {
   if (protectionEnabled) { alert('✅ Защита уже включена'); return; }
   if (!confirm('Создать аккаунты Firebase Auth для владельца и всех пользователей?')) return;
@@ -856,19 +890,18 @@ async function enableProtection() {
   let created = 0, skipped = 0;
   const ownerUid = await createAuthAccount(settings.ownerPhone, settings.ownerPassword);
   if (ownerUid) { await db.collection('allowlist').doc(ownerUid).set({ role: 'owner', phone: settings.ownerPhone }); created++; }
-  else skipped++;
+  else { skipped++; }
   for (const u of app.users) {
     if (!normalizePhone(u.phone) || !u.password) { skipped++; continue; }
     const uid = await createAuthAccount(u.phone, u.password);
     if (uid) { u.uid = uid; await db.collection('allowlist').doc(uid).set({ role: u.role, groupId: u.groupId, phone: u.phone }); created++; }
-    else skipped++;
+    else { skipped++; }
   }
   await saveToFirebase();
   await db.collection('public').doc('config').set({ groups: app.groups.map(g => ({ id: g.id, number: g.number, name: g.name })), maintenanceMode: settings.maintenanceMode, protected: true });
-  alert(`✅ Готово! Создано аккаунтов: ${created}, пропущено: ${skipped}.\n\nТЕПЕРЬ: Firestore Database → Rules → вставь новые правила → Publish. После этого входи по телефону+паролю через Firebase Auth.`);
+  alert(`✅ Готово! Создано аккаунтов: ${created}, пропущено: ${skipped}.\n\nТЕПЕРЬ: Firestore Database → Rules → вставь новые правила → Publish.`);
 }
 
-// ===== СОХРАНЕНИЕ ДАННЫХ =====
 function recalcAdmin() { let inc=0,pc=0,tc=0,exp=0; document.querySelectorAll('#adminStudents .student-row').forEach(r => { const name=r.querySelector('.a-name').value.trim(); const amount=Number(r.querySelector('.a-amount').value)||0; const paid=r.querySelector('.a-paid').checked; if(name||amount){tc++;if(paid){inc+=amount;pc++;}} }); document.querySelectorAll('#adminExpenses .expense-row').forEach(r => { exp += Number(r.querySelector('.a-amount').value)||0; }); const pb=Number(document.getElementById('editPrevBalance')?document.getElementById('editPrevBalance').value:0)||0; const ai=Number(document.getElementById('editAddIncome')?document.getElementById('editAddIncome').value:0)||0; const e1=document.getElementById('autoIncome'); if(e1)e1.textContent=formatMoney(inc)+' ₽'; const e2=document.getElementById('autoExpense'); if(e2)e2.textContent=formatMoney(exp)+' ₽'; const e3=document.getElementById('autoBudget'); if(e3)e3.textContent=formatMoney(inc+ai)+' ₽'; const e4=document.getElementById('autoBalance'); if(e4)e4.textContent=formatMoney(pb+inc+ai-exp)+' ₽'; const e5=document.getElementById('studentStats'); if(e5)e5.innerHTML=`Сдали: <b>${pc} из ${tc}</b> · Собрано: <b>${formatMoney(inc)} ₽</b>`; const e6=document.getElementById('expenseStats'); if(e6)e6.innerHTML=`Итого расход: <b>${formatMoney(exp)} ₽</b>`; }
 function collectAdminData() {
   const g = getGroup(currentGroupId);
@@ -887,7 +920,7 @@ function collectAdminData() {
   data.news=[]; document.querySelectorAll('#adminNews .a-news-card').forEach(c => { const t=c.querySelector('.a-news-title').value.trim(); const x=c.querySelector('.a-news-text').value.trim(); if(t||x)data.news.push({title:t,text:x,urgent:c.querySelector('.a-news-urgent').checked,date:c.dataset.date||new Date().toISOString()}); });
   data.currentMonthId = currentMonthId;
 }
-async function saveAll() { collectAdminData(); const btn=document.getElementById('saveBtn'); if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Сохранение...';} await saveToFirebase(); renderAll(); clearDirty(); document.getElementById('headerGroupLabel').textContent = groupLabel(getGroup(currentGroupId)); if(btn){btn.disabled=false;btn.innerHTML='💾 Сохранить';} }
+async function saveAll() { collectAdminData(); const btn=document.getElementById('saveBtn'); if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Сохранение...';} await saveToFirebase(); renderAll(); clearDirty(); fillChildrenDatalist(); document.getElementById('headerGroupLabel').textContent = groupLabel(getGroup(currentGroupId)); if(btn){btn.disabled=false;btn.innerHTML='💾 Сохранить';} }
 async function saveToFirebase() { try { await db.collection('data').doc('main').set({ ...app, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }); showSaveIndicator(); } catch(err) { console.error(err); alert('❌ Ошибка: ' + err.message); } }
 async function saveSettings() { try { await db.collection('settings').doc('passwords').set(settings); await db.collection('public').doc('config').set({ maintenanceMode: settings.maintenanceMode }, { merge: true }); showSaveIndicator(); } catch(err) { alert('❌ Ошибка: ' + err.message); } }
 
@@ -897,19 +930,27 @@ async function renameMonth(id){const m=data.months.find(x=>x.id===id);if(!m)retu
 async function deleteMonth(id){if(data.months.length<=1){alert('Нельзя удалить последний');return;}const m=data.months.find(x=>x.id===id);if(!confirm('Удалить "'+m.name+'"?'))return;collectAdminData();data.months=data.months.filter(x=>x.id!==id);if(currentMonthId===id)currentMonthId=data.months[0].id;data.currentMonthId=currentMonthId;await saveToFirebase();renderAdminMonths();renderMonthSelector();renderAll();clearDirty();}
 async function archiveMonth(){if(!confirm('Архивировать текущий месяц?'))return;collectAdminData();const m=getCurrentMonth();const bal=calcBalance(m);data.archive.push({...m,students:[...m.students],expenses:[...m.expenses]});data.months=data.months.filter(x=>x.id!==m.id);const nm=prompt('Название нового месяца:',new Date().toLocaleString('ru',{month:'long',year:'numeric'}));if(!nm)return;const nmo={id:'month_'+Date.now(),name:nm,prevBalance:bal,additionalIncome:0,students:[],expenses:[]};data.months.push(nmo);currentMonthId=nmo.id;data.currentMonthId=nmo.id;await saveToFirebase();renderAll();renderAdminMonths();renderMonthSelector();clearDirty();alert('✅ Архивировано. Остаток '+formatMoney(bal)+' ₽ перенесён.');}
 
-// ===== ВЛАДЕЛЕЦ =====
 function renderOwner() {
   let groupsHtml = '';
-  app.groups.forEach(g => { const uc = app.users.filter(u => u.groupId === g.id).length; groupsHtml += `<div class="month-item${g.id===currentGroupId?' is-current':''}"><div><strong>${groupLabel(g)}</strong><br><small style="color:var(--gray)">Пользователей: ${uc}</small></div><div class="month-item-actions"><button class="btn btn-primary btn-sm" onclick="ownerSwitchGroup('${g.id}')">📊 Открыть</button><button class="btn btn-danger btn-sm" onclick="deleteGroup('${g.id}')">🗑</button></div></div>`; });
+  app.groups.forEach(g => {
+    const uc = app.users.filter(u => u.groupId === g.id).length;
+    const gd = app.groupData[g.id];
+    const kc = gd ? (gd.children || []).length : 0;
+    const curM = gd ? (gd.months || []).find(mm => mm.id === gd.currentMonthId) : null;
+    const bal = curM ? calcBalance(curM) : 0;
+    groupsHtml += `<div class="month-item${g.id===currentGroupId?' is-current':''}"><div><strong>${groupLabel(g)}</strong>${g.id===currentGroupId?'<span class="month-current-badge">открыта</span>':''}<br><small style="color:var(--gray)">👥 ${uc} польз. · 👶 ${kc} детей · 💰 ${formatMoney(bal)} ₽</small></div><div class="month-item-actions"><button class="btn btn-primary btn-sm" onclick="ownerSwitchGroup('${g.id}')">📊 Открыть</button><button class="btn btn-warning btn-sm" onclick="ownerSwitchGroup('${g.id}');showSection('admin', document.getElementById('navAdminBtn'))">⚙️ Админ</button><button class="btn btn-danger btn-sm" onclick="deleteGroup('${g.id}')">🗑</button></div></div>`;
+  });
   document.getElementById('ownerContent').innerHTML = `
-    <div class="admin-card"><div class="admin-card-title">🔐 Защита (Firebase Auth)</div>
+    <div class="admin-card"><div class="admin-card-title">👑 Полное управление сайтом</div>
+      <div class="hint">Вы управляете ВСЕМ сайтом и всеми группами. Переключайте группы в шапке или кнопками ниже.</div>
+      <div class="admin-card-title">🔐 Защита (Firebase Auth)</div>
       <div class="hint">${protectionEnabled ? '✅ Защита ВКЛЮЧЕНА. Вход только через Firebase Auth.' : '⚠️ Защита пока выключена. Нажмите кнопку, затем опубликуйте новые правила Firestore.'}</div>
       <button class="btn btn-gold btn-block" onclick="enableProtection()">🔐 Включить защиту</button></div>
     <div class="admin-card"><div class="admin-card-title">➕ Создать группу</div>
       <div class="form-group"><label>Номер</label><input type="number" id="newGroupNumber" placeholder="8"></div>
       <div class="form-group"><label>Название</label><input type="text" id="newGroupName" placeholder="Ромашка"></div>
       <button class="btn btn-success" onclick="createGroup()">➕ Создать</button></div>
-    <div class="admin-card"><div class="admin-card-title">🏢 Список групп</div>${groupsHtml}</div>
+    <div class="admin-card"><div class="admin-card-title">🏢 Все группы сайта</div>${groupsHtml}</div>
     <div class="admin-card"><div class="admin-card-title">🚧 Режим тех. работ</div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:#fff3cd;border-radius:8px;margin-bottom:12px">
         <input type="checkbox" id="maintenanceToggle" style="width:20px;height:20px" ${settings.maintenanceMode?'checked':''}>
@@ -922,9 +963,9 @@ function renderOwner() {
     <div class="admin-card danger-zone"><div class="admin-card-title">⚠️ Опасная зона</div>
       <button class="btn btn-danger btn-block" onclick="resetAllData()">🗑️ Удалить ВСЕ данные</button></div>`;
 }
-function ownerSwitchGroup(gid){ if(adminDirty)collectAdminData(); currentGroupId=gid; bindGroupData(); renderAll(); renderOwner(); document.getElementById('headerGroupLabel').textContent=groupLabel(getGroup(currentGroupId)); clearDirty(); }
-async function createGroup(){const num=document.getElementById('newGroupNumber').value.trim();const name=document.getElementById('newGroupName').value.trim();if(!num||!name){alert('Заполните оба поля');return;}app.groups.push({id:'group_'+Date.now(),number:num,name});await saveToFirebase();if(protectionEnabled){await db.collection('public').doc('config').set({groups:app.groups.map(g=>({id:g.id,number:g.number,name:g.name}))},{merge:true});}renderOwner();fillLoginGroups();alert('✅ Группа создана');}
-async function deleteGroup(id){if(app.groups.length<=1){alert('Нельзя удалить последнюю');return;}const g=getGroup(id);if(!confirm('Удалить "'+groupLabel(g)+'"?'))return;collectAdminData();app.groups=app.groups.filter(x=>x.id!==id);app.users=app.users.filter(x=>x.groupId!==id);delete app.groupData[id];if(currentGroupId===id)currentGroupId=app.groups[0].id;bindGroupData();await saveToFirebase();if(protectionEnabled){await db.collection('public').doc('config').set({groups:app.groups.map(g=>({id:g.id,number:g.number,name:g.name}))},{merge:true});}renderAll();renderOwner();}
+function ownerSwitchGroup(gid){ if(adminDirty)collectAdminData(); currentGroupId=gid; bindGroupData(); renderAll(); renderOwner(); document.getElementById('headerGroupLabel').textContent=groupLabel(getGroup(currentGroupId)); const ogsel=document.getElementById('ownerGroupSelect'); if(ogsel) ogsel.value=gid; clearDirty(); }
+async function createGroup(){const num=document.getElementById('newGroupNumber').value.trim();const name=document.getElementById('newGroupName').value.trim();if(!num||!name){alert('Заполните оба поля');return;}app.groups.push({id:'group_'+Date.now(),number:num,name});await saveToFirebase();if(protectionEnabled){await db.collection('public').doc('config').set({groups:app.groups.map(g=>({id:g.id,number:g.number,name:g.name}))},{merge:true});}renderOwner();fillLoginGroups();const ogs=document.getElementById('ownerGroupSelect'); if(ogs){const o=document.createElement('option');o.value=app.groups[app.groups.length-1].id;o.textContent='🏫 '+groupLabel(app.groups[app.groups.length-1]);ogs.appendChild(o);} alert('✅ Группа создана');}
+async function deleteGroup(id){if(app.groups.length<=1){alert('Нельзя удалить последнюю');return;}const g=getGroup(id);if(!confirm('Удалить "'+groupLabel(g)+'"?'))return;collectAdminData();app.groups=app.groups.filter(x=>x.id!==id);app.users=app.users.filter(x=>x.groupId!==id);delete app.groupData[id];if(currentGroupId===id)currentGroupId=app.groups[0].id;bindGroupData();await saveToFirebase();if(protectionEnabled){await db.collection('public').doc('config').set({groups:app.groups.map(g=>({id:g.id,number:g.number,name:g.name}))},{merge:true});}renderAll();renderOwner();enterApp();}
 async function saveSiteSettings(){settings.maintenanceMode=document.getElementById('maintenanceToggle').checked;await saveSettings();alert(settings.maintenanceMode?'⚠️ Тех. работы ВКЛЮЧЕНЫ':'✅ Тех. работы ВЫКЛЮЧЕНЫ');}
 async function saveOwnerCredentials(){const ph=document.getElementById('ownerPhoneInput').value.trim();const pw=document.getElementById('ownerPasswordInput').value.trim();if(normalizePhone(ph).length<6||pw.length<3){alert('Проверьте данные');return;}settings.ownerPhone=ph;settings.ownerPassword=pw;await saveSettings();alert('✅ Сохранено');}
 async function resetAllData(){if(!confirm('Удалить ВСЕ данные?')||!confirm('Точно?'))return;app=getDefaultApp();currentGroupId=app.groups[0].id;bindGroupData();await saveToFirebase();location.reload();}
