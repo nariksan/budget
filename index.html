@@ -259,7 +259,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 <div class="login-error" id="loginError"></div>
 <div class="login-status" id="loginStatus">Подключение...</div>
-<div class="form-group"><label> Выберите группу <span style="color:var(--light-gray);font-weight:400">— владельцу можно не выбирать</span></label><select id="loginGroup"></select></div>
+<div class="form-group"><label> Выберите группу <span style="color:var(--light-gray);font-weight:400"></span></label><select id="loginGroup"></select></div>
 <div class="form-group"><label>📱 Телефон</label><input type="tel" id="loginPhone" placeholder="можно последние 4 цифры" onkeypress="if(event.key==='Enter')doLogin()"></div>
 <div class="form-group"><label> Пароль</label><input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')doLogin()" disabled></div>
 <button class="login-btn" onclick="doLogin()" id="loginBtn" disabled>Войти</button>
