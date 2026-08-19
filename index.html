@@ -54,7 +54,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .top-nav { background:white; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:99; }
 .top-nav-inner { display:flex; align-items:center; overflow-x:auto; scrollbar-width:none; padding:0 8px; max-width:1200px; margin:0 auto; }
 .top-nav-inner::-webkit-scrollbar { display:none; }
-.top-nav-btn { flex-shrink:0; background:none; border:none; padding:10px 12px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px; color:var(--gray); font-size:.72em; font-weight:600; white-space:nowrap; border-bottom:3px solid transparent; min-width:60px; }
+.top-nav-btn { flex-shrink:0; background:none; border:none; padding:10px 12px; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:2px; color:var(--gray); font-size:.72em; font-weight:600; white-space:nowrap; border-bottom:3px solid transparent; min-width:60px; position:relative; }
 .top-nav-btn .nav-icon { font-size:1.5em; line-height:1; }
 .top-nav-btn.active { color:var(--brand-green); border-bottom-color:var(--brand-orange); }
 .top-nav-btn:active { transform:scale(0.95); }
@@ -195,6 +195,32 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .save-indicator.show { opacity:1; }
 .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,.3); border-top-color:white; border-radius:50%; animation:spin .8s linear infinite; }
 @keyframes spin { from{transform:rotate(0);} to{transform:rotate(360deg);} }
+
+/* ===== СТИЛИ ДЛЯ СООБЩЕНИЙ ===== */
+.message-card { background:white; border-radius:var(--radius-lg); padding:16px; margin-bottom:12px; border-left:4px solid var(--info); box-shadow:var(--shadow-sm); }
+.message-card.new { border-left-color:var(--warning); background:#fff9e6; }
+.message-card.replied { border-left-color:var(--success); }
+.message-header { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+.message-meta { flex:1; }
+.message-sender { font-weight:700; color:var(--brand-green); font-size:1em; }
+.message-group { font-size:.75em; color:var(--gray); margin-top:2px; }
+.message-date { font-size:.75em; color:var(--light-gray); }
+.message-subject { font-weight:600; margin-bottom:6px; color:var(--dark); }
+.message-text { color:#555; font-size:.9em; line-height:1.5; white-space:pre-wrap; }
+.message-reply { background:#e8f5e9; border-left:3px solid var(--success); padding:12px; border-radius:var(--radius-sm); margin-top:12px; }
+.message-reply-header { font-weight:700; color:var(--success); font-size:.85em; margin-bottom:6px; }
+.message-reply-text { font-size:.9em; color:#333; white-space:pre-wrap; }
+.message-actions { display:flex; gap:6px; margin-top:12px; flex-wrap:wrap; }
+.message-status { display:inline-block; padding:3px 10px; border-radius:10px; font-size:.7em; font-weight:700; }
+.message-status.new { background:var(--warning); color:white; }
+.message-status.replied { background:var(--success); color:white; }
+.messages-filter { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
+.filter-btn { padding:8px 16px; border:2px solid var(--border); background:white; border-radius:var(--radius-sm); cursor:pointer; font-weight:600; font-size:.85em; }
+.filter-btn.active { background:var(--brand-green); color:white; border-color:var(--brand-green); }
+.messages-stats { background:#e8f5e9; padding:10px 14px; border-radius:var(--radius-sm); margin-bottom:16px; font-size:.85em; color:var(--brand-green); font-weight:600; }
+.reply-form { margin-top:12px; padding:12px; background:var(--bg); border-radius:var(--radius-md); }
+.reply-form textarea { width:100%; min-height:80px; padding:10px; border:2px solid var(--border); border-radius:var(--radius-sm); font-family:inherit; margin-bottom:8px; }
+.notification-badge { position:absolute; top:4px; right:4px; background:var(--danger); color:white; font-size:.65em; font-weight:700; padding:2px 6px; border-radius:10px; min-width:18px; text-align:center; }
 @media (max-width:768px) {
 .header-banner, .header-content { min-height:110px; }
 .header-title h1 { font-size:1.2em; }
@@ -266,6 +292,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <button class="top-nav-btn" onclick="showSection('expenses', this)"><span class="nav-icon">💸</span><span>Расходы</span></button>
 <button class="top-nav-btn" onclick="showSection('committee', this)"><span class="nav-icon">👥</span><span>Комитет</span></button>
 <button class="top-nav-btn" onclick="showSection('archive', this)"><span class="nav-icon">📦</span><span>Архив</span></button>
+<button class="top-nav-btn" id="navMessagesBtn" onclick="showSection('messages', this)"><span class="nav-icon">📩</span><span>Связь</span></button>
 <button class="top-nav-btn" id="navAdminBtn" onclick="showSection('admin', this)" style="display:none;"><span class="nav-icon">⚙️</span><span>Админ</span></button>
 <button class="top-nav-btn" id="navOwnerBtn" onclick="showSection('owner', this)" style="display:none;color:var(--danger);"><span class="nav-icon">👑</span><span>Владелец</span></button>
 <button class="top-nav-logout" onclick="doLogout()"><span>🚪</span><span>Выйти</span></button>
@@ -280,6 +307,19 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <div id="expenses" class="section"><h2 class="section-title">💸 Расходы текущего месяца</h2><div id="expensesTable"></div></div>
 <div id="committee" class="section"><h2 class="section-title">👥 Родительский комитет</h2><div id="committeeList"></div></div>
 <div id="archive" class="section"><h2 class="section-title">📦 Архив месяцев</h2><div id="archiveList"></div></div>
+<div id="messages" class="section">
+<h2 class="section-title">📩 Связь с владельцем</h2>
+<div class="admin-card">
+<div class="admin-card-title">✍️ Написать сообщение</div>
+<div class="form-group"><label>Тема (необязательно)</label><input type="text" id="msgSubject" placeholder="Кратко о чём сообщение"></div>
+<div class="form-group"><label>Текст сообщения</label><textarea id="msgText" placeholder="Опишите ваш вопрос или предложение..." rows="5"></textarea></div>
+<button class="btn btn-success btn-block" onclick="sendMessage()">📨 Отправить владельцу</button>
+</div>
+<div class="admin-card">
+<div class="admin-card-title">📋 Мои обращения</div>
+<div id="myMessagesList"></div>
+</div>
+</div>
 <div id="admin" class="section">
 <h2 class="section-title">⚙️ Админ-панель <span class="unsaved-badge" id="unsavedBadge">● не сохранено</span></h2>
 <div class="admin-tabs">
@@ -305,7 +345,16 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <button class="btn btn-secondary" onclick="showSection('home', document.querySelector('.top-nav-btn'))">✖ На сайт</button>
 </div>
 </div>
-<div id="owner" class="section"><h2 class="section-title">👑 Панель Владельца — полное управление сайтом</h2><div id="ownerContent"></div></div>
+<div id="owner" class="section"><h2 class="section-title">👑 Панель Владельца — полное управление сайтом</h2>
+<div class="admin-tabs">
+<button class="admin-tab active" onclick="showOwnerTab('groups', this)">🏢 Группы</button>
+<button class="admin-tab" onclick="showOwnerTab('messages', this)">📨 Сообщения <span id="ownerMsgCount" style="background:var(--danger);color:white;padding:2px 6px;border-radius:8px;font-size:.75em;margin-left:4px;display:none;">0</span></button>
+<button class="admin-tab" onclick="showOwnerTab('settings', this)">⚙️ Настройки</button>
+</div>
+<div id="owner-groups" class="admin-section active"></div>
+<div id="owner-messages" class="admin-section"></div>
+<div id="owner-settings" class="admin-section"></div>
+</div>
 </main>
 
 <div class="modal-overlay" id="accessRequestModal">
@@ -372,6 +421,7 @@ let childPickerTarget = null;
 let settings = { ownerPhone: '89146443734', ownerPassword: 'N130289s', maintenanceMode: false };
 let protectionEnabled = false;
 let publicConfig = { groups: [], maintenanceMode: false, protected: false };
+let messagesFilter = 'all';
 
 function updateClock() {
   const now = new Date();
@@ -398,6 +448,7 @@ function closeModal(id) { document.getElementById(id).classList.remove('active')
 function showSaveIndicator() { const i = document.getElementById('saveIndicator'); i.classList.add('show'); setTimeout(() => i.classList.remove('show'), 2000); }
 function ageWord(n) { const m10 = n % 10, m100 = n % 100; if (m10 === 1 && m100 !== 11) return n + ' год'; if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return n + ' года'; return n + ' лет'; }
 function formatDateRu(d) { if (!d) return ''; const p = d.split('-').map(Number); if (p.length < 3) return d; return `${p[2]} ${MONTH_NAMES[p[1]-1]} ${p[0]}`; }
+function formatDateTime(iso) { if (!iso) return ''; const d = new Date(iso); return d.toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
 function isPastDate(d) { if (!d) return false; const p = d.split('-').map(Number); if (p.length < 3) return false; const t = new Date(); t.setHours(0,0,0,0); return new Date(p[0], p[1]-1, p[2]) < t; }
 function getUpcomingBirthdays() {
   const today = new Date(); const t0 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -550,6 +601,7 @@ function enterApp() {
   } else ogs.style.display = 'none';
   if (!protectionEnabled) localStorage.setItem('parentBudgetSession', JSON.stringify({ role: currentRole, userId: currentUserId, groupId: currentGroupId }));
   renderAll();
+  if (currentRole === 'owner') loadOwnerMessages();
 }
 
 async function doLogout() {
@@ -577,7 +629,6 @@ function openAccessRequestModal() {
   document.getElementById('accessRequestModal').classList.add('active');
 }
 
-// ===== ВЫБОР РЕБЁНКА 👶 =====
 function openChildPicker(inputEl) {
   childPickerTarget = inputEl;
   const list = document.getElementById('childPickerList'); list.innerHTML = '';
@@ -610,6 +661,7 @@ function showSection(id, btn) {
   if (id === 'expenses') renderExpenses();
   if (id === 'committee') renderCommittee();
   if (id === 'archive') renderArchive();
+  if (id === 'messages') renderMyMessages();
   if (id === 'admin') renderAdmin();
   if (id === 'owner') renderOwner();
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -619,6 +671,15 @@ function showAdminTab(tab, btn) {
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('admin-' + tab).classList.add('active');
   if (btn) btn.classList.add('active');
+}
+function showOwnerTab(tab, btn) {
+  document.querySelectorAll('#owner .admin-section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('#owner .admin-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('owner-' + tab).classList.add('active');
+  if (btn) btn.classList.add('active');
+  if (tab === 'messages') loadOwnerMessages();
+  if (tab === 'groups') renderOwnerGroups();
+  if (tab === 'settings') renderOwnerSettings();
 }
 function changeMonth(id) { currentMonthId = id; data.currentMonthId = id; renderAll(); }
 function renderAll() { renderMonthSelector(); renderHome(); renderGroup(); renderNews(); renderContributions(); renderExpenses(); renderCommittee(); renderArchive(); }
@@ -676,6 +737,177 @@ function renderContributions() { const m = getCurrentMonth(); let html = '', tp 
 function renderExpenses() { const m = getCurrentMonth(); let html = '', t = 0; html += '<table class="data-table"><thead><tr><th style="width:40px">№</th><th>На что потрачено</th><th style="width:120px">Сумма, ₽</th></tr></thead><tbody>'; m.expenses.forEach((e,i) => { t += Number(e.amount||0); html += `<tr><td>${i+1}</td><td>${escapeHtml(e.description)||'—'}</td><td class="amount">${e.amount?formatMoney(e.amount)+' ₽':'—'}</td></tr>`; }); if (m.expenses.length) html += `<tr class="totals-row"><td colspan="2"><b>ИТОГО РАСХОД:</b></td><td class="amount"><b>${formatMoney(t)} ₽</b></td></tr>`; else html += '<tr><td colspan="3" style="text-align:center;color:var(--light-gray);padding:20px">Расходов нет</td></tr>'; html += '</tbody></table>'; document.getElementById('expensesTable').innerHTML = html; }
 function renderCommittee() { const c = document.getElementById('committeeList'); if (!data.committee.length) { c.innerHTML = '<div class="news-empty">Состав комитета ещё не заполнен</div>'; return; } let html = '<div class="committee-grid">'; data.committee.forEach(mb => { if (!mb.name) return; let cls = 'committee-card'; const r = (mb.role||'').toLowerCase(); if (r.includes('председатель')) cls += ' chair'; else if (r.includes('казначей')||r.includes('бухгалтер')) cls += ' treasurer'; const ph = mb.phone ? `<div class="member-phone">📞 <a href="tel:${mb.phone.replace(/[^\d+]/g,'')}">${escapeHtml(mb.phone)}</a></div>` : ''; html += `<div class="${cls}"><div class="member-name">${escapeHtml(mb.name)}</div><div class="member-role">${escapeHtml(mb.role||'Член комитета')}</div>${ph}</div>`; }); html += '</div>'; c.innerHTML = html; }
 function renderArchive() { const c = document.getElementById('archiveList'); if (!data.archive.length) { c.innerHTML = '<div class="news-empty">Архив пуст</div>'; return; } let html = ''; data.archive.slice().reverse().forEach(m => { const inc = calcIncome(m), ai = Number(m.additionalIncome||0), exp = calcExpense(m), bal = Number(m.prevBalance||0)+inc+ai-exp; const pc = m.students.filter(s => s.paid).length, tc = m.students.filter(s => s.name).length; html += `<div class="archive-item"><div class="archive-item-info"><strong>${escapeHtml(m.name)}</strong><small>Приход: ${formatMoney(inc)} ₽ · Расход: ${formatMoney(exp)} ₽ · Остаток: <b>${formatMoney(bal)} ₽</b> · Сдали: ${pc}/${tc}</small></div></div>`; }); c.innerHTML = html; }
+
+// ===== СИСТЕМА СООБЩЕНИЙ =====
+async function sendMessage() {
+  const subject = document.getElementById('msgSubject').value.trim();
+  const text = document.getElementById('msgText').value.trim();
+  if (!text) { alert('Введите текст сообщения'); return; }
+  const msg = {
+    senderId: currentUserId,
+    senderName: currentUserName,
+    senderPhone: app.users.find(u => u.id === currentUserId)?.phone || '',
+    groupId: currentGroupId,
+    subject,
+    text,
+    date: new Date().toISOString(),
+    status: 'new',
+    read: false
+  };
+  try {
+    await db.collection('messages').add(msg);
+    document.getElementById('msgSubject').value = '';
+    document.getElementById('msgText').value = '';
+    alert('✅ Сообщение отправлено владельцу!');
+    renderMyMessages();
+  } catch(e) {
+    alert('❌ Ошибка отправки: ' + e.message);
+  }
+}
+
+async function renderMyMessages() {
+  const list = document.getElementById('myMessagesList');
+  list.innerHTML = '<p style="color:var(--gray)">Загрузка...</p>';
+  try {
+    const snap = await db.collection('messages').where('senderId', '==', currentUserId).orderBy('date', 'desc').get();
+    if (snap.empty) {
+      list.innerHTML = '<div class="news-empty">У вас пока нет обращений</div>';
+      return;
+    }
+    let html = '';
+    snap.docs.forEach(doc => {
+      const m = doc.data();
+      const statusClass = m.status === 'new' ? 'new' : 'replied';
+      const statusText = m.status === 'new' ? '🟡 Ожидает ответа' : '🟢 Отвечено';
+      html += `<div class="message-card ${statusClass}">
+        <div class="message-header">
+          <div class="message-meta">
+            ${m.subject ? `<div class="message-subject">${escapeHtml(m.subject)}</div>` : ''}
+            <div class="message-date">${formatDateTime(m.date)}</div>
+          </div>
+          <span class="message-status ${statusClass}">${statusText}</span>
+        </div>
+        <div class="message-text">${escapeHtml(m.text)}</div>
+        ${m.reply ? `<div class="message-reply">
+          <div class="message-reply-header">💬 Ответ владельца (${formatDateTime(m.reply.date)})</div>
+          <div class="message-reply-text">${escapeHtml(m.reply.text)}</div>
+        </div>` : ''}
+      </div>`;
+    });
+    list.innerHTML = html;
+  } catch(e) {
+    list.innerHTML = '<p style="color:var(--danger)">Ошибка загрузки: ' + e.message + '</p>';
+  }
+}
+
+async function loadOwnerMessages() {
+  const container = document.getElementById('owner-messages');
+  container.innerHTML = '<p style="color:var(--gray)">Загрузка сообщений...</p>';
+  try {
+    const snap = await db.collection('messages').orderBy('date', 'desc').get();
+    if (snap.empty) {
+      container.innerHTML = '<div class="news-empty">Сообщений пока нет</div>';
+      document.getElementById('ownerMsgCount').style.display = 'none';
+      return;
+    }
+    const messages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const newCount = messages.filter(m => m.status === 'new').length;
+    const countBadge = document.getElementById('ownerMsgCount');
+    if (newCount > 0) {
+      countBadge.textContent = newCount;
+      countBadge.style.display = 'inline';
+    } else {
+      countBadge.style.display = 'none';
+    }
+    renderOwnerMessages(messages);
+  } catch(e) {
+    container.innerHTML = '<p style="color:var(--danger)">Ошибка загрузки: ' + e.message + '</p>';
+  }
+}
+
+function renderOwnerMessages(messages) {
+  const container = document.getElementById('owner-messages');
+  let filtered = messages;
+  if (messagesFilter === 'new') filtered = messages.filter(m => m.status === 'new');
+  else if (messagesFilter === 'replied') filtered = messages.filter(m => m.status === 'replied');
+  
+  let html = `<div class="messages-stats">📨 Всего сообщений: ${messages.length} · 🆕 Новых: ${messages.filter(m => m.status === 'new').length} · 💬 Отвечено: ${messages.filter(m => m.status === 'replied').length}</div>`;
+  html += `<div class="messages-filter">
+    <button class="filter-btn ${messagesFilter === 'all' ? 'active' : ''}" onclick="setMessagesFilter('all')">Все</button>
+    <button class="filter-btn ${messagesFilter === 'new' ? 'active' : ''}" onclick="setMessagesFilter('new')">🆕 Новые</button>
+    <button class="filter-btn ${messagesFilter === 'replied' ? 'active' : ''}" onclick="setMessagesFilter('replied')">💬 Отвеченные</button>
+  </div>`;
+  
+  if (!filtered.length) {
+    html += '<div class="news-empty">Нет сообщений по выбранному фильтру</div>';
+  } else {
+    filtered.forEach(m => {
+      const g = getGroup(m.groupId);
+      const statusClass = m.status === 'new' ? 'new' : 'replied';
+      html += `<div class="message-card ${statusClass}" id="msg-${m.id}">
+        <div class="message-header">
+          <div class="message-meta">
+            <div class="message-sender">${escapeHtml(m.senderName || 'Без имени')}</div>
+            <div class="message-group">🏫 ${g ? groupLabel(g) : 'Группа не найдена'} · 📞 ${escapeHtml(m.senderPhone || 'нет телефона')}</div>
+            <div class="message-date">${formatDateTime(m.date)}</div>
+          </div>
+          <span class="message-status ${statusClass}">${m.status === 'new' ? '🆕 Новое' : '✅ Отвечено'}</span>
+        </div>
+        ${m.subject ? `<div class="message-subject">${escapeHtml(m.subject)}</div>` : ''}
+        <div class="message-text">${escapeHtml(m.text)}</div>
+        ${m.reply ? `<div class="message-reply">
+          <div class="message-reply-header">💬 Ваш ответ (${formatDateTime(m.reply.date)})</div>
+          <div class="message-reply-text">${escapeHtml(m.reply.text)}</div>
+        </div>` : `<div class="reply-form">
+          <textarea id="reply-${m.id}" placeholder="Введите ответ..."></textarea>
+          <button class="btn btn-success btn-sm" onclick="sendReply('${m.id}')">📨 Ответить</button>
+        </div>`}
+        <div class="message-actions">
+          <button class="btn btn-danger btn-sm" onclick="deleteChat('${m.id}')">🗑 Удалить чат</button>
+        </div>
+      </div>`;
+    });
+  }
+  container.innerHTML = html;
+}
+
+function setMessagesFilter(filter) {
+  messagesFilter = filter;
+  loadOwnerMessages();
+}
+
+async function sendReply(msgId) {
+  const textarea = document.getElementById('reply-' + msgId);
+  const text = textarea.value.trim();
+  if (!text) { alert('Введите текст ответа'); return; }
+  try {
+    await db.collection('messages').doc(msgId).update({
+      reply: { text, date: new Date().toISOString() },
+      status: 'replied',
+      read: true
+    });
+    alert('✅ Ответ отправлен!');
+    loadOwnerMessages();
+  } catch(e) {
+    alert('❌ Ошибка: ' + e.message);
+  }
+}
+
+async function deleteChat(msgId) {
+  if (!confirm('Удалить всю переписку с этим пользователем? Это действие нельзя отменить.')) return;
+  try {
+    const msgDoc = await db.collection('messages').doc(msgId).get();
+    const msg = msgDoc.data();
+    const snap = await db.collection('messages').where('senderId', '==', msg.senderId).get();
+    const batch = db.batch();
+    snap.docs.forEach(doc => batch.delete(doc.ref));
+    await batch.commit();
+    alert('✅ Чат удалён!');
+    loadOwnerMessages();
+  } catch(e) {
+    alert('❌ Ошибка: ' + e.message);
+  }
+}
 
 function renderAdmin() { fillChildrenDatalist(); renderAdminSummary(); renderAdminGroupInfo(); renderAdminPeople(); renderAdminStudents(); renderAdminExpenses(); renderAdminNews(); renderAdminMonths(); renderAdminAccess(); }
 function renderAdminSummary() { const m = getCurrentMonth(); document.getElementById('admin-summary').innerHTML = `<div class="admin-card"><div class="admin-card-title">📊 Сводка: ${escapeHtml(m.name)}</div><div class="admin-cards-grid">
@@ -921,15 +1153,11 @@ function collectAdminData() {
   data.currentMonthId = currentMonthId;
 }
 
-// === ИСПРАВЛЕННАЯ ФУНКЦИЯ saveAll ===
 async function saveAll() {
   collectAdminData();
   const btn = document.getElementById('saveBtn');
   if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Сохранение...'; }
-  
   await saveToFirebase();
-  
-  // Обновляем публичный список групп для экрана входа, если включена защита
   if (protectionEnabled) {
     await db.collection('public').doc('config').set({
       groups: app.groups.map(g => ({ id: g.id, number: g.number, name: g.name })),
@@ -938,18 +1166,13 @@ async function saveAll() {
     }, { merge: true });
     publicConfig.groups = app.groups.map(g => ({ id: g.id, number: g.number, name: g.name }));
   }
-  
-  // Обновляем выпадающий список групп на экране входа
   fillLoginGroups();
-  
   renderAll();
   clearDirty();
   fillChildrenDatalist();
   document.getElementById('headerGroupLabel').textContent = groupLabel(getGroup(currentGroupId));
-  
   if (btn) { btn.disabled = false; btn.innerHTML = '💾 Сохранить'; }
 }
-// ==================================
 
 async function saveToFirebase() { try { await db.collection('data').doc('main').set({ ...app, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }); showSaveIndicator(); } catch(err) { console.error(err); alert('❌ Ошибка: ' + err.message); } }
 async function saveSettings() { try { await db.collection('settings').doc('passwords').set(settings); await db.collection('public').doc('config').set({ maintenanceMode: settings.maintenanceMode }, { merge: true }); showSaveIndicator(); } catch(err) { alert('❌ Ошибка: ' + err.message); } }
@@ -961,6 +1184,11 @@ async function deleteMonth(id){if(data.months.length<=1){alert('Нельзя у�
 async function archiveMonth(){if(!confirm('Архивировать текущий месяц?'))return;collectAdminData();const m=getCurrentMonth();const bal=calcBalance(m);data.archive.push({...m,students:[...m.students],expenses:[...m.expenses]});data.months=data.months.filter(x=>x.id!==m.id);const nm=prompt('Название нового месяца:',new Date().toLocaleString('ru',{month:'long',year:'numeric'}));if(!nm)return;const nmo={id:'month_'+Date.now(),name:nm,prevBalance:bal,additionalIncome:0,students:[],expenses:[]};data.months.push(nmo);currentMonthId=nmo.id;data.currentMonthId=nmo.id;await saveToFirebase();renderAll();renderAdminMonths();renderMonthSelector();clearDirty();alert('✅ Архивировано. Остаток '+formatMoney(bal)+' ₽ перенесён.');}
 
 function renderOwner() {
+  renderOwnerGroups();
+  renderOwnerSettings();
+}
+
+function renderOwnerGroups() {
   let groupsHtml = '';
   app.groups.forEach(g => {
     const uc = app.users.filter(u => u.groupId === g.id).length;
@@ -970,7 +1198,7 @@ function renderOwner() {
     const bal = curM ? calcBalance(curM) : 0;
     groupsHtml += `<div class="month-item${g.id===currentGroupId?' is-current':''}"><div><strong>${groupLabel(g)}</strong>${g.id===currentGroupId?'<span class="month-current-badge">открыта</span>':''}<br><small style="color:var(--gray)">👥 ${uc} польз. · 👶 ${kc} детей · 💰 ${formatMoney(bal)} ₽</small></div><div class="month-item-actions"><button class="btn btn-primary btn-sm" onclick="ownerSwitchGroup('${g.id}')">📊 Открыть</button><button class="btn btn-warning btn-sm" onclick="ownerSwitchGroup('${g.id}');showSection('admin', document.getElementById('navAdminBtn'))">⚙️ Админ</button><button class="btn btn-danger btn-sm" onclick="deleteGroup('${g.id}')">🗑</button></div></div>`;
   });
-  document.getElementById('ownerContent').innerHTML = `
+  document.getElementById('owner-groups').innerHTML = `
     <div class="admin-card"><div class="admin-card-title">👑 Полное управление сайтом</div>
       <div class="hint">Вы управляете ВСЕМ сайтом и всеми группами. Переключайте группы в шапке или кнопками ниже.</div>
       <div class="admin-card-title">🔐 Защита (Firebase Auth)</div>
@@ -980,7 +1208,11 @@ function renderOwner() {
       <div class="form-group"><label>Номер</label><input type="number" id="newGroupNumber" placeholder="8"></div>
       <div class="form-group"><label>Название</label><input type="text" id="newGroupName" placeholder="Ромашка"></div>
       <button class="btn btn-success" onclick="createGroup()">➕ Создать</button></div>
-    <div class="admin-card"><div class="admin-card-title">🏢 Все группы сайта</div>${groupsHtml}</div>
+    <div class="admin-card"><div class="admin-card-title">🏢 Все группы сайта</div>${groupsHtml}</div>`;
+}
+
+function renderOwnerSettings() {
+  document.getElementById('owner-settings').innerHTML = `
     <div class="admin-card"><div class="admin-card-title">🚧 Режим тех. работ</div>
       <div style="display:flex;align-items:center;gap:10px;padding:12px;background:#fff3cd;border-radius:8px;margin-bottom:12px">
         <input type="checkbox" id="maintenanceToggle" style="width:20px;height:20px" ${settings.maintenanceMode?'checked':''}>
@@ -991,6 +1223,7 @@ function renderOwner() {
       <div class="form-group"><label>Пароль</label><input type="text" id="ownerPasswordInput" value="${escapeHtml(settings.ownerPassword)}"></div>
       <button class="btn btn-primary" onclick="saveOwnerCredentials()">💾 Сохранить</button></div>
     <div class="admin-card danger-zone"><div class="admin-card-title">⚠️ Опасная зона</div>
+      <button class="btn btn-danger btn-block" onclick="resetAllData()">🗑️ Удалить
       <button class="btn btn-danger btn-block" onclick="resetAllData()">🗑️ Удалить ВСЕ данные</button></div>`;
 }
 function ownerSwitchGroup(gid){ if(adminDirty)collectAdminData(); currentGroupId=gid; bindGroupData(); renderAll(); renderOwner(); document.getElementById('headerGroupLabel').textContent=groupLabel(getGroup(currentGroupId)); const ogsel=document.getElementById('ownerGroupSelect'); if(ogsel) ogsel.value=gid; clearDirty(); }
