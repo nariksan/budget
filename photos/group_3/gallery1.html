@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Фотоальбом — Группа №3 </title>
+<title>Фотоальбом — Группа №3 ⭐</title>
 <style>
 :root {
   --brand-green: #2d8b4d;
@@ -110,14 +110,14 @@ body::before {
 .photo-card:nth-child(18) { animation-delay: 0.95s; }
 .photo-card:nth-child(19) { animation-delay: 1s; }
 .photo-card:nth-child(20) { animation-delay: 1.05s; }
-.photo-card:nth-child(21) { animation-delay: 1.05s; }
-.photo-card:nth-child(22) { animation-delay: 1.05s; }
-.photo-card:nth-child(23) { animation-delay: 1.05s; }
-.photo-card:nth-child(24) { animation-delay: 1.05s; }
-.photo-card:nth-child(25) { animation-delay: 1.05s; }
-.photo-card:nth-child(26) { animation-delay: 1.05s; }
-.photo-card:nth-child(27) { animation-delay: 1.05s; }
-.photo-card:nth-child(28) { animation-delay: 1.1s; }
+.photo-card:nth-child(21) { animation-delay: 1.1s; }
+.photo-card:nth-child(22) { animation-delay: 1.15s; }
+.photo-card:nth-child(23) { animation-delay: 1.2s; }
+.photo-card:nth-child(24) { animation-delay: 1.25s; }
+.photo-card:nth-child(25) { animation-delay: 1.3s; }
+.photo-card:nth-child(26) { animation-delay: 1.35s; }
+.photo-card:nth-child(27) { animation-delay: 1.4s; }
+.photo-card:nth-child(28) { animation-delay: 1.45s; }
 
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(30px); }
@@ -330,8 +330,8 @@ body::before {
 <body>
 
 <div class="decoration">🎈</div>
-<div class="decoration"></div>
-<div class="decoration"></div>
+<div class="decoration">🎨</div>
+<div class="decoration">🎭</div>
 <div class="decoration">🎪</div>
 
 <div class="container">
@@ -427,6 +427,35 @@ body::before {
     <img src="21.jfif" alt="Фото 21">
   </div>
 
+  <!-- Новые фотографии (22-28) -->
+  <div class="photo-card" onclick="openModal(21)">
+    <img src="22.jfif" alt="Фото 22">
+  </div>
+
+  <div class="photo-card" onclick="openModal(22)">
+    <img src="23.jfif" alt="Фото 23">
+  </div>
+
+  <div class="photo-card" onclick="openModal(23)">
+    <img src="24.jfif" alt="Фото 24">
+  </div>
+
+  <div class="photo-card medium" onclick="openModal(24)">
+    <img src="25.jfif" alt="Фото 25">
+  </div>
+
+  <div class="photo-card" onclick="openModal(25)">
+    <img src="26.jfif" alt="Фото 26">
+  </div>
+
+  <div class="photo-card" onclick="openModal(26)">
+    <img src="27.jfif" alt="Фото 27">
+  </div>
+
+  <div class="photo-card" onclick="openModal(27)">
+    <img src="28.jfif" alt="Фото 28">
+  </div>
+
 </div>
 
 </div>
@@ -440,14 +469,16 @@ body::before {
 </div>
 
 <!-- Счётчик -->
-<div class="photo-counter"> <span id="photoCount">21</span> фото</div>
+<div class="photo-counter">📸 <span id="photoCount">28</span> фото</div>
 
 <script>
 const photos = [
   '1.jfif', '2.jfif', '3.jfif', '4.jfif', '5.jfif',
   '6.jfif', '7.jfif', '8.jfif', '9.jfif', '10.jfif',
   '11.jfif', '12.jfif', '13.jfif', '14.jfif', '15.jfif',
-  '16.jfif', '17.jfif', '18.jfif', '19.jfif', '20.jfif', '21.jfif'
+  '16.jfif', '17.jfif', '18.jfif', '19.jfif', '20.jfif', 
+  '21.jfif', '22.jfif', '23.jfif', '24.jfif', '25.jfif',
+  '26.jfif', '27.jfif', '28.jfif'
 ];
 
 let currentPhotoIndex = 0;
