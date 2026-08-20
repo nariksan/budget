@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📖 Инструкция для родителей</title>
+<style>
+:root {
+  --brand-green: #2d8b4d;
+  --brand-orange: #e87722;
+  --radius: 16px;
+  --shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding: 20px;
+  line-height: 1.6;
+}
+.container { max-width: 900px; margin: 0 auto; }
+.header {
+  text-align: center;
+  background: white;
+  padding: 40px 20px;
+  border-radius: var(--radius);
+  margin-bottom: 30px;
+  box-shadow: var(--shadow);
+}
+.header h1 {
+  color: var(--brand-green);
+  font-size: 2.5em;
+  margin-bottom: 10px;
+}
+.header p { color: #666; font-size: 1.1em; }
+.section {
+  background: white;
+  padding: 30px;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+.section h2 {
+  color: var(--brand-green);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid var(--brand-orange);
+}
+.section h3 {
+  color: var(--brand-orange);
+  margin: 20px 0 10px;
+}
+.step {
+  background: #f8f9fa;
+  padding: 15px;
+  border-left: 4px solid var(--brand-green);
+  margin: 15px 0;
+  border-radius: 8px;
+}
+.step-number {
+  display: inline-block;
+  background: var(--brand-green);
+  color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 30px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+.screenshot {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.screenshot-title {
+  background: linear-gradient(135deg, var(--brand-green), var(--brand-orange));
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  margin: -20px -20px 20px -20px;
+  font-weight: 600;
+}
+.screenshot-icon { font-size: 4em; margin: 20px 0; }
+.screenshot-desc { color: #666; font-style: italic; margin-top: 10px; }
+.feature-list {
+  list-style: none;
+  padding: 0;
+}
+.feature-list li {
+  padding: 10px 15px;
+  margin: 8px 0;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 3px solid var(--brand-orange);
+}
+.feature-list li:before {
+  content: "✓ ";
+  color: var(--brand-green);
+  font-weight: bold;
+  margin-right: 8px;
+}
+.table-example {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 15px 0;
+}
+.table-example th, .table-example td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.table-example th {
+  background: var(--brand-green);
+  color: white;
+}
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85em;
+  font-weight: 600;
+  margin: 2px;
+}
+.badge-success { background: #d4edda; color: #155724; }
+.badge-danger { background: #f8d7da; color: #721c24; }
+.badge-warning { background: #fff3cd; color: #856404; }
+.back-btn {
+  display: inline-block;
+  background: var(--brand-green);
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  text-decoration: none;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+.back-btn:hover { background: #257a40; }
+.toc {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+}
+.toc h3 { margin-bottom: 15px; color: var(--brand-green); }
+.toc ul { list-style: none; }
+.toc li { margin: 8px 0; }
+.toc a {
+  color: var(--brand-orange);
+  text-decoration: none;
+  font-weight: 600;
+}
+.toc a:hover { text-decoration: underline; }
+.alert {
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin: 15px 0;
+  border-left: 4px solid;
+}
+.alert-success {
+  background: #d4edda;
+  border-color: var(--brand-green);
+  color: #155724;
+}
+.alert-info {
+  background: #d1ecf1;
+  border-color: #17a2b8;
+  color: #0c5460;
+}
+@media (max-width: 768px) {
+  .header h1 { font-size: 1.8em; }
+  .section { padding: 20px; }
+  .table-example { font-size: 0.9em; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<a href="index.html" class="back-btn">← Вернуться на сайт</a>
+
+<div class="header">
+  <h1>📖 Инструкция для родителей</h1>
+  <p>Как пользоваться сайтом родительского комитета</p>
+</div>
+
+<div class="toc">
+  <h3> Содержание:</h3>
+  <ul>
+    <li><a href="#database">1. Проверка подключения к базе данных</a></li>
+    <li><a href="#access">2. Как получить доступ</a></li>
+    <li><a href="#login">3. Вход на сайт</a></li>
+    <li><a href="#main">4. Главная страница</a></li>
+    <li><a href="#group">5. Раздел «Группа»</a></li>
+    <li><a href="#photos">6. Просмотр фотоальбомов</a></li>
+    <li><a href="#news">7. Новости и объявления</a></li>
+    <li><a href="#money">8. Взносы и расходы</a></li>
+    <li><a href="#contact">9. Связь с владельцем</a></li>
+  </ul>
+</div>
+
+<div class="section" id="database">
+  <h2>1. ✅ Проверка подключения к базе данных</h2>
+  
+  <div class="alert alert-success">
+    <strong>Важно!</strong> Перед началом работы убедитесь, что сайт подключился к базе данных Firebase.
+  </div>
+  
+  <h3>Как проверить:</h3>
+  
+  <div class="step">
+    <span class="step-number">1</span>
+    <strong>Откройте сайт</strong> в браузере
+  </div>
+  
+  <div class="step">
+    <span class="step-number">2</span>
+    <strong>Посмотрите на экран входа</strong>:
+    <ul style="margin-left: 20px; margin-top: 10px;">
+      <li>Если видите <strong>список групп</strong> — подключение работает ✅</li>
+      <li>Если список пуст или ошибка — проверьте подключение к интернету ❌</li>
+    </ul>
+  </div>
+  
+  <div class="screenshot">
+    <div class="screenshot-title">Экран входа — проверка подключения</div>
+    <div class="screenshot-icon">🔐</div>
+    <div style="background: white; border: 2px solid var(--brand-green); border-radius: 8px; padding: 20px; margin: 15px 0;">
+      <div style="color: var(--brand-green); font-weight: bold; margin-bottom: 15px;">
+        💰 Родительский комитет<br>
+        <small>Бюджет группы — безопасный доступ</small>
+      </div>
+      <div style="text-align: left; margin-bottom: 15px;">
+        <label style="display: block; color: #666; margin-bottom: 5px;">🏫 Выберите группу</label>
+        <select style="width: 100%; padding: 10px; border: 2px solid var(--brand-green); border-radius: 8px;">
+          <option>— Выберите группу —</option>
+          <option>№ 3 — Звёздочки ⭐</option>
+          <option>№ 5 — Ромашки 🌼</option>
+        </select>
+      </div>
+      <div style="text-align: left; margin-bottom: 15px;">
+        <label style="display: block; color: #666; margin-bottom: 5px;"> Телефон</label>
+        <input type="text" placeholder="можно последние 4 цифры" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;">
+      </div>
+      <div style="text-align: left; margin-bottom: 15px;">
+        <label style="display: block; color: #666; margin-bottom: 5px;">🔒 Пароль</label>
+        <input type="password" placeholder="Введите пароль" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;">
+      </div>
+      <button style="width: 100%; padding: 12px; background: var(--brand-green); color: white; border: none; border-radius: 8px; font-weight: bold;">Войти</button>
+      <button style="width: 100%; padding: 12px; background: white; color: var(--brand-green); border: 2px solid var(--brand-green); border-radius: 8px; font-weight: bold; margin-top: 10px;">📩 Запросить доступ к группе</button>
+    </div>
+    <div class="screenshot-desc">Если видите выпадающий список с группами — база данных подключена!</div>
+  </div>
+  
+  <div class="alert alert-info">
+    <strong>Если список групп пустой:</strong><br>
+    • Проверьте подключение к интернету<br>
+    • Обновите страницу (F5 или Ctrl+R)<br>
+    • Обратитесь к администратору сайта
+  </div>
+</div>
+
+<div class="section" id="access">
+  <h2>2. 🔑 Как получить доступ к сайту</h2>
+  
+  <h3>Если у вас ещё нет аккаунта:</h3>
+  
+  <div class="step">
+    <span class="step-number">1</span>
+    <strong>Откройте сайт</strong> родительского комитета
+  </div>
+  
+  <div class="step">
+    <span class="step-number">2</span>
+    <strong>Нажмите кнопку</strong> «📩 Запросить доступ к группе»
+    
+    <div class="screenshot">
+      <div class="screenshot-title">Кнопка запроса доступа</div>
+      <div class="screenshot-icon">🔐</div>
+      <div style="background: white; border: 2px solid var(--brand-orange); border-radius: 8px; padding: 15px; margin: 15px 0;">
+        <button style="width: 100%; padding: 12px; background: white; color: var(--brand-green); border: 2px solid var(--brand-green); border-radius: 8px; font-weight: bold; font-size: 1em;">
+          📩 Запросить доступ к группе
+        </button>
+      </div>
+      <div class="screenshot-desc">Кнопка находится под формой входа</div>
+    </div>
+  </div>
+  
+  <div class="step">
+    <span class="step-number">3</span>
+    <strong>Заполните форму запроса:</strong>
+    <ul style="margin-left: 20px; margin-top: 10px;">
+      <li><strong>Имя / ФИО</strong> — ваше имя (например: Наталья)</li>
+      <li><strong>Ваша группа</strong> — выберите из списка</li>
+      <li><strong>Если группы нет</strong> — укажите вручную (например: 8 Ромашка)</li>
+      <li><strong>Телефон</strong> — можно последние 4 цифры</li>
+    </ul>
+  </div>
+  
+  <div class="screenshot">
+    <div class="screenshot-title">Форма запроса доступа</div>
+    <div class="screenshot-icon">📝</div>
+    <div style="background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 15px 0; text-align: left;">
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; color: #666; margin-bottom: 5px; font-weight: 600;">Имя / ФИО</label>
+        <input type="text" placeholder="Например: Наталья" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;">
+      </div>
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; color: #666; margin-bottom: 5px; font-weight: 600;">Ваша группа</label>
+        <select style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;">
+          <option>— Выберите группу —</option>
+          <option>№ 3 — Звёздочки ⭐</option>
+        </select>
+      </div>
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; color: #666; margin-bottom: 5px; font-weight: 600;">Если группы нет — укажите</label>
+        <input type="text" placeholder="Например: 8 Ромашка" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;">
+      </div>
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; color: #666; margin-bottom: 5px; font-weight: 600;">Телефон</label>
+        <input type="tel" placeholder="можно последние 4 цифры" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;">
+      </div>
+      <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 10px; border-radius: 4px; margin-bottom: 15px; font-size: 0.9em;">
+        💡 Заполните хотя бы имя или телефон.
+      </div>
+      <button style="width: 100%; padding: 12px; background: var(--brand-green); color: white; border: none; border-radius: 8px; font-weight: bold;">📨 Отправить</button>
+    </div>
+  </div>
+  
+  <div class="step">
+    <span class="step-number">4</span>
+    <strong>Нажмите</strong> «📨 Отправить»
+  </div>
+  
+  <div class="step">
+    <span class="step-number">5</span>
+    <strong>Дождитесь</strong> создания аккаунта администратором<br>
+    <em>Вам сообщат логин (телефон) и пароль</em>
+  </div>
+  
+  <div class="alert alert-success">
+    ✅ После одобрения запроса вы получите логин и пароль для входа!
+  </div>
+</div>
+
+<div class="section" id="login">
+  <h2>3. 🚪 Вход на сайт</h2>
+  
+  <div class="step">
+    <span class="step-number">1</span>
+    <strong>Выберите группу</strong> из списка
+  </div>
+  
+  <div class="step">
+    <span class="step-number">2</span>
+    <strong>Введите телефон</strong> (можно последние 4 цифры)
+  </div>
+  
+  <div class="step">
+    <span class="step-number">3</span>
+    <strong>Введите пароль</strong> (который вам выдали)
+  </div>
+  
+  <div class="step">
+    <span class="step-number">4</span>
+    <strong>Нажмите</strong> зелёную кнопку «Войти»
+    
+    <div class="screenshot">
+      <div class="screenshot-title">Форма входа</div>
+      <div class="screenshot-icon">🔐</div>
+      <div style="background: white; border: 2px solid var(--brand-green); border-radius: 8px; padding: 20px; margin: 15px 0;">
+        <div style="color: var(--brand-green); font-size: 1.5em; font-weight: bold; margin-bottom: 15px; text-align: center;">
+          💰 Родительский комитет
+        </div>
+        <div style="text-align: left; margin-bottom: 15px;">
+          <label style="display: block; color: #666; margin-bottom: 5px; font-weight: 600;">🏫 Выберите группу</label>
+          <select style="width: 100%; padding: 10px; border: 2px solid var(--brand-green); border-radius: 8px;">
+            <option>№ 3 — Звёздочки ⭐</option>
+          </select>
+        </div>
+        <div style="text-align: left; margin-bottom: 15px;">
+          <label style="display: block; color: #666; margin-bottom: 5px; font-weight: 600;"> Телефон</label>
+          <input type="text" placeholder="можно последние 4 цифры" value="43734" style="width: 100%; padding: 10px; border: 2px solid var(--brand-green); border-radius: 8px;">
+        </div>
+        <div style="text-align: left; margin-bottom: 15px;">
+          <label style="display: block; color: #666; margin-bottom: 5px; font-weight: 600;">🔒 Пароль</label>
+          <input type="password" placeholder="Введите пароль" value="••••••" style="width: 100%; padding: 10px; border: 2px solid var(--brand-green); border-radius: 8px;">
+        </div>
+        <button style="width: 100%; padding: 14px; background: var(--brand-green); color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 1.1em;">Войти</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="alert alert-success">
+    ✅ После успешного входа вы попадёте на главную страницу сайта
+  </div>
+</div>
+
+<div class="section" id="main">
+  <h2>4. 🏠 Главная страница</h2>
+  
+  <h3> Баланс группы:</h3>
+  <p>Вы видите общую информацию о финансах:</p>
+  
+  <div class="screenshot">
+    <div class="screenshot-title">Главная страница — баланс группы</div>
+    <div class="screenshot-icon"></div>
+    <div style="background: linear-gradient(135deg, var(--brand-green), var(--brand-orange)); color: white; padding: 30px; border-radius: 12px; margin: 15px 0;">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="font-size: 0.9em; opacity: 0.9;">Текущий остаток средств</div>
+        <div style="font-size: 2.5em; font-weight: bold; margin: 10px 0;">15 450 ₽</div>
+        <div>Группа №3 «Звёздочки» · Август 2026 г.</div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 20px;">
+        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; text-align: center;">
+          <div style="font-size: 1.3em; font-weight: bold;">5 200 ₽</div>
+          <div style="font-size: 0.8em; margin-top: 5px;">С прошл. мес.</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; text-align: center;">
+          <div style="font-size: 1.3em; font-weight: bold;">12 500 ₽</div>
+          <div style="font-size: 0.8em; margin-top: 5px;">Приход</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; text-align: center;">
+          <div style="font-size: 1.3em; font-weight: bold;">2 250 ₽</div>
+          <div style="font-size: 0.8em; margin-top: 5px;">Расход</div>
+        </div>
+        <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; text-align: center;">
+          <div style="font-size: 1.3em; font-weight: bold;">18/20</div>
+          <div style="font-size: 0.8em; margin-top: 5px;">Сдали</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <ul class="feature-list">
+    <li><strong>Текущий остаток</strong> — сколько денег в группе</li>
+    <li><strong>С прошлого месяца</strong> — перенесённый остаток</li>
+    <li><strong>Приход</strong> — сколько собрали взносов</li>
+    <li><strong>Расход</strong> — сколько потратили</li>
+    <li><strong>Сдали</strong> — сколько человек сдали взносы</li>
+  </ul>
+  
+  <h3> Быстрый доступ:</h3>
+  <ul class="feature-list">
+    <li>💰 <strong>Взносы</strong> — кто сдал, кто нет</li>
+    <li>💸 <strong>Расходы</strong> — на что потратили деньги</li>
+    <li>📰 <strong>Новости</strong> — объявления</li>
+    <li>🏫 <strong>Наша группа</strong> — информация о группе, фотоальбомы</li>
+  </ul>
+</div>
+
+<div class="section" id="group">
+  <h2>5. 🏫 Раздел «Группа»</h2>
+  
+  <p>Нажмите на вкладку <strong>« Группа»</strong> в верхнем меню</p>
+  
+  <div class="screenshot">
+    <div class="screenshot-title">Верхнее меню</div>
+    <div style="background: white; border: 2px solid #ddd; border-radius: 8px; padding: 10px; margin: 15px 0;">
+      <div style="display: flex; gap: 5px; flex-wrap: wrap;">
+        <span style="padding: 10px 15px; background: white; border-bottom: 3px solid transparent; color: #666;">🏠 Главная</span>
+        <span style="padding: 10px 15px; background: white; border-bottom: 3px solid var(--brand-orange); color: var(--brand-green); font-weight: bold;">🏫 Группа</span>
+        <span style="padding: 10px 15px; background: white; border-bottom: 3px solid transparent; color: #666;">📰 Новости</span>
+        <span style="padding: 10px 15px; background: white; border-bottom: 3px solid transparent; color: #666;">💰 Взносы</span>
+      </div>
+    </div>
+    <div class="screenshot-desc">Вкладка «Группа» выделена оранжевой полосой снизу</div>
+  </div>
+  
+  <h3>Здесь вы увидите:</h3>
+  
+  <h4> Информация о группе:</h4>
+  
+  <div class="screenshot">
+    <div class="screenshot-title">Информация о группе</div>
+    <div style="background: linear-gradient(135deg, var(--brand-green), var(--brand-orange)); color: white; padding: 30px; border-radius: 12px; margin: 15px 0; text-align: center;">
+      <div style="font-size: 0.9em; opacity: 0.9;">ГРУППА № 3</div>
+      <div style="font-size: 2em; font-weight: bold; margin: 10px 0;">Звёздочки ⭐</div>
+      <div>📅 август 2026 г.</div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px;">
+      <div style="background: #fff3cd; padding: 15px; border-radius: 8px; text-align: center; border-top: 4px solid var(--brand-orange);">
+        <div style="font-size: 1.5em; font-weight: bold;">20</div>
+        <div style="font-size: 0.7em; color: #666; margin-top: 5px;">👶 Всего детей</div>
+      </div>
+      <div style="background: #ffe8f0; padding: 15px; border-radius: 8px; text-align: center; border-top: 4px solid #e83e8c;">
+        <div style="font-size: 1.5em; font-weight: bold;">11</div>
+        <div style="font-size: 0.7em; color: #666; margin-top: 5px;">🎀 Девочек</div>
+      </div>
+      <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; text-align: center; border-top: 4px solid #17a2b8;">
+        <div style="font-size: 1.5em; font-weight: bold;">9</div>
+        <div style="font-size: 0.7em; color: #666; margin-top: 5px;">👦 Мальчиков</div>
+      </div>
+    </div>
+  </div>
+  
+  <ul class="feature-list">
+    <li>Номер и название группы</li>
+    <li>Текущий месяц</li>
+    <li>Количество детей (всего, мальчиков, девочек)</li>
+    <li>Состав родительского комитета</li>
+    <li>Воспитатели</li>
+  </ul>
+  
+  <h4> Дни рождения:</h4>
+  <ul class="feature-list">
+    <li>Список детей с датами рождения</li>
+    <li>Если день рождения сегодня — выделено красным</li>
+  </ul>
+  
+  <h4> События и праздники:</h4>
+  <ul class="feature-list">
+    <li>Предстоящие мероприятия</li>
+    <li>Прошедшие события (полупрозрачные)</li>
+  </ul>
+  
+  <h4>📸 Фотоальбомы группы:</h4>
+  <ul class="feature-list">
+    <li>Карточки с фотоальбомами</li>
+    <li>Название альбома</li>
+    <li>Количество фото</li>
+  </ul>
+</div>
+
+<div class="section" id="photos">
+  <h2>6. 📷 Просмотр фотоальбомов</h2>
+  
+  <h3>Как посмотреть фотоальбом:</h3>
+  
+  <div class="step">
+    <span class="step-number">1</span>
+    В разделе <strong>«Группа»</strong> найдите блок <strong>«📸 Фотоальбомы группы»</strong>
+  </div>
+  
+  <div class="step">
+    <span class="step-number">2</span>
+    <strong>Нажмите на карточку</strong> нужного альбома
+    
+    <div class="screenshot">
+      <div class="screenshot-title">Карточки фотоальбомов</div>
+      <div class="screenshot-icon">📸</div>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 15px 0;">
+        <div style="background: white; border: 2px solid var(--brand-orange); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer;">
+          <div style="font-size: 3em; margin-bottom: 10px;"></div>
+          <div style="font-weight: bold; color: var(--brand-green); margin-bottom: 5px;">Дни рождения</div>
+          <div style="font-size: 0.85em; color: #666; margin-bottom: 10px;">Фотографии именинников и праздничных моментов</div>
+          <div style="color: var(--brand-orange); font-weight: 600; font-size: 0.9em;"> 21 фотография · Открыть →</div>
+        </div>
+        <div style="background: white; border: 2px solid #4ecdc4; border-radius: 12px; padding: 20px; text-align: center; cursor: pointer;">
+          <div style="font-size: 3em; margin-bottom: 10px;">🎉</div>
+          <div style="font-weight: bold; color: var(--brand-green); margin-bottom: 5px;">Праздники и события</div>
+          <div style="font-size: 0.85em; color: #666; margin-bottom: 10px;">23 Февраля, 8 Марта, 9 Мая, День России</div>
+          <div style="color: #4ecdc4; font-weight: 600; font-size: 0.9em;">🎊 15 фотографий · Открыть →</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="step">
+    <span class="step-number">3</span>
+    Фотоальбом откроется <strong>в модальном окне</strong> поверх сайта
+  </div>
+  
+  <h3>🎮 Управление фотоальбомом:</h3>
+  
+  <ul class="feature-list">
+    <li><strong>✕ Закрыть</strong> — кнопка в правом верхнем углу</li>
+    <li><strong>‹ ›</strong> — стрелки для переключения фото</li>
+    <li><strong>ESC</strong> — закрыть альбом (клавиша на клавиатуре)</li>
+    <li><strong>Клик по фото</strong> — открыть на весь экран</li>
+    <li><strong>Свайп влево/вправо</strong> — на телефоне</li>
+  </ul>
+  
+  <div class="screenshot">
+    <div class="screenshot-title">Модальное окно фотоальбома</div>
+    <div class="screenshot-icon">🖼️</div>
+    <div style="background: rgba(0,0,0,0.9); color: white; padding: 40px; border-radius: 12px; margin: 15px 0; position: relative;">
+      <div style="position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.2); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em;">✕</div>
+      <div style="position: absolute; top: 50%; left: 20px; transform: translateY(-50%); background: rgba(255,255,255,0.2); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em;">‹</div>
+      <div style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); background: rgba(255,255,255,0.2); width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5em;">›</div>
+      <div style="background: #ddd; height: 300px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #666;">
+        Фотография
+      </div>
+      <div style="position: fixed; bottom: 30px; right: 30px; background: linear-gradient(135deg, var(--brand-green), var(--brand-orange)); padding: 15px 25px; border-radius: 30px; font-weight: bold;">📸 28 фото</div>
+    </div>
+  </div>
+  
+  <h3> На телефоне:</h3>
+  <ul class="feature-list">
+    <li>Листайте фото свайпом (пальцем)</li>
+    <li>Закройте альбом свайпом вниз или кнопкой «Назад»</li>
+  </ul>
+</div>
+
+<div class="section" id="news">
+  <h2>7. 📰 Новости и объявления</h2>
+  
+  <div class="step">
+    <span class="step-number">1</span>
+    Нажмите вкладку <strong>«📰 Новости»</strong> в меню
+  </div>
+  
+  <div class="step">
+    <span class="step-number">2</span>
+    Вы увидите список всех объявлений
+  </div>
+  
+  <div class="screenshot">
+    <div class="screenshot-title">Страница новостей</div>
+    <div style="margin: 15px 0;">
+      <div style="background: white; border-left: 4px solid var(--brand-orange); padding: 20px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <div style="color: #dc3545; font-weight: bold; margin-bottom: 5px;">🔴 СРОЧНО • 20.08.2026 14:30</div>
+        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 10px;">Сбор денег на подарки к 1 сентября</div>
+        <div style="color: #555; line-height: 1.6;">Уважаемые родители! Просим сдать по 500₽ до 25 августа на подарки детям к празднику.</div>
+      </div>
+      <div style="background: white; border-left: 4px solid #17a2b8; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+        <div style="color: #666; font-size: 0.9em; margin-bottom: 5px;">18.08.2026 10:15</div>
+        <div style="font-weight: bold; font-size: 1.1em; margin-bottom: 10px;">Родительское собрание</div>
+        <div style="color: #555; line-height: 1.6;">25 августа в 18:00 состоится родительское собрание. Присутствие обязательно!</div>
+      </div>
+    </div>
+  </div>
+  
+  <h3>🔴 Срочные новости:</h3>
+  <ul class="feature-list">
+    <li>Выделены красной полосой слева</li>
+    <li>Имеют пометку <strong>«🔴 СРОЧНО»</strong></li>
+  </ul>
+  
+  <h3>📅 Дата публикации:</h3>
+  <p>Показана под заголовком<br>
+  Формат: ДД.ММ.ГГГГ ЧЧ:ММ</p>
+</div>
+
+<div class="section" id="money">
+  <h2>8. 💰 Взносы и расходы</h2>
+  
+  <h3>Кто сдал взносы:</h3>
+  
+  <div class="step">
+    <span class="step-number">1</span>
+    Нажмите вкладку <strong>«💰 Взносы»</strong>
+  </div>
+  
+  <div class="step">
+    <span class="step-number">2</span>
+    Вы увидите таблицу:
+    
+    <div class="screenshot">
+      <div class="screenshot-title">Таблица взносов</div>
+      <table class="table-example">
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>ФИО</th>
+            <th>Сумма</th>
+            <th>Статус</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Иванова М.П.</td>
+            <td>500 ₽</td>
+            <td><span class="badge badge-success">✔ Сдал</span></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Петрова С.А.</td>
+            <td>—</td>
+            <td><span class="badge badge-danger">✘ Не сдал</span></td>
+          </tr>
+          <tr style="background: #fff9e6; font-weight: bold;">
+            <td colspan="2"><b>ИТОГО:</b> сдали 18 из 20</td>
+            <td><b>9 000 ₽</b></td>
+            <td><small>ожидалось 10 000 ₽</small></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <ul class="feature-list">
+    <li><span class="badge badge-success">✔</span> <strong>зелёная галочка</strong> — сдал</li>
+    <li><span class="badge badge-danger">✘</span> <strong>красный крестик</strong> — не сдал</li>
+    <li><strong>ИТОГО</strong> — сколько сдали из общего числа</li>
+  </ul>
+  
+  <h3>💸 На что потратили:</h3>
+  
+  <div class="step">
+    <span class="step-number">1</span>
+    Нажмите вкладку <strong>«💸 Расходы»</strong>
+  </div>
+  
+  <div class="step">
+    <span class="step-number">2</span>
+    Таблица расходов:
+    
+    <div class="screenshot">
+      <div class="screenshot-title">Таблица расходов</div>
+      <table class="table-example">
+        <thead>
+          <tr>
+            <th>№</th>
+            <th>На что потрачено</th>
+            <th>Сумма</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Подарки на 23 Февраля</td>
+            <td>3 500 ₽</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Канцтовары</td>
+            <td>1 200 ₽</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Подарки к 8 Марта</td>
+            <td>2 800 ₽</td>
+          </tr>
+          <tr style="background: #fff9e6; font-weight: bold;">
+            <td colspan="2"><b>ИТОГО РАСХОД:</b></td>
+            <td><b>7 500 ₽</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="contact">
+  <h2>9.  Связь с владельцем</h2>
+  
+  <h3>Написать сообщение:</h3>
+  
+  <div class="step">
+    <span class="step-number">1</span>
+    Нажмите вкладку <strong>«📩 Связь»</strong> в меню
+  </div>
+  
+  <div class="step">
+    <span class="step-number">2</span>
+    В блоке <strong>«✍️ Написать сообщение»</strong> заполните:
+    <ul style="margin-left: 20px; margin-top: 10px;">
+      <li><strong>Тема</strong> (необязательно)</li>
+      <li><strong>Текст сообщения</strong></li>
+    </ul>
+  </div>
+  
+  <div class="step">
+    <span class="step-number">3</span>
+    Нажмите <strong>«📨 Отправить владельцу»</strong>
+  </div>
+  
+  <div class="screenshot">
+    <div class="screenshot-title">Форма связи с владельцем</div>
+    <div style="background: white; border: 2px solid #ddd; border-radius: 8px; padding: 20px; margin: 15px 0;">
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; color: #666; margin-bottom: 5px; font-weight: 600;">Тема (необязательно)</label>
+        <input type="text" placeholder="Кратко о чём сообщение" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px;">
+      </div>
+      <div style="margin-bottom: 15px;">
+        <label style="display: block; color: #666; margin-bottom: 5px; font-weight: 600;">Текст сообщения</label>
+        <textarea placeholder="Опишите ваш вопрос или предложение..." rows="4" style="width: 100%; padding: 10px; border: 2px solid #ddd; border-radius: 8px; resize: vertical;"></textarea>
+      </div>
+      <button style="width: 100%; padding: 12px; background: var(--brand-green); color: white; border: none; border-radius: 8px; font-weight: bold;"> Отправить владельцу</button>
+    </div>
+  </div>
+  
+  <h3>📋 Мои обращения:</h3>
+  <p>Ниже формы вы увидите <strong>историю ваших сообщений</strong></p>
+  
+  <ul class="feature-list">
+    <li><span class="badge badge-warning">🟡 Ожидает ответа</span> — владелец ещё не ответил</li>
+    <li><span class="badge badge-success">🟢 Отвечено</span> — есть ответ от владельца</li>
+  </ul>
+  
+  <h3>💬 Если вам ответили:</h3>
+  <ul class="feature-list">
+    <li>Появится блок <strong>«💬 Ответ владельца»</strong></li>
+    <li>Указана дата и время ответа</li>
+    <li>Текст ответа</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h2>🔧 Технические моменты</h2>
+  
+  <h3> На телефоне:</h3>
+  <ul class="feature-list">
+    <li>Меню можно листать <strong>горизонтально</strong> (свайпом)</li>
+    <li>Все таблицы адаптируются под экран</li>
+    <li>Фотоальбомы удобно листать пальцем</li>
+  </ul>
+  
+  <h3>💻 На компьютере:</h3>
+  <ul class="feature-list">
+    <li>Используйте <strong>клавиши стрелок</strong> для навигации</li>
+    <li><strong>ESC</strong> — закрыть модальное окно</li>
+  </ul>
+</div>
+
+<div class="section" style="background: linear-gradient(135deg, var(--brand-green), var(--brand-orange)); color: white;">
+  <h2 style="color: white; border-bottom-color: white;">❓ Нужна помощь?</h2>
+  <p style="font-size: 1.1em; margin-bottom: 15px;">
+    Если у вас возникли вопросы или проблемы с доступом:
+  </p>
+  <ul style="list-style: none; padding: 0;">
+    <li style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 8px;">
+      📞 Свяжитесь с председателем родительского комитета
+    </li>
+    <li style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 8px;">
+      📩 Используйте форму «Связь с владельцем»
+    </li>
+    <li style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 8px;">
+       Нажмите кнопку «Запросить доступ к группе» на экране входа
+    </li>
+  </ul>
+</div>
+
+<div style="text-align: center; padding: 30px; color: white; font-size: 0.9em;">
+  <p>📖 Инструкция по использованию сайта родительского комитета</p>
+  <p>Группа №3 «Звёздочки» ⭐</p>
+</div>
+
+</div>
+
+</body>
+</html>
