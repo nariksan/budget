@@ -37,7 +37,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .btn-request { width:100%; padding:12px; background:var(--bg); border:2px solid var(--border); color:var(--brand-green); border-radius:var(--radius-sm); font-size:.9em; font-weight:600; cursor:pointer; margin-top:8px; }
 .app-header { position:relative; z-index:100; box-shadow:var(--shadow-md); }
 .header-banner { position:relative; width:100%; min-height:130px; overflow:hidden; background:linear-gradient(135deg,var(--brand-green) 0%,var(--brand-orange) 100%); }
-.header-banner::before { content:'🧸 🎨 🏫  🖍️ '; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:2.6em; opacity:.15; white-space:nowrap; letter-spacing:14px; pointer-events:none; }
+.header-banner::before { content:'🧸 🎨 🏫 🖍️ '; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:2.6em; opacity:.15; white-space:nowrap; letter-spacing:14px; pointer-events:none; }
 .banner-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.35; }
 .header-content { position:relative; z-index:2; min-height:130px; display:flex; flex-direction:column; justify-content:space-between; padding:12px 16px; gap:8px; }
 .header-top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap; }
@@ -196,31 +196,30 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,.3); border-top-color:white; border-radius:50%; animation:spin .8s linear infinite; }
 @keyframes spin { from{transform:rotate(0);} to{transform:rotate(360deg);} }
 
-/* ===== СТИЛИ ДЛЯ СООБЩЕНИЙ ===== */
-.message-card { background:white; border-radius:var(--radius-lg); padding:16px; margin-bottom:12px; border-left:4px solid var(--info); box-shadow:var(--shadow-sm); }
-.message-card.new { border-left-color:var(--warning); background:#fff9e6; }
-.message-card.replied { border-left-color:var(--success); }
-.message-header { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
-.message-meta { flex:1; }
-.message-sender { font-weight:700; color:var(--brand-green); font-size:1em; }
-.message-group { font-size:.75em; color:var(--gray); margin-top:2px; }
-.message-date { font-size:.75em; color:var(--light-gray); }
-.message-subject { font-weight:600; margin-bottom:6px; color:var(--dark); }
-.message-text { color:#555; font-size:.9em; line-height:1.5; white-space:pre-wrap; }
-.message-reply { background:#e8f5e9; border-left:3px solid var(--success); padding:12px; border-radius:var(--radius-sm); margin-top:12px; }
-.message-reply-header { font-weight:700; color:var(--success); font-size:.85em; margin-bottom:6px; }
-.message-reply-text { font-size:.9em; color:#333; white-space:pre-wrap; }
-.message-actions { display:flex; gap:6px; margin-top:12px; flex-wrap:wrap; }
-.message-status { display:inline-block; padding:3px 10px; border-radius:10px; font-size:.7em; font-weight:700; }
-.message-status.new { background:var(--warning); color:white; }
-.message-status.replied { background:var(--success); color:white; }
-.messages-filter { display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap; }
-.filter-btn { padding:8px 16px; border:2px solid var(--border); background:white; border-radius:var(--radius-sm); cursor:pointer; font-weight:600; font-size:.85em; }
-.filter-btn.active { background:var(--brand-green); color:white; border-color:var(--brand-green); }
-.messages-stats { background:#e8f5e9; padding:10px 14px; border-radius:var(--radius-sm); margin-bottom:16px; font-size:.85em; color:var(--brand-green); font-weight:600; }
-.reply-form { margin-top:12px; padding:12px; background:var(--bg); border-radius:var(--radius-md); }
-.reply-form textarea { width:100%; min-height:80px; padding:10px; border:2px solid var(--border); border-radius:var(--radius-sm); font-family:inherit; margin-bottom:8px; }
-.notification-badge { position:absolute; top:4px; right:4px; background:var(--danger); color:white; font-size:.65em; font-weight:700; padding:2px 6px; border-radius:10px; min-width:18px; text-align:center; }
+/* ===== СТИЛИ ДЛЯ ФОТОАЛЬБОМОВ ===== */
+.albums-section { margin-top: 30px; }
+.albums-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+.album-card {
+  background: white; border-radius: var(--radius-lg); padding: 20px; text-align: center;
+  box-shadow: var(--shadow-sm); border: 2px solid var(--border); cursor: pointer; transition: all 0.3s;
+  text-decoration: none; color: inherit; display: block;
+}
+.album-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--brand-orange); }
+.album-icon { font-size: 3em; margin-bottom: 10px; }
+.album-title { font-size: 1.1em; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
+.album-file { font-size: 0.8em; color: var(--gray); font-family: monospace; }
+
+/* Стили для управления альбомами в админке */
+.album-admin-item {
+  background: var(--bg); border-radius: var(--radius-md); padding: 12px; margin-bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
+  border-left: 4px solid var(--brand-green);
+}
+.album-admin-info { flex: 1; min-width: 200px; }
+.album-admin-title { font-weight: 700; margin-bottom: 4px; }
+.album-admin-file { font-size: 0.85em; color: var(--gray); font-family: monospace; }
+.album-admin-group { font-size: 0.75em; color: var(--info); margin-top: 4px; }
+
 @media (max-width:768px) {
 .header-banner, .header-content { min-height:110px; }
 .header-title h1 { font-size:1.2em; }
@@ -231,6 +230,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .event-row-admin { grid-template-columns:1fr 1fr; }
 .expense-row { grid-template-columns:1fr 100px 36px; }
 .balance-hero .balance-value { font-size:1.8em; }
+.albums-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width:480px) { .group-stats-grid, .balance-stats { grid-template-columns:repeat(2,1fr); } .home-grid { grid-template-columns:1fr; } }
 </style>
@@ -255,7 +255,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 <div class="login-error" id="loginError"></div>
 <div class="login-status" id="loginStatus">Подключение...</div>
-<div class="form-group"><label>🏫 Выберите группу <span style="color:var(--light-gray);font-weight:400"></span></label><select id="loginGroup"></select></div>
+<div class="form-group"><label>🏫 Выберите группу</label><select id="loginGroup"></select></div>
 <div class="form-group"><label>📱 Телефон</label><input type="tel" id="loginPhone" placeholder="можно последние 4 цифры" onkeypress="if(event.key==='Enter')doLogin()"></div>
 <div class="form-group"><label>🔒 Пароль</label><input type="password" id="loginPassword" placeholder="Введите пароль" onkeypress="if(event.key==='Enter')doLogin()" disabled></div>
 <button class="login-btn" onclick="doLogin()" id="loginBtn" disabled>Войти</button>
@@ -331,6 +331,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <button class="admin-tab" onclick="showAdminTab('news', this)">📰 Новости</button>
 <button class="admin-tab" onclick="showAdminTab('months', this)">📅 Месяцы</button>
 <button class="admin-tab" onclick="showAdminTab('access', this)">🔑 Доступ</button>
+<button class="admin-tab" onclick="showAdminTab('albums', this)">📸 Альбомы</button>
 </div>
 <div id="admin-summary" class="admin-section active"></div>
 <div id="admin-groupinfo" class="admin-section"></div>
@@ -340,6 +341,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <div id="admin-news" class="admin-section"></div>
 <div id="admin-months" class="admin-section"></div>
 <div id="admin-access" class="admin-section"></div>
+<div id="admin-albums" class="admin-section"></div>
 <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
 <button class="btn btn-success" onclick="saveAll()" id="saveBtn">💾 Сохранить</button>
 <button class="btn btn-secondary" onclick="showSection('home', document.querySelector('.top-nav-btn'))">✖ На сайт</button>
@@ -349,10 +351,12 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <div class="admin-tabs">
 <button class="admin-tab active" onclick="showOwnerTab('groups', this)">🏢 Группы</button>
 <button class="admin-tab" onclick="showOwnerTab('messages', this)">📨 Сообщения <span id="ownerMsgCount" style="background:var(--danger);color:white;padding:2px 6px;border-radius:8px;font-size:.75em;margin-left:4px;display:none;">0</span></button>
+<button class="admin-tab" onclick="showOwnerTab('albums', this)">📸 Альбомы</button>
 <button class="admin-tab" onclick="showOwnerTab('settings', this)">⚙️ Настройки</button>
 </div>
 <div id="owner-groups" class="admin-section active"></div>
 <div id="owner-messages" class="admin-section"></div>
+<div id="owner-albums" class="admin-section"></div>
 <div id="owner-settings" class="admin-section"></div>
 </div>
 </main>
@@ -422,6 +426,7 @@ let settings = { ownerPhone: '89146443734', ownerPassword: 'N130289s', maintenan
 let protectionEnabled = false;
 let publicConfig = { groups: [], maintenanceMode: false, protected: false };
 let messagesFilter = 'all';
+let groupAlbums = [];
 
 function updateClock() {
   const now = new Date();
@@ -469,6 +474,60 @@ function bindGroupData() {
   data = app.groupData[currentGroupId];
   if (!data.children) data.children = []; if (!data.parents) data.parents = []; if (!data.events) data.events = []; if (!data.teachers) data.teachers = [];
   currentMonthId = data.currentMonthId || (data.months[0] && data.months[0].id);
+}
+
+// ===== ЗАГРУЗКА АЛЬБОМОВ =====
+async function loadGroupAlbums() {
+  if (!currentGroupId) return;
+  groupAlbums = [];
+  try {
+    const snap = await db.collection('albums').where('groupId', '==', currentGroupId).orderBy('createdAt', 'desc').get();
+    snap.docs.forEach(doc => {
+      groupAlbums.push({ id: doc.id, ...doc.data() });
+    });
+  } catch(e) {
+    console.error('Ошибка загрузки альбомов:', e);
+  }
+}
+
+async function loadAllAlbums() {
+  let allAlbums = [];
+  try {
+    const snap = await db.collection('albums').orderBy('createdAt', 'desc').get();
+    snap.docs.forEach(doc => {
+      allAlbums.push({ id: doc.id, ...doc.data() });
+    });
+  } catch(e) {
+    console.error('Ошибка загрузки всех альбомов:', e);
+  }
+  return allAlbums;
+}
+
+async function createAlbum(groupId, title, fileName) {
+  try {
+    await db.collection('albums').add({
+      groupId: groupId,
+      title: title,
+      fileName: fileName,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    return true;
+  } catch(e) {
+    console.error('Ошибка создания альбома:', e);
+    return false;
+  }
+}
+
+async function deleteAlbum(albumId) {
+  if (!confirm('Удалить этот фотоальбом?')) return;
+  try {
+    await db.collection('albums').doc(albumId).delete();
+    alert('✅ Альбом удалён!');
+    return true;
+  } catch(e) {
+    alert('❌ Ошибка: ' + e.message);
+    return false;
+  }
 }
 
 async function loadFromFirebase() {
@@ -601,6 +660,7 @@ function enterApp() {
   } else ogs.style.display = 'none';
   if (!protectionEnabled) localStorage.setItem('parentBudgetSession', JSON.stringify({ role: currentRole, userId: currentUserId, groupId: currentGroupId }));
   renderAll();
+  loadGroupAlbums();
   if (currentRole === 'owner') loadOwnerMessages();
 }
 
@@ -633,7 +693,7 @@ function openChildPicker(inputEl) {
   childPickerTarget = inputEl;
   const list = document.getElementById('childPickerList'); list.innerHTML = '';
   const kids = data.children || [];
-  if (!kids.length) list.innerHTML = '<p style="color:var(--light-gray);font-size:.9em">Дети ещё не добавлены — добавьте в «👥 Люди → Дети»</p>';
+  if (!kids.length) list.innerHTML = '<p style="color:var(--light-gray);font-size:.9em">Дети ещё не добавлены</p>';
   kids.forEach(k => { if (!k.name) return; const b = document.createElement('button'); b.className = 'btn btn-sm btn-secondary'; b.style.margin = '3px'; b.textContent = (k.gender === 'girl' ? '🎀 ' : '👦 ') + k.name; b.onclick = () => { childPickerTarget.value = k.name; markDirty(); closeModal('childPickerModal'); }; list.appendChild(b); });
   document.getElementById('childPickerManual').value = '';
   document.getElementById('childPickerModal').classList.add('active');
@@ -655,7 +715,7 @@ function showSection(id, btn) {
   document.querySelectorAll('.top-nav-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   if (id === 'home') renderHome();
-  if (id === 'group') renderGroup();
+  if (id === 'group') { renderGroup(); }
   if (id === 'news') renderNews();
   if (id === 'contributions') renderContributions();
   if (id === 'expenses') renderExpenses();
@@ -671,6 +731,7 @@ function showAdminTab(tab, btn) {
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('admin-' + tab).classList.add('active');
   if (btn) btn.classList.add('active');
+  if (tab === 'albums') renderAdminAlbums();
 }
 function showOwnerTab(tab, btn) {
   document.querySelectorAll('#owner .admin-section').forEach(s => s.classList.remove('active'));
@@ -679,6 +740,7 @@ function showOwnerTab(tab, btn) {
   if (btn) btn.classList.add('active');
   if (tab === 'messages') loadOwnerMessages();
   if (tab === 'groups') renderOwnerGroups();
+  if (tab === 'albums') renderOwnerAlbums();
   if (tab === 'settings') renderOwnerSettings();
 }
 function changeMonth(id) { currentMonthId = id; data.currentMonthId = id; renderAll(); }
@@ -701,7 +763,7 @@ function renderHome() {
     <div class="home-tile" onclick="showSection('contributions', document.querySelectorAll('.top-nav-btn')[3])"><div class="home-tile-header"><div class="home-tile-icon">💰</div><div class="home-tile-title">Взносы</div></div><div class="home-tile-subtitle">Сдача взносов за текущий месяц</div><div class="home-tile-badges"><span class="home-tile-badge ${pc>0?'active':''}">✅ ${pc} сдали</span><span class="home-tile-badge">👥 ${tc} всего</span></div></div>
     <div class="home-tile" onclick="showSection('expenses', document.querySelectorAll('.top-nav-btn')[4])"><div class="home-tile-header"><div class="home-tile-icon">💸</div><div class="home-tile-title">Расходы</div></div><div class="home-tile-subtitle">Куда потрачены деньги</div><div class="home-tile-badges"><span class="home-tile-badge warning">📊 ${formatMoney(exp)} ₽</span></div></div>
     <div class="home-tile" onclick="showSection('news', document.querySelectorAll('.top-nav-btn')[2])"><div class="home-tile-header"><div class="home-tile-icon">📰</div><div class="home-tile-title">Новости</div></div><div class="home-tile-subtitle">Объявления и информация</div><div class="home-tile-badges"><span class="home-tile-badge ${data.news.length>0?'info':''}">📣 ${data.news.length}</span></div></div>
-    <div class="home-tile" onclick="showSection('group', document.querySelectorAll('.top-nav-btn')[1])"><div class="home-tile-header"><div class="home-tile-icon">🏫</div><div class="home-tile-title">Наша группа</div></div><div class="home-tile-subtitle">Дети, воспитатели, дни рождения</div><div class="home-tile-badges"><span class="home-tile-badge ${kidsCount>0?'gold':''}">👶 ${kidsCount} детей</span></div></div>`;
+    <div class="home-tile" onclick="showSection('group', document.querySelectorAll('.top-nav-btn')[1])"><div class="home-tile-header"><div class="home-tile-icon">🏫</div><div class="home-tile-title">Наша группа</div></div><div class="home-tile-subtitle">Дети, воспитатели, фотоальбомы</div><div class="home-tile-badges"><span class="home-tile-badge ${kidsCount>0?'gold':''}">👶 ${kidsCount} детей</span></div></div>`;
 }
 
 function renderGroup() {
@@ -718,7 +780,7 @@ function renderGroup() {
     <div class="group-stat-card green"><div class="stat-value">${(data.teachers||[]).length}</div><div class="stat-label">Воспитателей</div></div></div>`;
   const bds = getUpcomingBirthdays();
   html += `<div class="info-block-g" style="border-left-color:var(--danger)"><h3>🎂 Дни рождения</h3>`;
-  if (!bds.length) html += `<p style="color:var(--light-gray);font-size:.9em">Добавьте детей с датами рождения (👥 Люди → Дети)</p>`;
+  if (!bds.length) html += `<p style="color:var(--light-gray);font-size:.9em">Добавьте детей с датами рождения</p>`;
   else bds.forEach(b => { html += `<div class="birthday-card${b.isToday?' today':''}"><div class="birthday-avatar">${b.isToday?'🎉':(b.gender==='girl'?'🎀':'')}</div><div class="birthday-info"><div class="birthday-name">${escapeHtml(b.name)}</div><div class="birthday-date${b.isToday?' today-text':''}">${b.day} ${MONTH_NAMES[b.month-1]}${b.isToday?' — СЕГОДНЯ!':''}</div></div><div class="birthday-age">исполнится ${ageWord(b.age)}</div></div>`; });
   html += `</div>`;
   const events = (data.events || []).filter(e => e.title).slice().sort((a,b) => (a.date||'9999').localeCompare(b.date||'9999'));
@@ -729,7 +791,48 @@ function renderGroup() {
   if ((data.teachers||[]).length) { html += `<div class="info-block-g"><h3>👩‍🏫 Наши воспитатели</h3>`; data.teachers.forEach(t => { if (!t.name) return; const ph = t.phone ? `<div class="teacher-phone">📞 <a href="tel:${t.phone.replace(/[^\d+]/g,'')}">${escapeHtml(t.phone)}</a></div>` : ''; html += `<div class="teacher-item"><div><div class="teacher-name">${escapeHtml(t.name)}</div><div class="teacher-role">${escapeHtml(t.role||'Воспитатель')}</div></div>${ph}</div>`; }); html += `</div>`; }
   if ((data.committee||[]).length) { html += `<h3 style="font-size:1.1em;color:var(--brand-green);margin:20px 0 12px;">👥 Родительский комитет</h3><div class="committee-grid">`; data.committee.forEach(mb => { if (!mb.name) return; let cls = 'committee-card'; const r = (mb.role||'').toLowerCase(); if (r.includes('председатель')) cls += ' chair'; else if (r.includes('казначей')) cls += ' treasurer'; const ph = mb.phone ? `<div class="member-phone">📞 <a href="tel:${mb.phone.replace(/[^\d+]/g,'')}">${escapeHtml(mb.phone)}</a></div>` : ''; html += `<div class="${cls}"><div class="member-name">${escapeHtml(mb.name)}</div><div class="member-role">${escapeHtml(mb.role||'Член комитета')}</div>${ph}</div>`; }); html += `</div>`; }
   if ((data.parents||[]).length) { html += `<div class="info-block-g" style="margin-top:20px"><h3>👨‍👩 Родители</h3>`; data.parents.forEach(p => { if (!p.name) return; const ph = p.phone ? `<div class="teacher-phone">📞 <a href="tel:${p.phone.replace(/[^\d+]/g,'')}">${escapeHtml(p.phone)}</a></div>` : ''; html += `<div class="teacher-item"><div><div class="teacher-name">${escapeHtml(p.name)}</div></div>${ph}</div>`; }); html += `</div>`; }
+  
+  // ===== ФОТОАЛЬБОМЫ =====
+  html += `<div class="albums-section">
+    <h3 style="font-size:1.1em;color:var(--brand-green);margin-bottom:15px;">📸 Фотоальбомы группы</h3>
+    <div class="albums-grid" id="groupAlbumsGrid">
+      <p style="color:var(--gray);grid-column:1/-1;text-align:center;padding:20px;">Загрузка альбомов...</p>
+    </div>
+  </div>`;
+  
+  // Сначала устанавливаем HTML, потом загружаем альбомы
   c.innerHTML = html;
+  
+  loadGroupAlbums().then(() => {
+    renderGroupAlbums();
+  });
+}
+
+function renderGroupAlbums() {
+  const grid = document.getElementById('groupAlbumsGrid');
+  if (!grid) return;
+  
+  if (groupAlbums.length === 0) {
+    grid.innerHTML = '<p style="color:var(--gray);grid-column:1/-1;text-align:center;padding:20px;">Фотоальбомы пока не добавлены</p>';
+    return;
+  }
+  
+  const g = getGroup(currentGroupId);
+  const folder = g ? `photos/group_${g.number}/` : 'photos/';
+  
+  grid.innerHTML = '';
+  groupAlbums.forEach(album => {
+    const card = document.createElement('a');
+    card.className = 'album-card';
+    card.href = folder + album.fileName;
+    card.target = '_blank';
+    card.innerHTML = `
+      <div class="album-icon">📷</div>
+      <div class="album-title">${escapeHtml(album.title)}</div>
+      <div class="album-file">${escapeHtml(album.fileName)}</div>
+    `;
+    grid.appendChild(card);
+  });
 }
 
 function renderNews() { const c = document.getElementById('newsList'); if (!data.news.length) { c.innerHTML = '<div class="news-empty">Новостей пока нет</div>'; return; } c.innerHTML = ''; [...data.news].sort((a,b) => new Date(b.date||0) - new Date(a.date||0)).forEach(n => { if (!n.title && !n.text) return; const d = n.date ? new Date(n.date).toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) : ''; c.innerHTML += `<div class="news-card${n.urgent?' urgent':''}"><div class="news-date">${n.urgent?'🔴 СРОЧНО • ':''}${d}</div><div class="news-title">${escapeHtml(n.title||'')}</div><div class="news-text">${escapeHtml(n.text||'')}</div></div>`; }); }
@@ -738,7 +841,186 @@ function renderExpenses() { const m = getCurrentMonth(); let html = '', t = 0; h
 function renderCommittee() { const c = document.getElementById('committeeList'); if (!data.committee.length) { c.innerHTML = '<div class="news-empty">Состав комитета ещё не заполнен</div>'; return; } let html = '<div class="committee-grid">'; data.committee.forEach(mb => { if (!mb.name) return; let cls = 'committee-card'; const r = (mb.role||'').toLowerCase(); if (r.includes('председатель')) cls += ' chair'; else if (r.includes('казначей')||r.includes('бухгалтер')) cls += ' treasurer'; const ph = mb.phone ? `<div class="member-phone">📞 <a href="tel:${mb.phone.replace(/[^\d+]/g,'')}">${escapeHtml(mb.phone)}</a></div>` : ''; html += `<div class="${cls}"><div class="member-name">${escapeHtml(mb.name)}</div><div class="member-role">${escapeHtml(mb.role||'Член комитета')}</div>${ph}</div>`; }); html += '</div>'; c.innerHTML = html; }
 function renderArchive() { const c = document.getElementById('archiveList'); if (!data.archive.length) { c.innerHTML = '<div class="news-empty">Архив пуст</div>'; return; } let html = ''; data.archive.slice().reverse().forEach(m => { const inc = calcIncome(m), ai = Number(m.additionalIncome||0), exp = calcExpense(m), bal = Number(m.prevBalance||0)+inc+ai-exp; const pc = m.students.filter(s => s.paid).length, tc = m.students.filter(s => s.name).length; html += `<div class="archive-item"><div class="archive-item-info"><strong>${escapeHtml(m.name)}</strong><small>Приход: ${formatMoney(inc)} ₽ · Расход: ${formatMoney(exp)} ₽ · Остаток: <b>${formatMoney(bal)} ₽</b> · Сдали: ${pc}/${tc}</small></div></div>`; }); c.innerHTML = html; }
 
-// ===== СИСТЕМА СООБЩЕНИЙ =====
+// ===== АДМИНКА: УПРАВЛЕНИЕ АЛЬБОМАМИ =====
+async function renderAdminAlbums() {
+  const container = document.getElementById('admin-albums');
+  const g = getGroup(currentGroupId);
+  const folder = g ? `photos/group_${g.number}/` : 'photos/';
+  
+  container.innerHTML = `
+    <div class="admin-card">
+      <div class="admin-card-title">➕ Создать фотоальбом</div>
+      <div class="hint">💡 Сначала загрузите HTML-файл галереи в папку <code>${folder}</code> на хостинге, затем укажите его имя ниже.</div>
+      <div class="form-group">
+        <label>Название альбома</label>
+        <input type="text" id="newAlbumTitle" placeholder="Например: Новый год 2026">
+      </div>
+      <div class="form-group">
+        <label>Имя файла (HTML)</label>
+        <input type="text" id="newAlbumFile" placeholder="Например: gallery1.html">
+      </div>
+      <button class="btn btn-success btn-block" onclick="adminCreateAlbum()">📸 Создать альбом</button>
+    </div>
+    
+    <div class="admin-card">
+      <div class="admin-card-title">📋 Альбомы группы ${escapeHtml(g ? groupLabel(g) : '')}</div>
+      <div id="adminAlbumsList">Загрузка...</div>
+    </div>
+  `;
+  
+  await loadGroupAlbums();
+  renderAdminAlbumsList();
+}
+
+function renderAdminAlbumsList() {
+  const list = document.getElementById('adminAlbumsList');
+  if (!list) return;
+  
+  if (groupAlbums.length === 0) {
+    list.innerHTML = '<p style="color:var(--gray);text-align:center;padding:20px;">Альбомов пока нет</p>';
+    return;
+  }
+  
+  list.innerHTML = '';
+  groupAlbums.forEach(album => {
+    const div = document.createElement('div');
+    div.className = 'album-admin-item';
+    div.innerHTML = `
+      <div class="album-admin-info">
+        <div class="album-admin-title">${escapeHtml(album.title)}</div>
+        <div class="album-admin-file">📄 ${escapeHtml(album.fileName)}</div>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="adminDeleteAlbum('${album.id}')">🗑 Удалить</button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+async function adminCreateAlbum() {
+  const title = document.getElementById('newAlbumTitle').value.trim();
+  const fileName = document.getElementById('newAlbumFile').value.trim();
+  
+  if (!title) { alert('Введите название альбома'); return; }
+  if (!fileName) { alert('Введите имя файла'); return; }
+  if (!fileName.endsWith('.html')) { alert('Имя файла должно заканчиваться на .html'); return; }
+  
+  const success = await createAlbum(currentGroupId, title, fileName);
+  if (success) {
+    document.getElementById('newAlbumTitle').value = '';
+    document.getElementById('newAlbumFile').value = '';
+    alert('✅ Альбом создан!');
+    await loadGroupAlbums();
+    renderAdminAlbumsList();
+  } else {
+    alert('❌ Ошибка создания альбома');
+  }
+}
+
+async function adminDeleteAlbum(albumId) {
+  const success = await deleteAlbum(albumId);
+  if (success) {
+    await loadGroupAlbums();
+    renderAdminAlbumsList();
+  }
+}
+
+// ===== ВЛАДЕЛЕЦ: УПРАВЛЕНИЕ АЛЬБОМАМИ =====
+async function renderOwnerAlbums() {
+  const container = document.getElementById('owner-albums');
+  const allAlbums = await loadAllAlbums();
+  
+  let html = `
+    <div class="admin-card">
+      <div class="admin-card-title">➕ Создать фотоальбом для группы</div>
+      <div class="hint">💡 Владелец может создавать альбомы для любой группы. Сначала загрузите HTML-файл в папку группы на хостинге.</div>
+      <div class="form-group">
+        <label>Группа</label>
+        <select id="ownerAlbumGroup"></select>
+      </div>
+      <div class="form-group">
+        <label>Название альбома</label>
+        <input type="text" id="ownerAlbumTitle" placeholder="Например: Выпускной 2026">
+      </div>
+      <div class="form-group">
+        <label>Имя файла (HTML)</label>
+        <input type="text" id="ownerAlbumFile" placeholder="Например: gallery2.html">
+      </div>
+      <button class="btn btn-success btn-block" onclick="ownerCreateAlbum()">📸 Создать альбом</button>
+    </div>
+    
+    <div class="admin-card">
+      <div class="admin-card-title">📋 Все альбомы всех групп</div>
+      <div id="ownerAlbumsList">Загрузка...</div>
+    </div>
+  `;
+  
+  container.innerHTML = html;
+  
+  const groupSelect = document.getElementById('ownerAlbumGroup');
+  app.groups.forEach(g => {
+    const option = document.createElement('option');
+    option.value = g.id;
+    option.textContent = groupLabel(g);
+    groupSelect.appendChild(option);
+  });
+  
+  renderOwnerAlbumsList(allAlbums);
+}
+
+function renderOwnerAlbumsList(allAlbums) {
+  const list = document.getElementById('ownerAlbumsList');
+  if (!list) return;
+  
+  if (allAlbums.length === 0) {
+    list.innerHTML = '<p style="color:var(--gray);text-align:center;padding:20px;">Альбомов пока нет</p>';
+    return;
+  }
+  
+  list.innerHTML = '';
+  allAlbums.forEach(album => {
+    const g = getGroup(album.groupId);
+    const div = document.createElement('div');
+    div.className = 'album-admin-item';
+    div.innerHTML = `
+      <div class="album-admin-info">
+        <div class="album-admin-title">${escapeHtml(album.title)}</div>
+        <div class="album-admin-file">📄 ${escapeHtml(album.fileName)}</div>
+        <div class="album-admin-group">🏫 ${g ? groupLabel(g) : 'Группа не найдена'}</div>
+      </div>
+      <button class="btn btn-danger btn-sm" onclick="ownerDeleteAlbum('${album.id}')">🗑 Удалить</button>
+    `;
+    list.appendChild(div);
+  });
+}
+
+async function ownerCreateAlbum() {
+  const groupId = document.getElementById('ownerAlbumGroup').value;
+  const title = document.getElementById('ownerAlbumTitle').value.trim();
+  const fileName = document.getElementById('ownerAlbumFile').value.trim();
+  
+  if (!groupId) { alert('Выберите группу'); return; }
+  if (!title) { alert('Введите название альбома'); return; }
+  if (!fileName) { alert('Введите имя файла'); return; }
+  if (!fileName.endsWith('.html')) { alert('Имя файла должно заканчиваться на .html'); return; }
+  
+  const success = await createAlbum(groupId, title, fileName);
+  if (success) {
+    document.getElementById('ownerAlbumTitle').value = '';
+    document.getElementById('ownerAlbumFile').value = '';
+    alert('✅ Альбом создан!');
+    await renderOwnerAlbums();
+  } else {
+    alert('❌ Ошибка создания альбома');
+  }
+}
+
+async function ownerDeleteAlbum(albumId) {
+  const success = await deleteAlbum(albumId);
+  if (success) {
+    await renderOwnerAlbums();
+  }
+}
+
 async function sendMessage() {
   const subject = document.getElementById('msgSubject').value.trim();
   const text = document.getElementById('msgText').value.trim();
@@ -939,7 +1221,7 @@ function renderAdminPeople() { let comHtml=''; (data.committee||[]).forEach(x =>
   <div class="admin-card"><div class="admin-card-title">👥 Комитет</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addCommitteeRow();markDirty()">➕ Добавить</button></div><div id="adminCommitteeList">${comHtml}</div></div>
   <div class="admin-card"><div class="admin-card-title">👨👩 Родители</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addParentRow();markDirty()">➕ Добавить</button></div><div id="adminParentsList">${parHtml}</div></div>
   <div class="admin-card"><div class="admin-card-title">👶 Дети</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addChildRow();markDirty()">➕ Добавить ребёнка</button></div><div id="adminChildrenList">${chHtml}</div></div>
-  <div class="admin-card"><div class="admin-card-title">👩‍ Воспитатели</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addTeacherRow();markDirty()">➕ Добавить</button></div><div id="adminTeachersList">${tHtml}</div></div>`; }
+  <div class="admin-card"><div class="admin-card-title">👩‍🏫 Воспитатели</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addTeacherRow();markDirty()">➕ Добавить</button></div><div id="adminTeachersList">${tHtml}</div></div>`; }
 function committeeRowHtml(x=null){return `<div class="a-row committee-row-admin"><input type="text" class="p-name" value="${x?escapeHtml(x.name||''):''}" placeholder="ФИО"><input type="text" class="p-role" value="${x?escapeHtml(x.role||''):''}" placeholder="Роль"><input type="tel" class="p-phone" value="${x?escapeHtml(x.phone||''):''}" placeholder="Телефон"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()">🗑</button></div>`;}
 function addCommitteeRow(){document.getElementById('adminCommitteeList').insertAdjacentHTML('beforeend',committeeRowHtml());}
 function parentRowHtml(p=null){return `<div class="a-row parent-row-admin"><input type="text" class="p-name" value="${p?escapeHtml(p.name||''):''}" placeholder="ФИО"><input type="tel" class="p-phone" value="${p?escapeHtml(p.phone||''):''}" placeholder="Телефон"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()">🗑</button></div>`;}
@@ -1223,7 +1505,6 @@ function renderOwnerSettings() {
       <div class="form-group"><label>Пароль</label><input type="text" id="ownerPasswordInput" value="${escapeHtml(settings.ownerPassword)}"></div>
       <button class="btn btn-primary" onclick="saveOwnerCredentials()">💾 Сохранить</button></div>
     <div class="admin-card danger-zone"><div class="admin-card-title">⚠️ Опасная зона</div>
-      <button class="btn btn-danger btn-block" onclick="resetAllData()">🗑️ Удалить
       <button class="btn btn-danger btn-block" onclick="resetAllData()">🗑️ Удалить ВСЕ данные</button></div>`;
 }
 function ownerSwitchGroup(gid){ if(adminDirty)collectAdminData(); currentGroupId=gid; bindGroupData(); renderAll(); renderOwner(); document.getElementById('headerGroupLabel').textContent=groupLabel(getGroup(currentGroupId)); const ogsel=document.getElementById('ownerGroupSelect'); if(ogsel) ogsel.value=gid; clearDirty(); }
