@@ -199,111 +199,71 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 /* ===== СТИЛИ ДЛЯ ФОТОАЛЬБОМОВ ===== */
 .albums-section { margin-top: 30px; }
 .albums-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
-.album-card {
-  background: white; border-radius: var(--radius-lg); padding: 20px; text-align: center;
-  box-shadow: var(--shadow-sm); border: 2px solid var(--border); cursor: pointer; transition: all 0.3s;
-  text-decoration: none; color: inherit; display: block;
-}
+.album-card { background: white; border-radius: var(--radius-lg); padding: 20px; text-align: center; box-shadow: var(--shadow-sm); border: 2px solid var(--border); cursor: pointer; transition: all 0.3s; text-decoration: none; color: inherit; display: block; }
 .album-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--brand-orange); }
 .album-icon { font-size: 3em; margin-bottom: 10px; }
 .album-title { font-size: 1.1em; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
 .album-file { font-size: 0.8em; color: var(--gray); font-family: monospace; }
-
-.album-admin-item {
-  background: var(--bg); border-radius: var(--radius-md); padding: 12px; margin-bottom: 10px;
-  display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
-  border-left: 4px solid var(--brand-green);
-}
+.album-admin-item { background: var(--bg); border-radius: var(--radius-md); padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; border-left: 4px solid var(--brand-green); }
 .album-admin-info { flex: 1; min-width: 200px; }
 .album-admin-title { font-weight: 700; margin-bottom: 4px; }
 .album-admin-file { font-size: 0.85em; color: var(--gray); font-family: monospace; }
 .album-admin-group { font-size: 0.75em; color: var(--info); margin-top: 4px; }
 
 /* ===== МОДАЛЬНОЕ ОКНО ДЛЯ ФОТОАЛЬБОМА ===== */
-.album-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 100000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
+.album-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 100000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+.album-modal-content { background: white; border-radius: 16px; width: 100%; max-width: 1200px; height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+.album-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: linear-gradient(135deg, var(--brand-green), var(--brand-orange)); color: white; border-radius: 16px 16px 0 0; }
+.album-modal-header h3 { margin: 0; font-size: 1.3em; }
+.album-close-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.95em; }
+.album-close-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
+.album-modal-body { flex: 1; overflow: hidden; background: #f8f9fa; }
+.album-modal-body iframe { width: 100%; height: 100%; border: none; }
 
-.album-modal-content {
-  background: white;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 1200px;
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+/* ===== СТИЛИ ДЛЯ ПЛАВАЮЩЕГО КОЛОКОЛЬЧИКА И МОДАЛКИ УВЕДОМЛЕНИЙ ===== */
+.floating-notif-bell {
+  position: fixed; bottom: 24px; right: 24px; width: 56px; height: 56px;
+  background: var(--brand-green); color: white; border-radius: 50%;
+  display: none; align-items: center; justify-content: center;
+  font-size: 1.8em; box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  cursor: pointer; z-index: 9000; transition: transform 0.2s, background 0.2s;
 }
+.floating-notif-bell:hover { transform: scale(1.1); background: var(--brand-orange); }
+.floating-notif-bell .notification-badge {
+  position: absolute; top: -2px; right: -2px; background: var(--danger); color: white;
+  font-size: 0.5em; padding: 4px 7px; border-radius: 50%; font-weight: 800;
+  border: 2px solid white; display: none; min-width: 18px; text-align: center;
+}
+.floating-notif-bell .notification-badge.show { display: block; animation: pulse-badge 2s infinite; }
 
-.album-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  background: linear-gradient(135deg, var(--brand-green), var(--brand-orange));
-  color: white;
-  border-radius: 16px 16px 0 0;
-}
-
-.album-modal-header h3 {
-  margin: 0;
-  font-size: 1.3em;
-}
-
-.album-close-btn {
-  background: rgba(255,255,255,0.2);
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s;
-  font-size: 0.95em;
-}
-
-.album-close-btn:hover {
-  background: rgba(255,255,255,0.3);
-  transform: scale(1.05);
-}
-
-.album-modal-body {
-  flex: 1;
-  overflow: hidden;
-  background: #f8f9fa;
-}
-
-.album-modal-body iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
+.notif-modal-content { max-width: 600px; width: 90%; }
+.notif-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--border); }
+.notif-modal-header h2 { margin: 0; font-size: 1.3em; color: var(--brand-green); }
+.notif-list-modal { max-height: 50vh; overflow-y: auto; margin-bottom: 16px; }
+.notif-item { padding: 12px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s; border-radius: 8px; margin-bottom: 4px; }
+.notif-item.unread { background: #e8f5e9; border-left: 4px solid var(--brand-green); }
+.notif-item:hover { background: var(--bg); }
+.notif-title { font-weight: 700; font-size: 0.95em; color: var(--dark); margin-bottom: 4px; display: flex; justify-content: space-between; }
+.notif-text { font-size: 0.85em; color: var(--gray); line-height: 1.4; margin-bottom: 4px; }
+.notif-time { font-size: 0.75em; color: var(--light-gray); }
+.notif-empty { padding: 30px; text-align: center; color: var(--light-gray); }
+.notif-modal-actions { display: flex; gap: 10px; justify-content: flex-end; padding-top: 12px; border-top: 2px solid var(--border); }
 
 @media (max-width:768px) {
-.header-banner, .header-content { min-height:110px; }
-.header-title h1 { font-size:1.2em; }
-.student-row { grid-template-columns:1fr 90px 46px 36px; }
-.committee-row-admin { grid-template-columns:1fr 1fr; }
-.parent-row-admin { grid-template-columns:1fr 1fr 36px; }
-.child-row-admin { grid-template-columns:1fr 110px 36px; }
-.event-row-admin { grid-template-columns:1fr 1fr; }
-.expense-row { grid-template-columns:1fr 100px 36px; }
-.balance-hero .balance-value { font-size:1.8em; }
-.albums-grid { grid-template-columns: repeat(2, 1fr); }
-.album-modal-content { height: 95vh; border-radius: 12px; }
-.album-modal-header h3 { font-size: 1.1em; }
-.album-close-btn { padding: 6px 12px; font-size: 0.85em; }
+  .header-banner, .header-content { min-height:110px; }
+  .header-title h1 { font-size:1.2em; }
+  .student-row { grid-template-columns:1fr 90px 46px 36px; }
+  .committee-row-admin { grid-template-columns:1fr 1fr; }
+  .parent-row-admin { grid-template-columns:1fr 1fr 36px; }
+  .child-row-admin { grid-template-columns:1fr 110px 36px; }
+  .event-row-admin { grid-template-columns:1fr 1fr; }
+  .expense-row { grid-template-columns:1fr 100px 36px; }
+  .balance-hero .balance-value { font-size:1.8em; }
+  .albums-grid { grid-template-columns: repeat(2, 1fr); }
+  .album-modal-content { height: 95vh; border-radius: 12px; }
+  .album-modal-header h3 { font-size: 1.1em; }
+  .album-close-btn { padding: 6px 12px; font-size: 0.85em; }
+  .floating-notif-bell { bottom: 16px; right: 16px; width: 50px; height: 50px; font-size: 1.5em; }
 }
 @media (max-width:480px) { .group-stats-grid, .balance-stats { grid-template-columns:repeat(2,1fr); } .home-grid { grid-template-columns:1fr; } }
 </style>
@@ -434,6 +394,23 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 </main>
 
+<!-- ===== МОДАЛЬНОЕ ОКНО УВЕДОМЛЕНИЙ ===== -->
+<div class="modal-overlay" id="notificationModal">
+  <div class="modal notif-modal-content">
+    <div class="notif-modal-header">
+      <h2>🔔 Уведомления</h2>
+      <button class="btn btn-sm btn-secondary" onclick="closeNotificationModal()">✕ Закрыть</button>
+    </div>
+    <div class="notif-list-modal" id="notifListModal">
+      <div class="notif-empty">Загрузка...</div>
+    </div>
+    <div class="notif-modal-actions">
+      <button class="btn btn-success" onclick="markAllNotificationsRead()">✅ Прочитать все</button>
+      <button class="btn btn-secondary" onclick="closeNotificationModal()">Закрыть</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="accessRequestModal">
 <div class="modal">
 <h2>📩 Запрос на вход</h2>
@@ -504,7 +481,6 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 </div>
 
-<!-- ===== МОДАЛЬНОЕ ОКНО ДЛЯ ФОТОАЛЬБОМА ===== -->
 <div id="albumModal" class="album-modal-overlay" style="display:none;">
   <div class="album-modal-content">
     <div class="album-modal-header">
@@ -515,6 +491,12 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
       <iframe id="albumFrame" src="" frameborder="0"></iframe>
     </div>
   </div>
+</div>
+
+<!-- ПЛАВАЮЩИЙ КОЛОКОЛЬЧИК В НИЖНЕМ ПРАВОМ УГЛУ -->
+<div class="floating-notif-bell" id="floatingNotifBell" onclick="openNotificationModal()">
+  🔔
+  <span class="notification-badge" id="floatingNotifBadge">0</span>
 </div>
 
 <div class="save-indicator" id="saveIndicator">✅ Сохранено</div>
@@ -546,6 +528,10 @@ let publicConfig = { groups: [], maintenanceMode: false, protected: false };
 let messagesFilter = 'all';
 let groupAlbums = [];
 
+// ===== ПЕРЕМЕННЫЕ ДЛЯ УВЕДОМЛЕНИЙ =====
+let currentNotifications = [];
+let notifUnsubscribe = null;
+
 function updateClock() {
   const now = new Date();
   document.getElementById('clockDate').textContent = `${WEEKDAY_NAMES[now.getDay()]}, ${now.getDate()} ${MONTH_NAMES[now.getMonth()]}`;
@@ -571,7 +557,11 @@ function closeModal(id) { document.getElementById(id).classList.remove('active')
 function showSaveIndicator() { const i = document.getElementById('saveIndicator'); i.classList.add('show'); setTimeout(() => i.classList.remove('show'), 2000); }
 function ageWord(n) { const m10 = n % 10, m100 = n % 100; if (m10 === 1 && m100 !== 11) return n + ' год'; if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return n + ' года'; return n + ' лет'; }
 function formatDateRu(d) { if (!d) return ''; const p = d.split('-').map(Number); if (p.length < 3) return d; return `${p[2]} ${MONTH_NAMES[p[1]-1]} ${p[0]}`; }
-function formatDateTime(iso) { if (!iso) return ''; const d = new Date(iso); return d.toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
+function formatDateTime(iso) { 
+  if (!iso) return ''; 
+  const d = iso.toDate ? iso.toDate() : new Date(iso);
+  return d.toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }); 
+}
 function isPastDate(d) { if (!d) return false; const p = d.split('-').map(Number); if (p.length < 3) return false; const t = new Date(); t.setHours(0,0,0,0); return new Date(p[0], p[1]-1, p[2]) < t; }
 function getUpcomingBirthdays() {
   const today = new Date(); const t0 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -599,52 +589,30 @@ async function loadGroupAlbums() {
   groupAlbums = [];
   try {
     const snap = await db.collection('albums').where('groupId', '==', currentGroupId).get();
-    snap.docs.forEach(doc => {
-      groupAlbums.push({ id: doc.id, ...doc.data() });
-    });
-  } catch(e) {
-    console.error('Ошибка загрузки альбомов:', e);
-  }
+    snap.docs.forEach(doc => { groupAlbums.push({ id: doc.id, ...doc.data() }); });
+  } catch(e) { console.error('Ошибка загрузки альбомов:', e); }
 }
 
 async function loadAllAlbums() {
   let allAlbums = [];
   try {
     const snap = await db.collection('albums').get();
-    snap.docs.forEach(doc => {
-      allAlbums.push({ id: doc.id, ...doc.data() });
-    });
-  } catch(e) {
-    console.error('Ошибка загрузки всех альбомов:', e);
-  }
+    snap.docs.forEach(doc => { allAlbums.push({ id: doc.id, ...doc.data() }); });
+  } catch(e) { console.error('Ошибка загрузки всех альбомов:', e); }
   return allAlbums;
 }
 
 async function createAlbum(groupId, title, fileName) {
   try {
-    await db.collection('albums').add({
-      groupId: groupId,
-      title: title,
-      fileName: fileName,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    await db.collection('albums').add({ groupId: groupId, title: title, fileName: fileName, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
     return true;
-  } catch(e) {
-    console.error('Ошибка создания альбома:', e);
-    return false;
-  }
+  } catch(e) { console.error('Ошибка создания альбома:', e); return false; }
 }
 
 async function deleteAlbum(albumId) {
   if (!confirm('Удалить этот фотоальбом?')) return;
-  try {
-    await db.collection('albums').doc(albumId).delete();
-    alert('✅ Альбом удалён!');
-    return true;
-  } catch(e) {
-    alert('❌ Ошибка: ' + e.message);
-    return false;
-  }
+  try { await db.collection('albums').doc(albumId).delete(); alert('✅ Альбом удалён!'); return true; }
+  catch(e) { alert('❌ Ошибка: ' + e.message); return false; }
 }
 
 async function loadFromFirebase() {
@@ -776,6 +744,11 @@ function enterApp() {
     app.groups.forEach(g => { const o = document.createElement('option'); o.value = g.id; o.textContent = '🏫 ' + groupLabel(g); if (g.id === currentGroupId) o.selected = true; sel.appendChild(o); });
   } else ogs.style.display = 'none';
   if (!protectionEnabled) localStorage.setItem('parentBudgetSession', JSON.stringify({ role: currentRole, userId: currentUserId, groupId: currentGroupId }));
+  
+  // Показываем колокольчик и запускаем слушатель уведомлений
+  document.getElementById('floatingNotifBell').style.display = 'flex';
+  startNotificationListener();
+  
   renderAll();
   loadGroupAlbums();
   if (currentRole === 'owner') loadOwnerMessages();
@@ -785,6 +758,11 @@ async function doLogout() {
   if (!confirm('Выйти?')) return;
   currentRole = null; currentUserId = null; currentUserName = null;
   localStorage.removeItem('parentBudgetSession');
+  
+  // Скрываем колокольчик и отключаем слушатель
+  document.getElementById('floatingNotifBell').style.display = 'none';
+  if (notifUnsubscribe) { notifUnsubscribe(); notifUnsubscribe = null; }
+  
   if (protectionEnabled) await auth.signOut();
   document.getElementById('appHeader').style.display = 'none';
   document.getElementById('topNav').style.display = 'none';
@@ -828,6 +806,8 @@ async function sendGuestMessage() {
   const msg = { senderName: name || 'Неизвестно', senderPhone: phone || '', groupId, subject: subject || 'Сообщение с экрана входа', text, date: new Date().toISOString(), status: 'new', read: false, fromGuest: true };
   try {
     await db.collection('messages').add(msg);
+    // ОТПРАВКА УВЕДОМЛЕНИЯ ВЛАДЕЛЬЦУ
+    await sendNotification('💬 Новое сообщение с сайта', `${name || 'Гость'}: ${subject || 'Без темы'}`, 'owner', 'all');
     document.getElementById('guestContactName').value = '';
     document.getElementById('guestContactPhone').value = '';
     document.getElementById('guestContactSubject').value = '';
@@ -991,7 +971,6 @@ function renderGroupAlbums() {
   });
 }
 
-// ===== ФУНКЦИИ ДЛЯ МОДАЛЬНОГО ОКНА ФОТОАЛЬБОМА =====
 function openAlbumModal(title, url) {
   document.getElementById('albumModalTitle').textContent = title;
   document.getElementById('albumFrame').src = url;
@@ -1005,18 +984,15 @@ function closeAlbumModal() {
   document.body.style.overflow = '';
 }
 
-// Закрытие по Escape
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
     closeAlbumModal();
+    closeNotificationModal();
   }
 });
 
-// Закрытие при клике вне модального окна
 document.getElementById('albumModal').addEventListener('click', function(e) {
-  if (e.target === this) {
-    closeAlbumModal();
-  }
+  if (e.target === this) closeAlbumModal();
 });
 
 function renderNews() { const c = document.getElementById('newsList'); if (!data.news.length) { c.innerHTML = '<div class="news-empty">Новостей пока нет</div>'; return; } c.innerHTML = ''; [...data.news].sort((a,b) => new Date(b.date||0) - new Date(a.date||0)).forEach(n => { if (!n.title && !n.text) return; const d = n.date ? new Date(n.date).toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) : ''; c.innerHTML += `<div class="news-card${n.urgent?' urgent':''}"><div class="news-date">${n.urgent?'🔴 СРОЧНО • ':''}${d}</div><div class="news-title">${escapeHtml(n.title||'')}</div><div class="news-text">${escapeHtml(n.text||'')}</div></div>`; }); }
@@ -1220,6 +1196,9 @@ async function sendMessage() {
   };
   try {
     await db.collection('messages').add(msg);
+    // ОТПРАВКА УВЕДОМЛЕНИЯ ВЛАДЕЛЬЦУ О НОВОМ СООБЩЕНИИ
+    await sendNotification('💬 Новое сообщение', `${currentUserName}: ${subject || 'Без темы'}`, 'owner', currentGroupId);
+    
     document.getElementById('msgSubject').value = '';
     document.getElementById('msgText').value = '';
     alert('✅ Сообщение отправлено владельцу!');
@@ -1621,6 +1600,14 @@ async function saveAll() {
   collectAdminData();
   const btn = document.getElementById('saveBtn');
   if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Сохранение...'; }
+  
+  // Проверка на срочные новости для отправки уведомления
+  const urgentNews = data.news.filter(n => n.urgent && !n.notified);
+  if (urgentNews.length > 0) {
+    await sendNotification('🔴 СРОЧНОЕ ОБЪЯВЛЕНИЕ', urgentNews[0].title, 'member', currentGroupId);
+    urgentNews.forEach(n => n.notified = true); // Помечаем, чтобы не спамить
+  }
+
   await saveToFirebase();
   if (protectionEnabled) {
     await db.collection('public').doc('config').set({
@@ -1698,6 +1685,126 @@ async function resetAllData(){if(!confirm('Удалить ВСЕ данные?')
 
 document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active'); }));
 if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('./service-worker.js').catch(() => {}); }); }
+
+// ===== ЛОГИКА УВЕДОМЛЕНИЙ =====
+async function sendNotification(title, text, targetRole = 'all', groupId = 'all') {
+  try {
+    await db.collection('notifications').add({
+      title: title, text: text, targetRole: targetRole, groupId: groupId,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(), readBy: []
+    });
+  } catch (e) { console.error('Ошибка отправки уведомления:', e); }
+}
+
+function startNotificationListener() {
+  if (notifUnsubscribe) notifUnsubscribe();
+  if (!currentRole) return;
+
+  const rolesToQuery = currentRole === 'owner' ? ['all', 'owner', 'admin', 'member'] : ['all', currentRole];
+  
+  notifUnsubscribe = db.collection('notifications')
+    .where('targetRole', 'in', rolesToQuery)
+    .orderBy('createdAt', 'desc')
+    .limit(50)
+    .onSnapshot(snapshot => {
+      currentNotifications = [];
+      let unreadCount = 0;
+      const viewerId = currentUserId || 'owner';
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.groupId !== 'all' && data.groupId !== currentGroupId && currentRole !== 'owner') return;
+
+        const isRead = data.readBy && data.readBy.includes(viewerId);
+        if (!isRead) unreadCount++;
+        
+        currentNotifications.push({ 
+          id: doc.id, ...data, isRead,
+          timeStr: data.createdAt ? formatDateTime(data.createdAt.toDate()) : 'Только что' 
+        });
+      });
+
+      updateNotifBadge(unreadCount);
+      renderNotificationsModal();
+    }, error => {
+      console.error('Ошибка слушателя уведомлений:', error);
+    });
+}
+
+function updateNotifBadge(count) {
+  const badge = document.getElementById('floatingNotifBadge');
+  if (count > 0) {
+    badge.textContent = count > 9 ? '9+' : count;
+    badge.classList.add('show');
+  } else {
+    badge.classList.remove('show');
+  }
+}
+
+function openNotificationModal() {
+  renderNotificationsModal();
+  document.getElementById('notificationModal').classList.add('active');
+}
+
+function closeNotificationModal() {
+  document.getElementById('notificationModal').classList.remove('active');
+}
+
+function renderNotificationsModal() {
+  const list = document.getElementById('notifListModal');
+  if (!list) return;
+  if (currentNotifications.length === 0) {
+    list.innerHTML = '<div class="notif-empty">Нет уведомлений 🎉</div>';
+    return;
+  }
+  list.innerHTML = currentNotifications.map(n => `
+    <div class="notif-item ${n.isRead ? '' : 'unread'}" onclick="markNotificationAsRead('${n.id}')">
+      <div class="notif-title">
+        <span>${escapeHtml(n.title)}</span>
+        ${!n.isRead ? '<span style="color:var(--brand-green);font-size:1.2em;">●</span>' : ''}
+      </div>
+      <div class="notif-text">${escapeHtml(n.text)}</div>
+      <div class="notif-time">${n.timeStr}</div>
+    </div>
+  `).join('');
+}
+
+async function markAllNotificationsRead() {
+  const viewerId = currentUserId || 'owner';
+  const unreadNotifs = currentNotifications.filter(n => !n.isRead);
+  if (unreadNotifs.length === 0) {
+    alert('Все уведомления уже прочитаны');
+    return;
+  }
+  try {
+    const batch = db.batch();
+    unreadNotifs.forEach(n => {
+      const ref = db.collection('notifications').doc(n.id);
+      batch.update(ref, { readBy: firebase.firestore.FieldValue.arrayUnion(viewerId) });
+    });
+    await batch.commit();
+    currentNotifications.forEach(n => n.isRead = true);
+    renderNotificationsModal();
+    updateNotifBadge(0);
+  } catch (e) { console.error('Ошибка массового прочтения:', e); }
+}
+
+async function markNotificationAsRead(notifId) {
+  const viewerId = currentUserId || 'owner';
+  const notif = currentNotifications.find(n => n.id === notifId);
+  if (notif && !notif.isRead) {
+    try {
+      await db.collection('notifications').doc(notifId).update({
+        readBy: firebase.firestore.FieldValue.arrayUnion(viewerId)
+      });
+      notif.isRead = true;
+      renderNotificationsModal();
+      const unreadCount = currentNotifications.filter(n => !n.isRead).length;
+      updateNotifBadge(unreadCount);
+    } catch (e) { console.error('Ошибка отметки прочитанным:', e); }
+  }
+}
+
 loadFromFirebase();
 </script>
 </body>
