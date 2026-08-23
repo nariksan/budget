@@ -221,74 +221,48 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 
 /* ===== МОДАЛЬНОЕ ОКНО ДЛЯ ФОТОАЛЬБОМА ===== */
 .album-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 100000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.9); z-index: 100000;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
 }
-
 .album-modal-content {
-  background: white;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 1200px;
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  background: white; border-radius: 16px; width: 100%; max-width: 1200px; height: 90vh;
+  display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
-
 .album-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
+  display: flex; justify-content: space-between; align-items: center; padding: 15px 20px;
   background: linear-gradient(135deg, var(--brand-green), var(--brand-orange));
-  color: white;
-  border-radius: 16px 16px 0 0;
+  color: white; border-radius: 16px 16px 0 0;
 }
-
-.album-modal-header h3 {
-  margin: 0;
-  font-size: 1.3em;
-}
-
+.album-modal-header h3 { margin: 0; font-size: 1.3em; }
 .album-close-btn {
-  background: rgba(255,255,255,0.2);
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s;
-  font-size: 0.95em;
+  background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px;
+  border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.95em;
 }
+.album-close-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
+.album-modal-body { flex: 1; overflow: hidden; background: #f8f9fa; }
+.album-modal-body iframe { width: 100%; height: 100%; border: none; }
 
-.album-close-btn:hover {
-  background: rgba(255,255,255,0.3);
-  transform: scale(1.05);
-}
+/* ===== СТИЛИ ДЛЯ УВЕДОМЛЕНИЙ (КОЛОКОЛЬЧИК) ===== */
+.notification-wrapper { position: relative; cursor: pointer; margin-left: 12px; }
+.notification-bell { font-size: 1.6em; position: relative; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: rgba(255,255,255,0.2); border-radius: 50%; border: 2px solid rgba(255,255,255,0.5); transition: transform 0.2s; }
+.notification-bell:hover { transform: scale(1.1); background: rgba(255,255,255,0.3); }
+.notification-badge { position: absolute; top: -2px; right: -2px; background: var(--danger); color: white; font-size: 0.65em; padding: 3px 6px; border-radius: 50%; font-weight: 800; border: 2px solid white; display: none; min-width: 18px; text-align: center; }
+.notification-badge.show { display: block; animation: pulse-badge 2s infinite; }
+@keyframes pulse-badge { 0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(220, 53, 69, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); } }
 
-.album-modal-body {
-  flex: 1;
-  overflow: hidden;
-  background: #f8f9fa;
-}
-
-.album-modal-body iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
+.notification-dropdown { position: absolute; top: 50px; right: 0; width: 320px; max-width: 90vw; background: white; border-radius: var(--radius-lg); box-shadow: 0 10px 40px rgba(0,0,0,0.2); border: 1px solid var(--border); z-index: 10000; display: none; overflow: hidden; }
+.notification-dropdown.active { display: block; animation: fadeIn 0.2s ease; }
+.notif-header { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--bg); }
+.notif-header strong { color: var(--brand-green); font-size: 0.95em; }
+.notif-list { max-height: 350px; overflow-y: auto; }
+.notif-item { padding: 12px 16px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.2s; }
+.notif-item.unread { background: #e8f5e9; border-left: 4px solid var(--brand-green); }
+.notif-item:hover { background: var(--bg); }
+.notif-title { font-weight: 700; font-size: 0.88em; color: var(--dark); margin-bottom: 4px; display: flex; justify-content: space-between; }
+.notif-text { font-size: 0.82em; color: var(--gray); line-height: 1.4; }
+.notif-time { font-size: 0.7em; color: var(--light-gray); margin-top: 6px; }
+.notif-empty { padding: 30px; text-align: center; color: var(--light-gray); font-size: 0.9em; }
 
 @media (max-width:768px) {
 .header-banner, .header-content { min-height:110px; }
@@ -304,6 +278,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .album-modal-content { height: 95vh; border-radius: 12px; }
 .album-modal-header h3 { font-size: 1.1em; }
 .album-close-btn { padding: 6px 12px; font-size: 0.85em; }
+.notification-dropdown { width: 280px; right: -10px; }
 }
 @media (max-width:480px) { .group-stats-grid, .balance-stats { grid-template-columns:repeat(2,1fr); } .home-grid { grid-template-columns:1fr; } }
 </style>
@@ -342,8 +317,30 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <img class="banner-img" src="budget-banner.jpg" alt="" onerror="this.remove()">
 <div class="header-content">
 <div class="header-top">
-<div class="header-title"><h1>💰 Бюджет группы</h1><div class="header-group-label" id="headerGroupLabel"></div></div>
-<div class="header-clock"><div class="clock-time" id="clockTime">--:--:--</div><div class="clock-date" id="clockDate">...</div></div>
+  <div class="header-title">
+    <h1>💰 Бюджет группы</h1>
+    <div class="header-group-label" id="headerGroupLabel"></div>
+  </div>
+  <div style="display:flex; align-items:center; gap:10px;">
+    <!-- КОЛОКОЛЬЧИК УВЕДОМЛЕНИЙ -->
+    <div class="notification-wrapper" onclick="toggleNotifications(event)">
+      <div class="notification-bell">🔔<span class="notification-badge" id="notifBadge">0</span></div>
+      <div class="notification-dropdown" id="notifDropdown">
+        <div class="notif-header">
+          <strong>🔔 Уведомления</strong>
+          <button class="btn btn-sm btn-secondary" onclick="markAllNotificationsRead(event)" style="font-size:0.75em; padding:4px 8px; min-height:28px;">Прочитать все</button>
+        </div>
+        <div class="notif-list" id="notifList">
+          <div class="notif-empty">Загрузка...</div>
+        </div>
+      </div>
+    </div>
+    <!-- КОНЕЦ КОЛОКОЛЬЧИКА -->
+    <div class="header-clock">
+      <div class="clock-time" id="clockTime">--:--:--</div>
+      <div class="clock-date" id="clockDate">...</div>
+    </div>
+  </div>
 </div>
 <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:8px;flex-wrap:wrap;">
 <div class="current-user-badge" id="currentUserBadge" style="display:none;"><span>👤</span><span id="currentUserName"></span><span class="role-badge-header" id="currentUserRole"></span></div>
@@ -546,6 +543,10 @@ let publicConfig = { groups: [], maintenanceMode: false, protected: false };
 let messagesFilter = 'all';
 let groupAlbums = [];
 
+// ===== ПЕРЕМЕННЫЕ ДЛЯ УВЕДОМЛЕНИЙ =====
+let currentNotifications = [];
+let notifUnsubscribe = null;
+
 function updateClock() {
   const now = new Date();
   document.getElementById('clockDate').textContent = `${WEEKDAY_NAMES[now.getDay()]}, ${now.getDate()} ${MONTH_NAMES[now.getMonth()]}`;
@@ -571,7 +572,12 @@ function closeModal(id) { document.getElementById(id).classList.remove('active')
 function showSaveIndicator() { const i = document.getElementById('saveIndicator'); i.classList.add('show'); setTimeout(() => i.classList.remove('show'), 2000); }
 function ageWord(n) { const m10 = n % 10, m100 = n % 100; if (m10 === 1 && m100 !== 11) return n + ' год'; if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return n + ' года'; return n + ' лет'; }
 function formatDateRu(d) { if (!d) return ''; const p = d.split('-').map(Number); if (p.length < 3) return d; return `${p[2]} ${MONTH_NAMES[p[1]-1]} ${p[0]}`; }
-function formatDateTime(iso) { if (!iso) return ''; const d = new Date(iso); return d.toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }); }
+function formatDateTime(iso) { 
+  if (!iso) return ''; 
+  // Поддержка как ISO строк, так и Firebase Timestamp
+  const d = iso.toDate ? iso.toDate() : new Date(iso);
+  return d.toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }); 
+}
 function isPastDate(d) { if (!d) return false; const p = d.split('-').map(Number); if (p.length < 3) return false; const t = new Date(); t.setHours(0,0,0,0); return new Date(p[0], p[1]-1, p[2]) < t; }
 function getUpcomingBirthdays() {
   const today = new Date(); const t0 = new Date(today.getFullYear(), today.getMonth(), today.getDate());
@@ -599,52 +605,30 @@ async function loadGroupAlbums() {
   groupAlbums = [];
   try {
     const snap = await db.collection('albums').where('groupId', '==', currentGroupId).get();
-    snap.docs.forEach(doc => {
-      groupAlbums.push({ id: doc.id, ...doc.data() });
-    });
-  } catch(e) {
-    console.error('Ошибка загрузки альбомов:', e);
-  }
+    snap.docs.forEach(doc => { groupAlbums.push({ id: doc.id, ...doc.data() }); });
+  } catch(e) { console.error('Ошибка загрузки альбомов:', e); }
 }
 
 async function loadAllAlbums() {
   let allAlbums = [];
   try {
     const snap = await db.collection('albums').get();
-    snap.docs.forEach(doc => {
-      allAlbums.push({ id: doc.id, ...doc.data() });
-    });
-  } catch(e) {
-    console.error('Ошибка загрузки всех альбомов:', e);
-  }
+    snap.docs.forEach(doc => { allAlbums.push({ id: doc.id, ...doc.data() }); });
+  } catch(e) { console.error('Ошибка загрузки всех альбомов:', e); }
   return allAlbums;
 }
 
 async function createAlbum(groupId, title, fileName) {
   try {
-    await db.collection('albums').add({
-      groupId: groupId,
-      title: title,
-      fileName: fileName,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    await db.collection('albums').add({ groupId: groupId, title: title, fileName: fileName, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
     return true;
-  } catch(e) {
-    console.error('Ошибка создания альбома:', e);
-    return false;
-  }
+  } catch(e) { console.error('Ошибка создания альбома:', e); return false; }
 }
 
 async function deleteAlbum(albumId) {
   if (!confirm('Удалить этот фотоальбом?')) return;
-  try {
-    await db.collection('albums').doc(albumId).delete();
-    alert('✅ Альбом удалён!');
-    return true;
-  } catch(e) {
-    alert('❌ Ошибка: ' + e.message);
-    return false;
-  }
+  try { await db.collection('albums').doc(albumId).delete(); alert('✅ Альбом удалён!'); return true; }
+  catch(e) { alert('❌ Ошибка: ' + e.message); return false; }
 }
 
 async function loadFromFirebase() {
@@ -779,12 +763,19 @@ function enterApp() {
   renderAll();
   loadGroupAlbums();
   if (currentRole === 'owner') loadOwnerMessages();
+  
+  // ЗАПУСК СЛУШАТЕЛЯ УВЕДОМЛЕНИЙ ПРИ ВХОДЕ
+  startNotificationListener();
 }
 
 async function doLogout() {
   if (!confirm('Выйти?')) return;
   currentRole = null; currentUserId = null; currentUserName = null;
   localStorage.removeItem('parentBudgetSession');
+  
+  // ОСТАНОВКА СЛУШАТЕЛЯ УВЕДОМЛЕНИЙ ПРИ ВЫХОДЕ
+  if (notifUnsubscribe) { notifUnsubscribe(); notifUnsubscribe = null; }
+  
   if (protectionEnabled) await auth.signOut();
   document.getElementById('appHeader').style.display = 'none';
   document.getElementById('topNav').style.display = 'none';
@@ -828,6 +819,9 @@ async function sendGuestMessage() {
   const msg = { senderName: name || 'Неизвестно', senderPhone: phone || '', groupId, subject: subject || 'Сообщение с экрана входа', text, date: new Date().toISOString(), status: 'new', read: false, fromGuest: true };
   try {
     await db.collection('messages').add(msg);
+    // ОТПРАВКА УВЕДОМЛЕНИЯ ВЛАДЕЛЬЦУ
+    await sendNotification('💬 Новое сообщение с сайта', `${name || 'Гость'}: ${subject || 'Без темы'}`, 'owner', 'all');
+    
     document.getElementById('guestContactName').value = '';
     document.getElementById('guestContactPhone').value = '';
     document.getElementById('guestContactSubject').value = '';
@@ -959,39 +953,25 @@ function renderGroup() {
   </div>`;
   
   c.innerHTML = html;
-  
-  loadGroupAlbums().then(() => {
-    renderGroupAlbums();
-  });
+  loadGroupAlbums().then(() => { renderGroupAlbums(); });
 }
 
 function renderGroupAlbums() {
   const grid = document.getElementById('groupAlbumsGrid');
   if (!grid) return;
-  
-  if (groupAlbums.length === 0) {
-    grid.innerHTML = '<p style="color:var(--gray);grid-column:1/-1;text-align:center;padding:20px;">Фотоальбомы пока не добавлены</p>';
-    return;
-  }
-  
+  if (groupAlbums.length === 0) { grid.innerHTML = '<p style="color:var(--gray);grid-column:1/-1;text-align:center;padding:20px;">Фотоальбомы пока не добавлены</p>'; return; }
   const g = getGroup(currentGroupId);
   const folder = g ? `photos/group_${g.number}/` : 'photos/';
-  
   grid.innerHTML = '';
   groupAlbums.forEach(album => {
     const card = document.createElement('div');
     card.className = 'album-card';
     card.onclick = () => openAlbumModal(album.title, folder + album.fileName);
-    card.innerHTML = `
-      <div class="album-icon">📷</div>
-      <div class="album-title">${escapeHtml(album.title)}</div>
-      <div class="album-file">${escapeHtml(album.fileName)}</div>
-    `;
+    card.innerHTML = `<div class="album-icon">📷</div><div class="album-title">${escapeHtml(album.title)}</div><div class="album-file">${escapeHtml(album.fileName)}</div>`;
     grid.appendChild(card);
   });
 }
 
-// ===== ФУНКЦИИ ДЛЯ МОДАЛЬНОГО ОКНА ФОТОАЛЬБОМА =====
 function openAlbumModal(title, url) {
   document.getElementById('albumModalTitle').textContent = title;
   document.getElementById('albumFrame').src = url;
@@ -1005,19 +985,8 @@ function closeAlbumModal() {
   document.body.style.overflow = '';
 }
 
-// Закрытие по Escape
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') {
-    closeAlbumModal();
-  }
-});
-
-// Закрытие при клике вне модального окна
-document.getElementById('albumModal').addEventListener('click', function(e) {
-  if (e.target === this) {
-    closeAlbumModal();
-  }
-});
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAlbumModal(); });
+document.getElementById('albumModal').addEventListener('click', function(e) { if (e.target === this) closeAlbumModal(); });
 
 function renderNews() { const c = document.getElementById('newsList'); if (!data.news.length) { c.innerHTML = '<div class="news-empty">Новостей пока нет</div>'; return; } c.innerHTML = ''; [...data.news].sort((a,b) => new Date(b.date||0) - new Date(a.date||0)).forEach(n => { if (!n.title && !n.text) return; const d = n.date ? new Date(n.date).toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) : ''; c.innerHTML += `<div class="news-card${n.urgent?' urgent':''}"><div class="news-date">${n.urgent?'🔴 СРОЧНО • ':''}${d}</div><div class="news-title">${escapeHtml(n.title||'')}</div><div class="news-text">${escapeHtml(n.text||'')}</div></div>`; }); }
 function renderContributions() { const m = getCurrentMonth(); let html = '', tp = 0, te = 0, pc = 0, tc = 0; html += '<table class="data-table"><thead><tr><th style="width:40px">№</th><th>ФИО</th><th style="width:120px">Сумма, ₽</th><th style="width:80px">Статус</th></tr></thead><tbody>'; m.students.forEach((s,i) => { if (!s.name && !s.amount) return; tc++; te += Number(s.amount||0); if (s.paid) { pc++; tp += Number(s.amount||0); } html += `<tr><td>${i+1}</td><td>${escapeHtml(s.name)||'—'}</td><td class="amount">${s.amount?formatMoney(s.amount)+' ₽':'—'}</td><td class="${s.paid?'status-paid':'status-unpaid'}">${s.paid?'✔':'✘'}</td></tr>`; }); if (tc > 0) html += `<tr class="totals-row"><td colspan="2"><b>ИТОГО:</b> сдали ${pc} из ${tc}</td><td class="amount"><b>${formatMoney(tp)} ₽</b></td><td><small>ожидалось ${formatMoney(te)} ₽</small></td></tr>`; else html += '<tr><td colspan="4" style="text-align:center;color:var(--light-gray);padding:20px">Нет данных</td></tr>'; html += '</tbody></table>'; document.getElementById('contributionsTable').innerHTML = html; }
@@ -1029,52 +998,29 @@ async function renderAdminAlbums() {
   const container = document.getElementById('admin-albums');
   const g = getGroup(currentGroupId);
   const folder = g ? `photos/group_${g.number}/` : 'photos/';
-  
   container.innerHTML = `
     <div class="admin-card">
       <div class="admin-card-title">➕ Создать фотоальбом</div>
       <div class="hint">💡 Сначала загрузите HTML-файл галереи в папку <code>${folder}</code> на хостинге, затем укажите его имя ниже.</div>
-      <div class="form-group">
-        <label>Название альбома</label>
-        <input type="text" id="newAlbumTitle" placeholder="Например: Новый год 2026">
-      </div>
-      <div class="form-group">
-        <label>Имя файла (HTML)</label>
-        <input type="text" id="newAlbumFile" placeholder="Например: gallery1.html">
-      </div>
+      <div class="form-group"><label>Название альбома</label><input type="text" id="newAlbumTitle" placeholder="Например: Новый год 2026"></div>
+      <div class="form-group"><label>Имя файла (HTML)</label><input type="text" id="newAlbumFile" placeholder="Например: gallery1.html"></div>
       <button class="btn btn-success btn-block" onclick="adminCreateAlbum()">📸 Создать альбом</button>
     </div>
-    
     <div class="admin-card">
       <div class="admin-card-title">📋 Альбомы группы ${escapeHtml(g ? groupLabel(g) : '')}</div>
       <div id="adminAlbumsList">Загрузка...</div>
-    </div>
-  `;
-  
-  await loadGroupAlbums();
-  renderAdminAlbumsList();
+    </div>`;
+  await loadGroupAlbums(); renderAdminAlbumsList();
 }
 
 function renderAdminAlbumsList() {
   const list = document.getElementById('adminAlbumsList');
   if (!list) return;
-  
-  if (groupAlbums.length === 0) {
-    list.innerHTML = '<p style="color:var(--gray);text-align:center;padding:20px;">Альбомов пока нет</p>';
-    return;
-  }
-  
+  if (groupAlbums.length === 0) { list.innerHTML = '<p style="color:var(--gray);text-align:center;padding:20px;">Альбомов пока нет</p>'; return; }
   list.innerHTML = '';
   groupAlbums.forEach(album => {
-    const div = document.createElement('div');
-    div.className = 'album-admin-item';
-    div.innerHTML = `
-      <div class="album-admin-info">
-        <div class="album-admin-title">${escapeHtml(album.title)}</div>
-        <div class="album-admin-file">📄 ${escapeHtml(album.fileName)}</div>
-      </div>
-      <button class="btn btn-danger btn-sm" onclick="adminDeleteAlbum('${album.id}')"> Удалить</button>
-    `;
+    const div = document.createElement('div'); div.className = 'album-admin-item';
+    div.innerHTML = `<div class="album-admin-info"><div class="album-admin-title">${escapeHtml(album.title)}</div><div class="album-admin-file">📄 ${escapeHtml(album.fileName)}</div></div><button class="btn btn-danger btn-sm" onclick="adminDeleteAlbum('${album.id}')"> Удалить</button>`;
     list.appendChild(div);
   });
 }
@@ -1082,95 +1028,52 @@ function renderAdminAlbumsList() {
 async function adminCreateAlbum() {
   const title = document.getElementById('newAlbumTitle').value.trim();
   const fileName = document.getElementById('newAlbumFile').value.trim();
-  
   if (!title) { alert('Введите название альбома'); return; }
   if (!fileName) { alert('Введите имя файла'); return; }
   if (!fileName.endsWith('.html')) { alert('Имя файла должно заканчиваться на .html'); return; }
-  
   const success = await createAlbum(currentGroupId, title, fileName);
   if (success) {
-    document.getElementById('newAlbumTitle').value = '';
-    document.getElementById('newAlbumFile').value = '';
-    alert('✅ Альбом создан!');
-    await loadGroupAlbums();
-    renderAdminAlbumsList();
-  } else {
-    alert('❌ Ошибка создания альбома');
-  }
+    document.getElementById('newAlbumTitle').value = ''; document.getElementById('newAlbumFile').value = '';
+    alert('✅ Альбом создан!'); await loadGroupAlbums(); renderAdminAlbumsList();
+  } else { alert('❌ Ошибка создания альбома'); }
 }
 
 async function adminDeleteAlbum(albumId) {
   const success = await deleteAlbum(albumId);
-  if (success) {
-    await loadGroupAlbums();
-    renderAdminAlbumsList();
-  }
+  if (success) { await loadGroupAlbums(); renderAdminAlbumsList(); }
 }
 
 async function renderOwnerAlbums() {
   const container = document.getElementById('owner-albums');
   const allAlbums = await loadAllAlbums();
-  
   let html = `
     <div class="admin-card">
       <div class="admin-card-title"> Создать фотоальбом для группы</div>
       <div class="hint">💡 Владелец может создавать альбомы для любой группы. Сначала загрузите HTML-файл в папку группы на хостинге.</div>
-      <div class="form-group">
-        <label>Группа</label>
-        <select id="ownerAlbumGroup"></select>
-      </div>
-      <div class="form-group">
-        <label>Название альбома</label>
-        <input type="text" id="ownerAlbumTitle" placeholder="Например: Выпускной 2026">
-      </div>
-      <div class="form-group">
-        <label>Имя файла (HTML)</label>
-        <input type="text" id="ownerAlbumFile" placeholder="Например: gallery2.html">
-      </div>
+      <div class="form-group"><label>Группа</label><select id="ownerAlbumGroup"></select></div>
+      <div class="form-group"><label>Название альбома</label><input type="text" id="ownerAlbumTitle" placeholder="Например: Выпускной 2026"></div>
+      <div class="form-group"><label>Имя файла (HTML)</label><input type="text" id="ownerAlbumFile" placeholder="Например: gallery2.html"></div>
       <button class="btn btn-success btn-block" onclick="ownerCreateAlbum()">📸 Создать альбом</button>
     </div>
-    
     <div class="admin-card">
       <div class="admin-card-title">📋 Все альбомы всех групп</div>
       <div id="ownerAlbumsList">Загрузка...</div>
-    </div>
-  `;
-  
+    </div>`;
   container.innerHTML = html;
-  
   const groupSelect = document.getElementById('ownerAlbumGroup');
-  app.groups.forEach(g => {
-    const option = document.createElement('option');
-    option.value = g.id;
-    option.textContent = groupLabel(g);
-    groupSelect.appendChild(option);
-  });
-  
+  app.groups.forEach(g => { const option = document.createElement('option'); option.value = g.id; option.textContent = groupLabel(g); groupSelect.appendChild(option); });
   renderOwnerAlbumsList(allAlbums);
 }
 
 function renderOwnerAlbumsList(allAlbums) {
   const list = document.getElementById('ownerAlbumsList');
   if (!list) return;
-  
-  if (allAlbums.length === 0) {
-    list.innerHTML = '<p style="color:var(--gray);text-align:center;padding:20px;">Альбомов пока нет</p>';
-    return;
-  }
-  
+  if (allAlbums.length === 0) { list.innerHTML = '<p style="color:var(--gray);text-align:center;padding:20px;">Альбомов пока нет</p>'; return; }
   list.innerHTML = '';
   allAlbums.forEach(album => {
     const g = getGroup(album.groupId);
-    const div = document.createElement('div');
-    div.className = 'album-admin-item';
-    div.innerHTML = `
-      <div class="album-admin-info">
-        <div class="album-admin-title">${escapeHtml(album.title)}</div>
-        <div class="album-admin-file">📄 ${escapeHtml(album.fileName)}</div>
-        <div class="album-admin-group">🏫 ${g ? groupLabel(g) : 'Группа не найдена'}</div>
-      </div>
-      <button class="btn btn-danger btn-sm" onclick="ownerDeleteAlbum('${album.id}')">🗑 Удалить</button>
-    `;
+    const div = document.createElement('div'); div.className = 'album-admin-item';
+    div.innerHTML = `<div class="album-admin-info"><div class="album-admin-title">${escapeHtml(album.title)}</div><div class="album-admin-file">📄 ${escapeHtml(album.fileName)}</div><div class="album-admin-group">🏫 ${g ? groupLabel(g) : 'Группа не найдена'}</div></div><button class="btn btn-danger btn-sm" onclick="ownerDeleteAlbum('${album.id}')">🗑 Удалить</button>`;
     list.appendChild(div);
   });
 }
@@ -1179,28 +1082,20 @@ async function ownerCreateAlbum() {
   const groupId = document.getElementById('ownerAlbumGroup').value;
   const title = document.getElementById('ownerAlbumTitle').value.trim();
   const fileName = document.getElementById('ownerAlbumFile').value.trim();
-  
   if (!groupId) { alert('Выберите группу'); return; }
   if (!title) { alert('Введите название альбома'); return; }
   if (!fileName) { alert('Введите имя файла'); return; }
   if (!fileName.endsWith('.html')) { alert('Имя файла должно заканчиваться на .html'); return; }
-  
   const success = await createAlbum(groupId, title, fileName);
   if (success) {
-    document.getElementById('ownerAlbumTitle').value = '';
-    document.getElementById('ownerAlbumFile').value = '';
-    alert('✅ Альбом создан!');
-    await renderOwnerAlbums();
-  } else {
-    alert('❌ Ошибка создания альбома');
-  }
+    document.getElementById('ownerAlbumTitle').value = ''; document.getElementById('ownerAlbumFile').value = '';
+    alert('✅ Альбом создан!'); await renderOwnerAlbums();
+  } else { alert('❌ Ошибка создания альбома'); }
 }
 
 async function ownerDeleteAlbum(albumId) {
   const success = await deleteAlbum(albumId);
-  if (success) {
-    await renderOwnerAlbums();
-  }
+  if (success) { await renderOwnerAlbums(); }
 }
 
 async function sendMessage() {
@@ -1208,25 +1103,18 @@ async function sendMessage() {
   const text = document.getElementById('msgText').value.trim();
   if (!text) { alert('Введите текст сообщения'); return; }
   const msg = {
-    senderId: currentUserId,
-    senderName: currentUserName,
+    senderId: currentUserId, senderName: currentUserName,
     senderPhone: app.users.find(u => u.id === currentUserId)?.phone || '',
-    groupId: currentGroupId,
-    subject,
-    text,
-    date: new Date().toISOString(),
-    status: 'new',
-    read: false
+    groupId: currentGroupId, subject, text, date: new Date().toISOString(), status: 'new', read: false
   };
   try {
     await db.collection('messages').add(msg);
-    document.getElementById('msgSubject').value = '';
-    document.getElementById('msgText').value = '';
-    alert('✅ Сообщение отправлено владельцу!');
-    renderMyMessages();
-  } catch(e) {
-    alert('❌ Ошибка отправки: ' + e.message);
-  }
+    // ОТПРАВКА УВЕДОМЛЕНИЯ ВЛАДЕЛЬЦУ О НОВОМ СООБЩЕНИИ
+    await sendNotification('💬 Новое сообщение', `${currentUserName}: ${subject || 'Без темы'}`, 'owner', currentGroupId);
+    
+    document.getElementById('msgSubject').value = ''; document.getElementById('msgText').value = '';
+    alert('✅ Сообщение отправлено владельцу!'); renderMyMessages();
+  } catch(e) { alert('❌ Ошибка отправки: ' + e.message); }
 }
 
 async function renderMyMessages() {
@@ -1234,34 +1122,21 @@ async function renderMyMessages() {
   list.innerHTML = '<p style="color:var(--gray)">Загрузка...</p>';
   try {
     const snap = await db.collection('messages').where('senderId', '==', currentUserId).orderBy('date', 'desc').get();
-    if (snap.empty) {
-      list.innerHTML = '<div class="news-empty">У вас пока нет обращений</div>';
-      return;
-    }
+    if (snap.empty) { list.innerHTML = '<div class="news-empty">У вас пока нет обращений</div>'; return; }
     let html = '';
     snap.docs.forEach(doc => {
       const m = doc.data();
       const statusClass = m.status === 'new' ? 'new' : 'replied';
       const statusText = m.status === 'new' ? '🟡 Ожидает ответа' : ' Отвечено';
       html += `<div class="message-card ${statusClass}">
-        <div class="message-header">
-          <div class="message-meta">
-            ${m.subject ? `<div class="message-subject">${escapeHtml(m.subject)}</div>` : ''}
-            <div class="message-date">${formatDateTime(m.date)}</div>
-          </div>
-          <span class="message-status ${statusClass}">${statusText}</span>
-        </div>
+        <div class="message-header"><div class="message-meta">${m.subject ? `<div class="message-subject">${escapeHtml(m.subject)}</div>` : ''}<div class="message-date">${formatDateTime(m.date)}</div></div>
+        <span class="message-status ${statusClass}">${statusText}</span></div>
         <div class="message-text">${escapeHtml(m.text)}</div>
-        ${m.reply ? `<div class="message-reply">
-          <div class="message-reply-header">💬 Ответ владельца (${formatDateTime(m.reply.date)})</div>
-          <div class="message-reply-text">${escapeHtml(m.reply.text)}</div>
-        </div>` : ''}
+        ${m.reply ? `<div class="message-reply"><div class="message-reply-header">💬 Ответ владельца (${formatDateTime(m.reply.date)})</div><div class="message-reply-text">${escapeHtml(m.reply.text)}</div></div>` : ''}
       </div>`;
     });
     list.innerHTML = html;
-  } catch(e) {
-    list.innerHTML = '<p style="color:var(--danger)">Ошибка загрузки: ' + e.message + '</p>';
-  }
+  } catch(e) { list.innerHTML = '<p style="color:var(--danger)">Ошибка загрузки: ' + e.message + '</p>'; }
 }
 
 async function loadOwnerMessages() {
@@ -1269,24 +1144,14 @@ async function loadOwnerMessages() {
   container.innerHTML = '<p style="color:var(--gray)">Загрузка сообщений...</p>';
   try {
     const snap = await db.collection('messages').orderBy('date', 'desc').get();
-    if (snap.empty) {
-      container.innerHTML = '<div class="news-empty">Сообщений пока нет</div>';
-      document.getElementById('ownerMsgCount').style.display = 'none';
-      return;
-    }
+    if (snap.empty) { container.innerHTML = '<div class="news-empty">Сообщений пока нет</div>'; document.getElementById('ownerMsgCount').style.display = 'none'; return; }
     const messages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     const newCount = messages.filter(m => m.status === 'new').length;
     const countBadge = document.getElementById('ownerMsgCount');
-    if (newCount > 0) {
-      countBadge.textContent = newCount;
-      countBadge.style.display = 'inline';
-    } else {
-      countBadge.style.display = 'none';
-    }
+    if (newCount > 0) { countBadge.textContent = newCount; countBadge.style.display = 'inline'; }
+    else { countBadge.style.display = 'none'; }
     renderOwnerMessages(messages);
-  } catch(e) {
-    container.innerHTML = '<p style="color:var(--danger)">Ошибка загрузки: ' + e.message + '</p>';
-  }
+  } catch(e) { container.innerHTML = '<p style="color:var(--danger)">Ошибка загрузки: ' + e.message + '</p>'; }
 }
 
 function renderOwnerMessages(messages) {
@@ -1302,59 +1167,34 @@ function renderOwnerMessages(messages) {
     <button class="filter-btn ${messagesFilter === 'replied' ? 'active' : ''}" onclick="setMessagesFilter('replied')">💬 Отвеченные</button>
   </div>`;
   
-  if (!filtered.length) {
-    html += '<div class="news-empty">Нет сообщений по выбранному фильтру</div>';
-  } else {
+  if (!filtered.length) { html += '<div class="news-empty">Нет сообщений по выбранному фильтру</div>'; }
+  else {
     filtered.forEach(m => {
       const g = getGroup(m.groupId);
       const statusClass = m.status === 'new' ? 'new' : 'replied';
       html += `<div class="message-card ${statusClass}" id="msg-${m.id}">
-        <div class="message-header">
-          <div class="message-meta">
-            <div class="message-sender">${escapeHtml(m.senderName || 'Без имени')}</div>
-            <div class="message-group"> ${g ? groupLabel(g) : 'Группа не найдена'} · 📞 ${escapeHtml(m.senderPhone || 'нет телефона')}</div>
-            <div class="message-date">${formatDateTime(m.date)}</div>
-          </div>
-          <span class="message-status ${statusClass}">${m.status === 'new' ? '🆕 Новое' : '✅ Отвечено'}</span>
-        </div>
+        <div class="message-header"><div class="message-meta"><div class="message-sender">${escapeHtml(m.senderName || 'Без имени')}</div><div class="message-group"> ${g ? groupLabel(g) : 'Группа не найдена'} · 📞 ${escapeHtml(m.senderPhone || 'нет телефона')}</div><div class="message-date">${formatDateTime(m.date)}</div></div>
+        <span class="message-status ${statusClass}">${m.status === 'new' ? '🆕 Новое' : '✅ Отвечено'}</span></div>
         ${m.subject ? `<div class="message-subject">${escapeHtml(m.subject)}</div>` : ''}
         <div class="message-text">${escapeHtml(m.text)}</div>
-        ${m.reply ? `<div class="message-reply">
-          <div class="message-reply-header">💬 Ваш ответ (${formatDateTime(m.reply.date)})</div>
-          <div class="message-reply-text">${escapeHtml(m.reply.text)}</div>
-        </div>` : `<div class="reply-form">
-          <textarea id="reply-${m.id}" placeholder="Введите ответ..."></textarea>
-          <button class="btn btn-success btn-sm" onclick="sendReply('${m.id}')">📨 Ответить</button>
-        </div>`}
-        <div class="message-actions">
-          <button class="btn btn-danger btn-sm" onclick="deleteChat('${m.id}')">🗑 Удалить чат</button>
-        </div>
+        ${m.reply ? `<div class="message-reply"><div class="message-reply-header">💬 Ваш ответ (${formatDateTime(m.reply.date)})</div><div class="message-reply-text">${escapeHtml(m.reply.text)}</div></div>` : `<div class="reply-form"><textarea id="reply-${m.id}" placeholder="Введите ответ..."></textarea><button class="btn btn-success btn-sm" onclick="sendReply('${m.id}')">📨 Ответить</button></div>`}
+        <div class="message-actions"><button class="btn btn-danger btn-sm" onclick="deleteChat('${m.id}')">🗑 Удалить чат</button></div>
       </div>`;
     });
   }
   container.innerHTML = html;
 }
 
-function setMessagesFilter(filter) {
-  messagesFilter = filter;
-  loadOwnerMessages();
-}
+function setMessagesFilter(filter) { messagesFilter = filter; loadOwnerMessages(); }
 
 async function sendReply(msgId) {
   const textarea = document.getElementById('reply-' + msgId);
   const text = textarea.value.trim();
   if (!text) { alert('Введите текст ответа'); return; }
   try {
-    await db.collection('messages').doc(msgId).update({
-      reply: { text, date: new Date().toISOString() },
-      status: 'replied',
-      read: true
-    });
-    alert('✅ Ответ отправлен!');
-    loadOwnerMessages();
-  } catch(e) {
-    alert(' Ошибка: ' + e.message);
-  }
+    await db.collection('messages').doc(msgId).update({ reply: { text, date: new Date().toISOString() }, status: 'replied', read: true });
+    alert('✅ Ответ отправлен!'); loadOwnerMessages();
+  } catch(e) { alert(' Ошибка: ' + e.message); }
 }
 
 async function deleteChat(msgId) {
@@ -1366,11 +1206,8 @@ async function deleteChat(msgId) {
     const batch = db.batch();
     snap.docs.forEach(doc => batch.delete(doc.ref));
     await batch.commit();
-    alert('✅ Чат удалён!');
-    loadOwnerMessages();
-  } catch(e) {
-    alert('❌ Ошибка: ' + e.message);
-  }
+    alert('✅ Чат удалён!'); loadOwnerMessages();
+  } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
 
 function renderAdmin() { fillChildrenDatalist(); renderAdminSummary(); renderAdminGroupInfo(); renderAdminPeople(); renderAdminStudents(); renderAdminExpenses(); renderAdminNews(); renderAdminMonths(); renderAdminAccess(); }
@@ -1621,6 +1458,14 @@ async function saveAll() {
   collectAdminData();
   const btn = document.getElementById('saveBtn');
   if (btn) { btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Сохранение...'; }
+  
+  // Проверка на срочные новости для отправки уведомления
+  const urgentNews = data.news.filter(n => n.urgent && !n.notified);
+  if (urgentNews.length > 0) {
+    await sendNotification('🔴 СРОЧНОЕ ОБЪЯВЛЕНИЕ', urgentNews[0].title, 'member', currentGroupId);
+    urgentNews.forEach(n => n.notified = true); // Помечаем, чтобы не спамить
+  }
+
   await saveToFirebase();
   if (protectionEnabled) {
     await db.collection('public').doc('config').set({
@@ -1647,10 +1492,7 @@ async function renameMonth(id){const m=data.months.find(x=>x.id===id);if(!m)retu
 async function deleteMonth(id){if(data.months.length<=1){alert('Нельзя удалить последний');return;}const m=data.months.find(x=>x.id===id);if(!confirm('Удалить "'+m.name+'"?'))return;collectAdminData();data.months=data.months.filter(x=>x.id!==id);if(currentMonthId===id)currentMonthId=data.months[0].id;data.currentMonthId=currentMonthId;await saveToFirebase();renderAdminMonths();renderMonthSelector();renderAll();clearDirty();}
 async function archiveMonth(){if(!confirm('Архивировать текущий месяц?'))return;collectAdminData();const m=getCurrentMonth();const bal=calcBalance(m);data.archive.push({...m,students:[...m.students],expenses:[...m.expenses]});data.months=data.months.filter(x=>x.id!==m.id);const nm=prompt('Название нового месяца:',new Date().toLocaleString('ru',{month:'long',year:'numeric'}));if(!nm)return;const nmo={id:'month_'+Date.now(),name:nm,prevBalance:bal,additionalIncome:0,students:[],expenses:[]};data.months.push(nmo);currentMonthId=nmo.id;data.currentMonthId=nmo.id;await saveToFirebase();renderAll();renderAdminMonths();renderMonthSelector();clearDirty();alert('✅ Архивировано. Остаток '+formatMoney(bal)+' ₽ перенесён.');}
 
-function renderOwner() {
-  renderOwnerGroups();
-  renderOwnerSettings();
-}
+function renderOwner() { renderOwnerGroups(); renderOwnerSettings(); }
 
 function renderOwnerGroups() {
   let groupsHtml = '';
@@ -1698,6 +1540,132 @@ async function resetAllData(){if(!confirm('Удалить ВСЕ данные?')
 
 document.querySelectorAll('.modal-overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('active'); }));
 if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('./service-worker.js').catch(() => {}); }); }
+
+// ===== ЛОГИКА УВЕДОМЛЕНИЙ =====
+async function sendNotification(title, text, targetRole = 'all', groupId = 'all') {
+  try {
+    await db.collection('notifications').add({
+      title: title, text: text, targetRole: targetRole, groupId: groupId,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(), readBy: []
+    });
+  } catch (e) { console.error('Ошибка отправки уведомления:', e); }
+}
+
+function startNotificationListener() {
+  if (notifUnsubscribe) notifUnsubscribe();
+  if (!currentRole) return;
+
+  // Владелец видит всё, админы и родители видят 'all' или свою роль
+  const rolesToQuery = currentRole === 'owner' ? ['all', 'owner', 'admin', 'member'] : ['all', currentRole];
+  
+  notifUnsubscribe = db.collection('notifications')
+    .where('targetRole', 'in', rolesToQuery)
+    .orderBy('createdAt', 'desc')
+    .limit(50)
+    .onSnapshot(snapshot => {
+      currentNotifications = [];
+      let unreadCount = 0;
+      const viewerId = currentUserId || 'owner';
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (data.groupId !== 'all' && data.groupId !== currentGroupId && currentRole !== 'owner') return;
+
+        const isRead = data.readBy && data.readBy.includes(viewerId);
+        if (!isRead) unreadCount++;
+        
+        currentNotifications.push({ 
+          id: doc.id, ...data, isRead,
+          timeStr: data.createdAt ? formatDateTime(data.createdAt.toDate()) : 'Только что' 
+        });
+      });
+
+      updateNotifBadge(unreadCount);
+      renderNotifications();
+    }, error => {
+      console.error('Ошибка слушателя уведомлений:', error);
+      // Если ошибка связана с отсутствием индекса, Firestore выведет ссылку для его создания
+    });
+}
+
+function updateNotifBadge(count) {
+  const badge = document.getElementById('notifBadge');
+  if (count > 0) {
+    badge.textContent = count > 9 ? '9+' : count;
+    badge.classList.add('show');
+  } else {
+    badge.classList.remove('show');
+  }
+}
+
+function renderNotifications() {
+  const list = document.getElementById('notifList');
+  if (!list) return;
+  if (currentNotifications.length === 0) {
+    list.innerHTML = '<div class="notif-empty">Нет новых уведомлений 🎉</div>';
+    return;
+  }
+  list.innerHTML = currentNotifications.map(n => `
+    <div class="notif-item ${n.isRead ? '' : 'unread'}" onclick="markNotificationAsRead('${n.id}', event)">
+      <div class="notif-title">
+        <span>${escapeHtml(n.title)}</span>
+        ${!n.isRead ? '<span style="color:var(--brand-green);font-size:1.2em;">●</span>' : ''}
+      </div>
+      <div class="notif-text">${escapeHtml(n.text)}</div>
+      <div class="notif-time">${n.timeStr}</div>
+    </div>
+  `).join('');
+}
+
+function toggleNotifications(event) {
+  event.stopPropagation();
+  const dropdown = document.getElementById('notifDropdown');
+  dropdown.classList.toggle('active');
+}
+
+document.addEventListener('click', function(e) {
+  const wrapper = document.querySelector('.notification-wrapper');
+  if (wrapper && !wrapper.contains(e.target)) {
+    const dropdown = document.getElementById('notifDropdown');
+    if (dropdown) dropdown.classList.remove('active');
+  }
+});
+
+async function markNotificationAsRead(notifId, event) {
+  if(event) event.stopPropagation();
+  const viewerId = currentUserId || 'owner';
+  const notif = currentNotifications.find(n => n.id === notifId);
+  if (notif && !notif.isRead) {
+    try {
+      await db.collection('notifications').doc(notifId).update({
+        readBy: firebase.firestore.FieldValue.arrayUnion(viewerId)
+      });
+      notif.isRead = true;
+      renderNotifications();
+      const unreadCount = currentNotifications.filter(n => !n.isRead).length;
+      updateNotifBadge(unreadCount);
+    } catch (e) { console.error('Ошибка отметки прочитанным:', e); }
+  }
+}
+
+async function markAllNotificationsRead(event) {
+  if(event) event.stopPropagation();
+  const viewerId = currentUserId || 'owner';
+  const unreadNotifs = currentNotifications.filter(n => !n.isRead);
+  if (unreadNotifs.length === 0) return;
+  try {
+    const batch = db.batch();
+    unreadNotifs.forEach(n => {
+      const ref = db.collection('notifications').doc(n.id);
+      batch.update(ref, { readBy: firebase.firestore.FieldValue.arrayUnion(viewerId) });
+    });
+    await batch.commit();
+    currentNotifications.forEach(n => n.isRead = true);
+    renderNotifications();
+    updateNotifBadge(0);
+  } catch (e) { console.error('Ошибка массового прочтения:', e); }
+}
+
 loadFromFirebase();
 </script>
 </body>
