@@ -37,7 +37,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .btn-request { width:100%; padding:12px; background:var(--bg); border:2px solid var(--border); color:var(--brand-green); border-radius:var(--radius-sm); font-size:.9em; font-weight:600; cursor:pointer; margin-top:8px; }
 .app-header { position:relative; z-index:100; box-shadow:var(--shadow-md); }
 .header-banner { position:relative; width:100%; min-height:130px; overflow:hidden; background:linear-gradient(135deg,var(--brand-green) 0%,var(--brand-orange) 100%); }
-.header-banner::before { content:'🧸 🎨  🖍️ '; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:2.6em; opacity:.15; white-space:nowrap; letter-spacing:14px; pointer-events:none; }
+.header-banner::before { content:'🧸 🎨 🏫 🖍️ '; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:2.6em; opacity:.15; white-space:nowrap; letter-spacing:14px; pointer-events:none; }
 .banner-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.35; }
 .header-content { position:relative; z-index:2; min-height:130px; display:flex; flex-direction:column; justify-content:space-between; padding:12px 16px; gap:8px; }
 .header-top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; flex-wrap:wrap; }
@@ -198,10 +198,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .month-item-actions { display:flex; gap:6px; flex-wrap:wrap; }
 .request-card { background:var(--bg); border-radius:var(--radius-md); padding:14px; margin-bottom:10px; border-left:4px solid var(--warning); display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
 .request-card.new-request { border-left-color: var(--danger); background: #fff5f5; animation: highlightNew 2s ease; }
-@keyframes highlightNew {
-  0% { background: #ffe0e0; }
-  100% { background: var(--bg); }
-}
+@keyframes highlightNew { 0% { background: #ffe0e0; } 100% { background: var(--bg); } }
 .user-card { background:var(--bg); border-radius:var(--radius-md); padding:14px; margin-bottom:10px; border-left:4px solid var(--brand-green); display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
 .user-card.admin-u { border-left-color:var(--danger); }
 .role-badge { font-size:.7em; font-weight:700; padding:2px 8px; border-radius:10px; background:var(--brand-green); color:white; }
@@ -229,7 +226,6 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .album-icon { font-size: 3em; margin-bottom: 10px; }
 .album-title { font-size: 1.1em; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
 .album-file { font-size: 0.8em; color: var(--gray); font-family: monospace; }
-
 .album-admin-item {
   background: var(--bg); border-radius: var(--radius-md); padding: 12px; margin-bottom: 10px;
   display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
@@ -242,174 +238,50 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 
 /* ===== МОДАЛЬНОЕ ОКНО ДЛЯ ФОТОАЛЬБОМА ===== */
 .album-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.9);
-  z-index: 100000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.9); z-index: 100000;
+  display: flex; align-items: center; justify-content: center; padding: 20px;
 }
-
 .album-modal-content {
-  background: white;
-  border-radius: 16px;
-  width: 100%;
-  max-width: 1200px;
-  height: 90vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  background: white; border-radius: 16px; width: 100%; max-width: 1200px; height: 90vh;
+  display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
-
 .album-modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
+  display: flex; justify-content: space-between; align-items: center; padding: 15px 20px;
   background: linear-gradient(135deg, var(--brand-green), var(--brand-orange));
-  color: white;
-  border-radius: 16px 16px 0 0;
+  color: white; border-radius: 16px 16px 0 0;
 }
-
-.album-modal-header h3 {
-  margin: 0;
-  font-size: 1.3em;
-}
-
+.album-modal-header h3 { margin: 0; font-size: 1.3em; }
 .album-close-btn {
-  background: rgba(255,255,255,0.2);
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s;
-  font-size: 0.95em;
+  background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px;
+  border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.95em;
 }
-
-.album-close-btn:hover {
-  background: rgba(255,255,255,0.3);
-  transform: scale(1.05);
-}
-
-.album-modal-body {
-  flex: 1;
-  overflow: hidden;
-  background: #f8f9fa;
-}
-
-.album-modal-body iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
+.album-close-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
+.album-modal-body { flex: 1; overflow: hidden; background: #f8f9fa; }
+.album-modal-body iframe { width: 100%; height: 100%; border: none; }
 
 /* ===== СТИЛИ ДЛЯ УВЕДОМЛЕНИЙ ===== */
-@keyframes slideIn {
-  from { transform: translateX(400px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-@keyframes slideOut {
-  from { transform: translateX(0); opacity: 1; }
-  to { transform: translateX(400px); opacity: 0; }
-}
-
+@keyframes slideIn { from { transform: translateX(400px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(400px); opacity: 0; } }
 .toast-notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 16px 24px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  z-index: 99999;
-  animation: slideIn 0.3s ease;
-  font-weight: 600;
-  color: white;
+  position: fixed; top: 20px; right: 20px; padding: 16px 24px; border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 99999; animation: slideIn 0.3s ease;
+  font-weight: 600; color: white;
 }
-
 .toast-notification.success { background: var(--success); }
 .toast-notification.error { background: var(--danger); }
 .toast-notification.info { background: var(--info); }
 .toast-notification.warning { background: var(--warning); color: var(--dark); }
 
-.message-badge {
-  background: var(--danger);
-  color: white;
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-size: 0.7em;
-  margin-left: 4px;
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  display: none;
-  font-weight: 700;
+.message-badge, .admin-badge, .news-badge, .contribution-badge, .expense-badge {
+  padding: 2px 6px; border-radius: 10px; font-size: 0.7em; margin-left: 4px;
+  position: absolute; top: 2px; right: 2px; display: none; font-weight: 700;
 }
-
-.admin-badge {
-  background: var(--danger);
-  color: white;
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-size: 0.7em;
-  margin-left: 4px;
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  display: none;
-  font-weight: 700;
-  animation: pulseBadge 1.5s infinite;
-}
-
-.news-badge {
-  background: var(--info);
-  color: white;
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-size: 0.7em;
-  margin-left: 4px;
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  display: none;
-  font-weight: 700;
-}
-
-.contribution-badge {
-  background: var(--warning);
-  color: var(--dark);
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-size: 0.7em;
-  margin-left: 4px;
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  display: none;
-  font-weight: 700;
-  animation: pulseBadge 1.5s infinite;
-}
-
-.expense-badge {
-  background: var(--gold);
-  color: var(--dark);
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-size: 0.7em;
-  margin-left: 4px;
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  display: none;
-  font-weight: 700;
-}
+.message-badge, .admin-badge { background: var(--danger); color: white; }
+.admin-badge { animation: pulseBadge 1.5s infinite; }
+.news-badge { background: var(--info); color: white; }
+.contribution-badge { background: var(--warning); color: var(--dark); animation: pulseBadge 1.5s infinite; }
+.expense-badge { background: var(--gold); color: var(--dark); }
 
 @media (max-width:768px) {
 .header-banner, .header-content { min-height:110px; }
@@ -436,7 +308,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <div class="login-logo-icon"></div>
 <h2 style="color:var(--warning);margin-bottom:12px;">Технические работы</h2>
 <p style="color:var(--gray);margin-bottom:24px;">Сайт временно обновляется. Зайдите позже.</p>
-<button class="btn btn-secondary btn-block" onclick="openAdminLoginFromMaintenance()"> Вход для владельца</button>
+<button class="btn btn-secondary btn-block" onclick="openAdminLoginFromMaintenance()">🔐 Вход для владельца</button>
 </div>
 </div>
 
@@ -482,34 +354,29 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <button class="top-nav-btn active" onclick="showSection('home', this)"><span class="nav-icon">🏠</span><span>Главная</span></button>
 <button class="top-nav-btn" onclick="showSection('group', this)"><span class="nav-icon">🏫</span><span>Группа</span></button>
 <button class="top-nav-btn" onclick="showSection('news', this)" style="position:relative;">
-  <span class="nav-icon">📰</span>
-  <span>Новости</span>
+  <span class="nav-icon">📰</span><span>Новости</span>
   <span id="newsBadge" class="news-badge">0</span>
 </button>
 <button class="top-nav-btn" onclick="showSection('contributions', this)" style="position:relative;">
-  <span class="nav-icon">💰</span>
-  <span>Взносы</span>
+  <span class="nav-icon">💰</span><span>Взносы</span>
   <span id="contributionBadge" class="contribution-badge">!</span>
 </button>
 <button class="top-nav-btn" onclick="showSection('expenses', this)" style="position:relative;">
-  <span class="nav-icon">💸</span>
-  <span>Расходы</span>
+  <span class="nav-icon">💸</span><span>Расходы</span>
   <span id="expenseBadge" class="expense-badge">0</span>
 </button>
-<button class="top-nav-btn" onclick="showSection('committee', this)"><span class="nav-icon"></span>👥<span>Комитет</span></button>
+<button class="top-nav-btn" onclick="showSection('committee', this)"><span class="nav-icon">👥</span><span>Комитет</span></button>
 <button class="top-nav-btn" onclick="showSection('archive', this)"><span class="nav-icon">📦</span><span>Архив</span></button>
 <button class="top-nav-btn" id="navMessagesBtn" onclick="showSection('messages', this)" style="position:relative;">
-  <span class="nav-icon">📩</span>
-  <span>Связь</span>
+  <span class="nav-icon">📩</span><span>Связь</span>
   <span id="msgBadge" class="message-badge">0</span>
 </button>
 <button class="top-nav-btn" id="navAdminBtn" onclick="showSection('admin', this)" style="display:none;position:relative;">
-  <span class="nav-icon">⚙️</span>
-  <span>Админ</span>
+  <span class="nav-icon">⚙️</span><span>Админ</span>
   <span id="adminBadge" class="admin-badge">0</span>
 </button>
-<button class="top-nav-btn" id="navOwnerBtn" onclick="showSection('owner', this)" style="display:none;color:var(--danger);"><span class="nav-icon"></span>👑<span>Владелец</span></button>
-<button class="top-nav-logout" onclick="doLogout()"><span></span><span>Выйти</span></button>
+<button class="top-nav-btn" id="navOwnerBtn" onclick="showSection('owner', this)" style="display:none;color:var(--danger);"><span class="nav-icon">👑</span><span>Владелец</span></button>
+<button class="top-nav-logout" onclick="doLogout()"><span>🚪</span><span>Выйти</span></button>
 </div>
 </nav>
 
@@ -530,7 +397,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <button class="btn btn-success btn-block" onclick="sendMessage()">📨 Отправить владельцу</button>
 </div>
 <div class="admin-card">
-<div class="admin-card-title"> Мои обращения</div>
+<div class="admin-card-title">📋 Мои обращения</div>
 <div id="myMessagesList"></div>
 </div>
 </div>
@@ -558,7 +425,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <div id="admin-albums" class="admin-section"></div>
 <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
 <button class="btn btn-success" onclick="saveAll()" id="saveBtn">💾 Сохранить</button>
-<button class="btn btn-secondary" onclick="showSection('home', document.querySelector('.top-nav-btn'))"> На сайт</button>
+<button class="btn btn-secondary" onclick="showSection('home', document.querySelector('.top-nav-btn'))">🌐 На сайт</button>
 </div>
 </div>
 <div id="owner" class="section"><h2 class="section-title">👑 Панель Владельца — полное управление сайтом</h2>
@@ -577,12 +444,12 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 
 <div class="modal-overlay" id="accessRequestModal">
 <div class="modal">
-<h2> Запрос на вход</h2>
+<h2>📩 Запрос на вход</h2>
 <div class="form-group"><label>Имя / ФИО</label><input type="text" id="reqName" placeholder="Например: Наталья"></div>
 <div class="form-group"><label>Ваша группа</label><select id="reqGroup"></select></div>
 <div class="form-group"><label>Если группы нет — укажите</label><input type="text" id="reqGroupText" placeholder="Например: 8 Ромашка"></div>
 <div class="form-group"><label>Телефон</label><input type="tel" id="reqPhone" placeholder="можно последние 4 цифры"></div>
-<div class="hint"> Заполните хотя бы имя или телефон.</div>
+<div class="hint">💡 Заполните хотя бы имя или телефон.</div>
 <button class="btn btn-success btn-block" onclick="submitAccessRequest()">📨 Отправить</button>
 <button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('accessRequestModal')">Отмена</button>
 </div>
@@ -593,12 +460,12 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <h2>📩 Чем можем помочь?</h2>
 <p style="color:var(--gray);margin-bottom:20px;font-size:.9em">Выберите, что вам нужно:</p>
 <div class="help-option access" onclick="chooseHelpOption('access')" style="background:var(--bg);border:2px solid var(--border);border-radius:var(--radius-md);padding:18px;margin-bottom:12px;cursor:pointer;">
-  <div style="font-size:1.8em;margin-bottom:6px;"></div>
+  <div style="font-size:1.8em;margin-bottom:6px;">🔐</div>
   <div style="font-weight:700;color:var(--brand-green);margin-bottom:4px;">Запросить доступ к группе</div>
   <div style="font-size:.85em;color:var(--gray);">Если у вас ещё нет аккаунта</div>
 </div>
 <div class="help-option contact" onclick="chooseHelpOption('contact')" style="background:var(--bg);border:2px solid var(--border);border-radius:var(--radius-md);padding:18px;cursor:pointer;">
-  <div style="font-size:1.8em;margin-bottom:6px;"></div>
+  <div style="font-size:1.8em;margin-bottom:6px;">💬</div>
   <div style="font-weight:700;color:var(--brand-orange);margin-bottom:4px;">Написать владельцу</div>
   <div style="font-size:.85em;color:var(--gray);">Вопрос, проблема или предложение</div>
 </div>
@@ -614,8 +481,8 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <div class="form-group"><label>📱 Телефон для связи</label><input type="tel" id="guestContactPhone" placeholder="+7 (___) ___-__-__"></div>
 <div class="form-group"><label>🏫 Ваша группа (если знаете)</label><select id="guestContactGroup"><option value="">— Не знаю / другая —</option></select></div>
 <div class="form-group"><label>📝 Тема</label><input type="text" id="guestContactSubject" placeholder="Кратко о чём сообщение"></div>
-<div class="form-group"><label>️ Текст сообщения</label><textarea id="guestContactText" placeholder="Опишите ваш вопрос или проблему..." rows="5"></textarea></div>
-<button class="btn btn-success btn-block" onclick="sendGuestMessage()"> Отправить</button>
+<div class="form-group"><label>✉️ Текст сообщения</label><textarea id="guestContactText" placeholder="Опишите ваш вопрос или проблему..." rows="5"></textarea></div>
+<button class="btn btn-success btn-block" onclick="sendGuestMessage()">📨 Отправить</button>
 <button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('contactOwnerModal')">Отмена</button>
 </div>
 </div>
@@ -625,7 +492,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <h2>✅ Одобрить запрос</h2>
 <p id="approveInfo" style="color:var(--gray);font-size:.9em;margin-bottom:14px"></p>
 <div class="form-group" id="approveGroupBox" style="display:none"><label>Группа</label><select id="approveGroup"></select></div>
-<div class="form-group"><label>Роль</label><select id="approveRole"><option value="member">️ Родитель</option><option value="admin">💎 Админ</option></select></div>
+<div class="form-group"><label>Роль</label><select id="approveRole"><option value="member">👁️ Родитель</option><option value="admin">💎 Админ</option></select></div>
 <div class="form-group"><label>Пароль</label>
 <div style="display:flex;gap:8px"><input type="text" id="approvePassword"><button class="btn btn-secondary btn-sm" onclick="document.getElementById('approvePassword').value=genPassword()">🎲</button></div>
 </div>
@@ -645,7 +512,6 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 </div>
 
-<!-- ===== МОДАЛЬНОЕ ОКНО ДЛЯ ФОТОАЛЬБОМА ===== -->
 <div id="albumModal" class="album-modal-overlay" style="display:none;">
   <div class="album-modal-content">
     <div class="album-modal-header">
@@ -686,301 +552,195 @@ let protectionEnabled = false;
 let publicConfig = { groups: [], maintenanceMode: false, protected: false };
 let messagesFilter = 'all';
 let groupAlbums = [];
-let messagesListener = null;
-let inboxListener = null;
-let newsListener = null;
-let expensesListener = null;
-let pendingRequestsCount = 0;
-let lastNewsCount = 0;
-let lastExpensesCount = 0;
+
+// Переменные для уведомлений
+let messagesListener = null, inboxListener = null, newsListener = null, expensesListener = null;
+let pendingRequestsCount = 0, lastNewsCount = 0, lastExpensesCount = 0;
+let isFirstNewsLoad = true, isFirstExpensesLoad = true;
 
 // ===== ФУНКЦИИ УВЕДОМЛЕНИЙ =====
-
 function requestNotificationPermission() {
   if ('Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission().then(permission => {
-      console.log('Разрешение на уведомления:', permission);
-    });
+    Notification.requestPermission().then(permission => console.log('Разрешение на уведомления:', permission));
   }
 }
-
 function showBrowserNotification(title, body) {
   if ('Notification' in window && Notification.permission === 'granted') {
-    new Notification(title, {
-      body: body,
-      icon: './apple-touch-icon.png',
-      badge: './apple-touch-icon.png',
-      tag: 'new-message',
-      requireInteraction: true
-    });
+    new Notification(title, { body, icon: './apple-touch-icon.png', badge: './apple-touch-icon.png', tag: 'new-message', requireInteraction: true });
   }
 }
-
 function playNotificationSound() {
   try {
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
     const gainNode = audioContext.createGain();
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-    oscillator.frequency.value = 800;
-    oscillator.type = 'sine';
+    oscillator.connect(gainNode); gainNode.connect(audioContext.destination);
+    oscillator.frequency.value = 800; oscillator.type = 'sine';
     gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-    oscillator.start(audioContext.currentTime);
-    oscillator.stop(audioContext.currentTime + 0.5);
-  } catch(e) {
-    console.log('Звук не воспроизведён:', e);
-  }
+    oscillator.start(audioContext.currentTime); oscillator.stop(audioContext.currentTime + 0.5);
+  } catch(e) { console.log('Звук не воспроизведён:', e); }
 }
-
 function showToast(message, type = 'info') {
   const toast = document.createElement('div');
   toast.className = `toast-notification ${type}`;
   toast.textContent = message;
   document.body.appendChild(toast);
-  setTimeout(() => {
-    toast.style.animation = 'slideOut 0.3s ease';
-    setTimeout(() => toast.remove(), 300);
-  }, 3000);
+  setTimeout(() => { toast.style.animation = 'slideOut 0.3s ease'; setTimeout(() => toast.remove(), 300); }, 3000);
 }
 
 function updateMessageBadge(count) {
   const badge = document.getElementById('msgBadge');
   if (!badge) return;
-  if (count > 0) {
-    badge.textContent = count > 99 ? '99+' : count;
-    badge.style.display = 'inline-block';
-    document.title = `(${count}) Родительский комитет`;
-  } else {
-    badge.style.display = 'none';
-    document.title = 'Родительский комитет — Бюджет группы';
-  }
+  if (count > 0) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = 'inline-block'; document.title = `(${count}) Родительский комитет`; }
+  else { badge.style.display = 'none'; document.title = 'Родительский комитет — Бюджет группы'; }
 }
-
 function updateAdminBadge(count) {
   const badge = document.getElementById('adminBadge');
   if (!badge) return;
-  if (count > 0) {
-    badge.textContent = count > 99 ? '99+' : count;
-    badge.style.display = 'inline-block';
-  } else {
-    badge.style.display = 'none';
-  }
+  if (count > 0) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = 'inline-block'; }
+  else { badge.style.display = 'none'; }
 }
-
 function updateAccessTabBadge(count) {
   const badge = document.getElementById('accessTabBadge');
   if (!badge) return;
-  if (count > 0) {
-    badge.textContent = count > 99 ? '99+' : count;
-    badge.classList.add('show');
-  } else {
-    badge.classList.remove('show');
-  }
+  if (count > 0) { badge.textContent = count > 99 ? '99+' : count; badge.classList.add('show'); }
+  else { badge.classList.remove('show'); }
 }
-
 function updateNewsBadge(count) {
   const badge = document.getElementById('newsBadge');
   if (!badge) return;
-  if (count > 0) {
-    badge.textContent = count > 99 ? '99+' : count;
-    badge.style.display = 'inline-block';
-  } else {
-    badge.style.display = 'none';
-  }
+  if (count > 0) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = 'inline-block'; }
+  else { badge.style.display = 'none'; }
 }
-
 function updateContributionBadge(hasUnpaid) {
   const badge = document.getElementById('contributionBadge');
   if (!badge) return;
-  if (hasUnpaid) {
-    badge.style.display = 'inline-block';
-  } else {
-    badge.style.display = 'none';
-  }
+  badge.style.display = hasUnpaid ? 'inline-block' : 'none';
 }
-
 function updateExpenseBadge(count) {
   const badge = document.getElementById('expenseBadge');
   if (!badge) return;
-  if (count > 0) {
-    badge.textContent = count > 99 ? '99+' : count;
-    badge.style.display = 'inline-block';
-  } else {
-    badge.style.display = 'none';
-  }
+  if (count > 0) { badge.textContent = count > 99 ? '99+' : count; badge.style.display = 'inline-block'; }
+  else { badge.style.display = 'none'; }
 }
 
 function startMessagesListener() {
   if (currentRole !== 'owner' && currentRole !== 'admin') return;
   if (messagesListener) messagesListener();
-  
-  messagesListener = db.collection('messages')
-    .where('status', '==', 'new')
-    .onSnapshot(snapshot => {
-      const newCount = snapshot.docs.length;
-      updateMessageBadge(newCount);
-      
-      const ownerCountBadge = document.getElementById('ownerMsgCount');
-      if (ownerCountBadge) {
-        if (newCount > 0) {
-          ownerCountBadge.textContent = newCount;
-          ownerCountBadge.style.display = 'inline';
-        } else {
-          ownerCountBadge.style.display = 'none';
-        }
-      }
-      
-      const messagesSection = document.getElementById('messages');
-      const isInMessages = messagesSection && messagesSection.classList.contains('active');
-      
-      if (newCount > 0 && !isInMessages) {
-        showBrowserNotification('📩 Новое сообщение!', `У вас ${newCount} новое(ых) сообщение(ий)`);
-        playNotificationSound();
-        showToast(`📩 Новое сообщение! Всего новых: ${newCount}`, 'info');
-      } else if (newCount > 0 && isInMessages) {
-        playNotificationSound();
-        showToast(`📩 Пришло новое сообщение`, 'info');
-      }
-    }, error => {
-      console.error('Ошибка прослушивания сообщений:', error);
-    });
+  messagesListener = db.collection('messages').where('status', '==', 'new').onSnapshot(snapshot => {
+    const newCount = snapshot.docs.length;
+    updateMessageBadge(newCount);
+    const ownerCountBadge = document.getElementById('ownerMsgCount');
+    if (ownerCountBadge) {
+      ownerCountBadge.textContent = newCount;
+      ownerCountBadge.style.display = newCount > 0 ? 'inline' : 'none';
+    }
+    const messagesSection = document.getElementById('messages');
+    const isInMessages = messagesSection && messagesSection.classList.contains('active');
+    if (newCount > 0 && !isInMessages) {
+      showBrowserNotification('📩 Новое сообщение!', `У вас ${newCount} новое(ых) сообщение(ий)`);
+      playNotificationSound(); showToast(`📩 Новое сообщение! Всего новых: ${newCount}`, 'info');
+    } else if (newCount > 0 && isInMessages) {
+      playNotificationSound(); showToast(`📩 Пришло новое сообщение`, 'info');
+    }
+  }, error => { console.error('Ошибка прослушивания сообщений:', error); });
 }
 
 function startInboxListener() {
   if (currentRole !== 'owner' && currentRole !== 'admin') return;
   if (inboxListener) inboxListener();
-  
-  inboxListener = db.collection('inbox')
-    .onSnapshot(snapshot => {
-      const newCount = snapshot.docs.length;
-      pendingRequestsCount = newCount;
-      updateAdminBadge(newCount);
-      updateAccessTabBadge(newCount);
-      
-      const accessSection = document.getElementById('admin-access');
-      const isInAccess = accessSection && accessSection.classList.contains('active');
-      
-      if (newCount > 0 && !isInAccess) {
-        showBrowserNotification(' Новый запрос на доступ!', `${newCount} новый(ых) запрос(ов)`);
-        playNotificationSound();
-        showToast(`🔑 Новый запрос на доступ! Всего: ${newCount}`, 'warning');
-      } else if (newCount > 0 && isInAccess) {
-        playNotificationSound();
-        showToast(`🔑 Новый запрос на доступ`, 'warning');
-        renderAdminAccess();
-      }
-    }, error => {
-      console.error('Ошибка прослушивания inbox:', error);
-    });
+  inboxListener = db.collection('inbox').onSnapshot(snapshot => {
+    const newCount = snapshot.docs.length;
+    pendingRequestsCount = newCount;
+    updateAdminBadge(newCount); updateAccessTabBadge(newCount);
+    const accessSection = document.getElementById('admin-access');
+    const isInAccess = accessSection && accessSection.classList.contains('active');
+    if (newCount > 0 && !isInAccess) {
+      showBrowserNotification('🔑 Новый запрос на доступ!', `${newCount} новый(ых) запрос(ов)`);
+      playNotificationSound(); showToast(`🔑 Новый запрос на доступ! Всего: ${newCount}`, 'warning');
+    } else if (newCount > 0 && isInAccess) {
+      playNotificationSound(); showToast(`🔑 Новый запрос на доступ`, 'warning'); renderAdminAccess();
+    }
+  }, error => { console.error('Ошибка прослушивания inbox:', error); });
 }
 
 function startNewsListener() {
   if (newsListener) newsListener();
-  
-  newsListener = db.collection('data').doc('main')
-    .onSnapshot(doc => {
-      if (!doc.exists) return;
-      const appData = doc.data();
-      const groupData = appData.groupData && appData.groupData[currentGroupId];
-      if (!groupData) return;
-      
-      const newsCount = (groupData.news || []).length;
-      const newNewsCount = newsCount - lastNewsCount;
-      
-      if (newNewsCount > 0 && lastNewsCount > 0) {
-        updateNewsBadge(newNewsCount);
-        playNotificationSound();
-        showToast(`📰 ${newNewsCount} новая новость!`, 'info');
-        showBrowserNotification('📰 Новые новости', `Появилось ${newNewsCount} новых новостей`);
-      } else if (newsCount > 0) {
-        updateNewsBadge(newsCount);
-      }
-      
-      lastNewsCount = newsCount;
-    }, error => {
-      console.error('Ошибка прослушивания новостей:', error);
-    });
+  lastNewsCount = (data.news || []).length;
+  isFirstNewsLoad = true;
+  newsListener = db.collection('data').doc('main').onSnapshot(doc => {
+    if (!doc.exists) return;
+    const appData = doc.data();
+    const groupData = appData.groupData && appData.groupData[currentGroupId];
+    if (!groupData) return;
+    const newsCount = (groupData.news || []).length;
+    if (isFirstNewsLoad) {
+      lastNewsCount = newsCount; isFirstNewsLoad = false; updateNewsBadge(0); return;
+    }
+    if (newsCount > lastNewsCount) {
+      const newCount = newsCount - lastNewsCount;
+      updateNewsBadge(newCount); playNotificationSound();
+      showToast(`📰 ${newCount} новая новость!`, 'info');
+      showBrowserNotification('📰 Новые новости', `Появилось ${newCount} новых новостей`);
+    } else { updateNewsBadge(0); }
+    lastNewsCount = newsCount;
+  }, error => { console.error('Ошибка прослушивания новостей:', error); });
 }
 
 function startExpensesListener() {
   if (expensesListener) expensesListener();
-  
-  expensesListener = db.collection('data').doc('main')
-    .onSnapshot(doc => {
-      if (!doc.exists) return;
-      const appData = doc.data();
-      const groupData = appData.groupData && appData.groupData[currentGroupId];
-      if (!groupData) return;
-      
-      const currentMonth = groupData.months.find(m => m.id === groupData.currentMonthId);
-      if (!currentMonth) return;
-      
-      const expensesCount = (currentMonth.expenses || []).length;
-      const newExpensesCount = expensesCount - lastExpensesCount;
-      
-      if (newExpensesCount > 0 && lastExpensesCount > 0) {
-        updateExpenseBadge(newExpensesCount);
-        playNotificationSound();
-        showToast(`💸 ${newExpensesCount} новый расход!`, 'warning');
-        showBrowserNotification('💸 Новые расходы', `Добавлено ${newExpensesCount} новых расходов`);
-      } else if (expensesCount > 0) {
-        updateExpenseBadge(expensesCount);
-      }
-      
-      lastExpensesCount = expensesCount;
-    }, error => {
-      console.error('Ошибка прослушивания расходов:', error);
-    });
+  const currentMonth = getCurrentMonth();
+  lastExpensesCount = currentMonth ? (currentMonth.expenses || []).length : 0;
+  isFirstExpensesLoad = true;
+  expensesListener = db.collection('data').doc('main').onSnapshot(doc => {
+    if (!doc.exists) return;
+    const appData = doc.data();
+    const groupData = appData.groupData && appData.groupData[currentGroupId];
+    if (!groupData) return;
+    const currentMonthData = groupData.months.find(m => m.id === groupData.currentMonthId);
+    if (!currentMonthData) return;
+    const expensesCount = (currentMonthData.expenses || []).length;
+    if (isFirstExpensesLoad) {
+      lastExpensesCount = expensesCount; isFirstExpensesLoad = false; updateExpenseBadge(0); return;
+    }
+    if (expensesCount > lastExpensesCount) {
+      const newCount = expensesCount - lastExpensesCount;
+      updateExpenseBadge(newCount); playNotificationSound();
+      showToast(`💸 ${newCount} новый расход!`, 'warning');
+      showBrowserNotification('💸 Новые расходы', `Добавлено ${newCount} новых расходов`);
+    } else { updateExpenseBadge(0); }
+    lastExpensesCount = expensesCount;
+  }, error => { console.error('Ошибка прослушивания расходов:', error); });
 }
 
 function checkContributionStatus() {
-  if (currentRole === 'owner' || currentRole === 'admin') {
-    updateContributionBadge(false);
-    return;
-  }
-  
+  if (currentRole === 'owner' || currentRole === 'admin') { updateContributionBadge(false); return; }
   const currentMonth = getCurrentMonth();
   if (!currentMonth) return;
-  
-  const userName = currentUserName || '';
-  const userPhone = app.users.find(u => u.id === currentUserId)?.phone || '';
-  
+  const userName = (currentUserName || '').toLowerCase();
+  const userPhone = (app.users.find(u => u.id === currentUserId)?.phone || '').replace(/\D/g, '');
   const hasUnpaid = currentMonth.students.some(s => {
     const studentName = (s.name || '').toLowerCase();
-    const searchName = userName.toLowerCase();
-    const searchPhone = userPhone.replace(/\D/g, '');
     const studentPhone = (s.phone || '').replace(/\D/g, '');
-    
-    return (studentName.includes(searchName) || searchName.includes(studentName)) && !s.paid;
+    return (studentName.includes(userName) || userName.includes(studentName) || (userPhone && studentPhone === userPhone)) && !s.paid;
   });
-  
   updateContributionBadge(hasUnpaid);
 }
 
 async function markAllMessagesAsRead() {
   try {
     const snap = await db.collection('messages').where('status', '==', 'new').get();
-    if (snap.empty) {
-      updateMessageBadge(0);
-      return;
-    }
+    if (snap.empty) { updateMessageBadge(0); return; }
     const batch = db.batch();
-    snap.docs.forEach(doc => {
-      batch.update(doc.ref, { read: true, status: 'replied' });
-    });
+    snap.docs.forEach(doc => { batch.update(doc.ref, { read: true, status: 'replied' }); });
     await batch.commit();
     updateMessageBadge(0);
     const ownerCountBadge = document.getElementById('ownerMsgCount');
     if (ownerCountBadge) ownerCountBadge.style.display = 'none';
     const ownerSection = document.getElementById('owner');
-    if (ownerSection && ownerSection.classList.contains('active')) {
-      loadOwnerMessages();
-    }
-  } catch(e) {
-    console.error('Ошибка обновления статуса:', e);
-  }
+    if (ownerSection && ownerSection.classList.contains('active')) loadOwnerMessages();
+  } catch(e) { console.error('Ошибка обновления статуса:', e); }
 }
 
 function updateClock() {
@@ -1039,7 +799,6 @@ async function loadGroupAlbums() {
     snap.docs.forEach(doc => { groupAlbums.push({ id: doc.id, ...doc.data() }); });
   } catch(e) { console.error('Ошибка загрузки альбомов:', e); }
 }
-
 async function loadAllAlbums() {
   let allAlbums = [];
   try {
@@ -1048,20 +807,17 @@ async function loadAllAlbums() {
   } catch(e) { console.error('Ошибка загрузки всех альбомов:', e); }
   return allAlbums;
 }
-
 async function createAlbum(groupId, title, fileName) {
   try {
     await db.collection('albums').add({ groupId, title, fileName, createdAt: firebase.firestore.FieldValue.serverTimestamp() });
     return true;
   } catch(e) { console.error('Ошибка создания альбома:', e); return false; }
 }
-
 async function deleteAlbum(albumId) {
   if (!confirm('Удалить этот фотоальбом?')) return;
   try {
     await db.collection('albums').doc(albumId).delete();
-    alert('✅ Альбом удалён!');
-    return true;
+    alert('✅ Альбом удалён!'); return true;
   } catch(e) { alert('❌ Ошибка: ' + e.message); return false; }
 }
 
@@ -1105,7 +861,7 @@ async function loadMainData() {
 async function enterByAuth(fu) {
   try {
     const al = await db.collection('allowlist').doc(fu.uid).get();
-    if (!al.exists) { alert(' Доступ не найден.'); auth.signOut(); return; }
+    if (!al.exists) { alert('⛔ Доступ не найден.'); auth.signOut(); return; }
     await loadMainData();
     const role = al.data().role;
     if (role === 'owner') {
@@ -1222,12 +978,8 @@ async function doLogout() {
   document.getElementById('appContent').style.display = 'none';
   document.getElementById('loginPassword').value = '';
   document.getElementById('loginPhone').value = '';
-  updateMessageBadge(0);
-  updateAdminBadge(0);
-  updateAccessTabBadge(0);
-  updateNewsBadge(0);
-  updateContributionBadge(false);
-  updateExpenseBadge(0);
+  updateMessageBadge(0); updateAdminBadge(0); updateAccessTabBadge(0);
+  updateNewsBadge(0); updateContributionBadge(false); updateExpenseBadge(0);
   if (settings.maintenanceMode) { document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('maintenanceScreen').classList.remove('hidden'); }
   else { document.getElementById('loginScreen').classList.remove('hidden'); enableLogin(); }
 }
@@ -1241,7 +993,6 @@ function openHelpModal() {
   }
   document.getElementById('helpModal').classList.add('active');
 }
-
 function chooseHelpOption(option) {
   closeModal('helpModal');
   if (option === 'access') openAccessRequestModal();
@@ -1253,7 +1004,6 @@ function chooseHelpOption(option) {
     document.getElementById('contactOwnerModal').classList.add('active');
   }
 }
-
 async function sendGuestMessage() {
   const name = document.getElementById('guestContactName').value.trim();
   const phone = document.getElementById('guestContactPhone').value.trim();
@@ -1273,7 +1023,6 @@ async function sendGuestMessage() {
     showToast('✅ Сообщение отправлено!', 'success');
   } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
-
 function openAccessRequestModal() {
   const sel = document.getElementById('reqGroup');
   sel.innerHTML = '<option value="">— Выберите группу —</option>';
@@ -1284,13 +1033,12 @@ function openAccessRequestModal() {
   document.getElementById('reqPhone').value = '';
   document.getElementById('accessRequestModal').classList.add('active');
 }
-
 function openChildPicker(inputEl) {
   childPickerTarget = inputEl;
   const list = document.getElementById('childPickerList'); list.innerHTML = '';
   const kids = data.children || [];
   if (!kids.length) list.innerHTML = '<p style="color:var(--light-gray);font-size:.9em">Дети ещё не добавлены</p>';
-  kids.forEach(k => { if (!k.name) return; const b = document.createElement('button'); b.className = 'btn btn-sm btn-secondary'; b.style.margin = '3px'; b.textContent = (k.gender === 'girl' ? '🎀 ' : ' ') + k.name; b.onclick = () => { childPickerTarget.value = k.name; markDirty(); closeModal('childPickerModal'); }; list.appendChild(b); });
+  kids.forEach(k => { if (!k.name) return; const b = document.createElement('button'); b.className = 'btn btn-sm btn-secondary'; b.style.margin = '3px'; b.textContent = (k.gender === 'girl' ? '🎀 ' : '👦 ') + k.name; b.onclick = () => { childPickerTarget.value = k.name; markDirty(); closeModal('childPickerModal'); }; list.appendChild(b); });
   document.getElementById('childPickerManual').value = '';
   document.getElementById('childPickerModal').classList.add('active');
 }
@@ -1313,38 +1061,19 @@ function showSection(id, btn) {
   
   if (id === 'messages') {
     updateMessageBadge(0);
-    if (currentRole === 'owner' || currentRole === 'admin') {
-      markAllMessagesAsRead();
-    }
+    if (currentRole === 'owner' || currentRole === 'admin') markAllMessagesAsRead();
   }
-  
-  if (id === 'admin') {
-    updateAdminBadge(0);
-  }
-  
-  if (id === 'news') {
-    updateNewsBadge(0);
-    lastNewsCount = (data.news || []).length;
-  }
-  
-  if (id === 'contributions') {
-    updateContributionBadge(false);
-  }
-  
-  if (id === 'expenses') {
-    updateExpenseBadge(0);
-    lastExpensesCount = getCurrentMonth().expenses.length;
-  }
-  
+  if (id === 'admin') updateAdminBadge(0);
+  if (id === 'news') { updateNewsBadge(0); lastNewsCount = (data.news || []).length; }
+  if (id === 'contributions') updateContributionBadge(false);
+  if (id === 'expenses') { updateExpenseBadge(0); const cm = getCurrentMonth(); lastExpensesCount = cm ? (cm.expenses || []).length : 0; }
   if (id === 'owner') {
     const ownerTab = document.querySelector('#owner .admin-tab.active');
-    if (ownerTab && ownerTab.textContent.includes('Сообщения')) {
-      loadOwnerMessages();
-    }
+    if (ownerTab && ownerTab.textContent.includes('Сообщения')) loadOwnerMessages();
   }
   
   if (id === 'home') renderHome();
-  if (id === 'group') { renderGroup(); }
+  if (id === 'group') renderGroup();
   if (id === 'news') renderNews();
   if (id === 'contributions') renderContributions();
   if (id === 'expenses') renderExpenses();
@@ -1361,13 +1090,9 @@ function showAdminTab(tab, btn) {
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('admin-' + tab).classList.add('active');
   if (btn) btn.classList.add('active');
-  if (tab === 'access') {
-    updateAccessTabBadge(0);
-    renderAdminAccess();
-  }
+  if (tab === 'access') { updateAccessTabBadge(0); renderAdminAccess(); }
   if (tab === 'albums') renderAdminAlbums();
 }
-
 function showOwnerTab(tab, btn) {
   document.querySelectorAll('#owner .admin-section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('#owner .admin-tab').forEach(t => t.classList.remove('active'));
@@ -1378,7 +1103,6 @@ function showOwnerTab(tab, btn) {
   if (tab === 'albums') renderOwnerAlbums();
   if (tab === 'settings') renderOwnerSettings();
 }
-
 function changeMonth(id) { currentMonthId = id; data.currentMonthId = id; renderAll(); }
 function renderAll() { renderMonthSelector(); renderHome(); renderGroup(); renderNews(); renderContributions(); renderExpenses(); renderCommittee(); renderArchive(); }
 function renderMonthSelector() { const sel = document.getElementById('monthSelect'); sel.innerHTML = ''; data.months.forEach(m => { const o = document.createElement('option'); o.value = m.id; o.textContent = m.name; if (m.id === currentMonthId) o.selected = true; sel.appendChild(o); }); }
@@ -1409,7 +1133,7 @@ function renderGroup() {
   const kids = data.children || [], girls = kids.filter(k => k.gender === 'girl').length, boys = kids.filter(k => k.gender === 'boy').length;
   let html = `<div class="group-hero"><div class="group-number">Группа № ${escapeHtml(g.number)}</div><div class="group-name">${escapeHtml(g.name)}</div><div>📅 ${escapeHtml(m.name)}</div>${data.description ? `<div class="group-desc">${escapeHtml(data.description)}</div>` : ''}</div>`;
   html += `<div class="group-stats-grid">
-    <div class="group-stat-card orange"><div class="stat-value">${kids.length}</div><div class="stat-label"> Всего детей</div></div>
+    <div class="group-stat-card orange"><div class="stat-value">${kids.length}</div><div class="stat-label">👶 Всего детей</div></div>
     <div class="group-stat-card pink"><div class="stat-value">${girls}</div><div class="stat-label">🎀 Девочек</div></div>
     <div class="group-stat-card blue"><div class="stat-value">${boys}</div><div class="stat-label">👦 Мальчиков</div></div>
     <div class="group-stat-card green"><div class="stat-value">${(data.committee||[]).length}</div><div class="stat-label">👥 Комитет</div></div>
@@ -1417,7 +1141,7 @@ function renderGroup() {
   const bds = getUpcomingBirthdays();
   html += `<div class="info-block-g" style="border-left-color:var(--danger)"><h3>🎂 Дни рождения</h3>`;
   if (!bds.length) html += `<p style="color:var(--light-gray);font-size:.9em">Добавьте детей с датами рождения</p>`;
-  else bds.forEach(b => { html += `<div class="birthday-card${b.isToday?' today':''}"><div class="birthday-avatar">${b.isToday?'🎉':(b.gender==='girl'?'':'🎈')}</div><div class="birthday-info"><div class="birthday-name">${escapeHtml(b.name)}</div><div class="birthday-date${b.isToday?' today-text':''}">${b.day} ${MONTH_NAMES[b.month-1]}${b.isToday?' — СЕГОДНЯ!':''}</div></div><div class="birthday-age">исполнится ${ageWord(b.age)}</div></div>`; });
+  else bds.forEach(b => { html += `<div class="birthday-card${b.isToday?' today':''}"><div class="birthday-avatar">${b.isToday?'🎉':(b.gender==='girl'?'🎀':'🎈')}</div><div class="birthday-info"><div class="birthday-name">${escapeHtml(b.name)}</div><div class="birthday-date${b.isToday?' today-text':''}">${b.day} ${MONTH_NAMES[b.month-1]}${b.isToday?' — СЕГОДНЯ!':''}</div></div><div class="birthday-age">исполнится ${ageWord(b.age)}</div></div>`; });
   html += `</div>`;
   const events = (data.events || []).filter(e => e.title).slice().sort((a,b) => (a.date||'9999').localeCompare(b.date||'9999'));
   html += `<div class="info-block-g" style="border-left-color:var(--info)"><h3>🎉 События и праздники</h3>`;
@@ -1426,7 +1150,7 @@ function renderGroup() {
   html += `</div>`;
   if ((data.teachers||[]).length) { html += `<div class="info-block-g"><h3>👩‍🏫 Наши воспитатели</h3>`; data.teachers.forEach(t => { if (!t.name) return; const ph = t.phone ? `<div class="teacher-phone">📞 <a href="tel:${t.phone.replace(/[^\d+]/g,'')}">${escapeHtml(t.phone)}</a></div>` : ''; html += `<div class="teacher-item"><div><div class="teacher-name">${escapeHtml(t.name)}</div><div class="teacher-role">${escapeHtml(t.role||'Воспитатель')}</div></div>${ph}</div>`; }); html += `</div>`; }
   if ((data.committee||[]).length) { html += `<h3 style="font-size:1.1em;color:var(--brand-green);margin:20px 0 12px;">👥 Родительский комитет</h3><div class="committee-grid">`; data.committee.forEach(mb => { if (!mb.name) return; let cls = 'committee-card'; const r = (mb.role||'').toLowerCase(); if (r.includes('председатель')) cls += ' chair'; else if (r.includes('казначей')) cls += ' treasurer'; const ph = mb.phone ? `<div class="member-phone">📞 <a href="tel:${mb.phone.replace(/[^\d+]/g,'')}">${escapeHtml(mb.phone)}</a></div>` : ''; html += `<div class="${cls}"><div class="member-name">${escapeHtml(mb.name)}</div><div class="member-role">${escapeHtml(mb.role||'Член комитета')}</div>${ph}</div>`; }); html += `</div>`; }
-  if ((data.parents||[]).length) { html += `<div class="info-block-g" style="margin-top:20px"><h3>👨‍👩👧 Родители</h3>`; data.parents.forEach(p => { if (!p.name) return; const ph = p.phone ? `<div class="teacher-phone">📞 <a href="tel:${p.phone.replace(/[^\d+]/g,'')}">${escapeHtml(p.phone)}</a></div>` : ''; html += `<div class="teacher-item"><div><div class="teacher-name">${escapeHtml(p.name)}</div></div>${ph}</div>`; }); html += `</div>`; }
+  if ((data.parents||[]).length) { html += `<div class="info-block-g" style="margin-top:20px"><h3>👨‍👩‍👧 Родители</h3>`; data.parents.forEach(p => { if (!p.name) return; const ph = p.phone ? `<div class="teacher-phone">📞 <a href="tel:${p.phone.replace(/[^\d+]/g,'')}">${escapeHtml(p.phone)}</a></div>` : ''; html += `<div class="teacher-item"><div><div class="teacher-name">${escapeHtml(p.name)}</div></div>${ph}</div>`; }); html += `</div>`; }
   html += `<div class="albums-section"><h3 style="font-size:1.1em;color:var(--brand-green);margin-bottom:15px;">📸 Фотоальбомы группы</h3><div class="albums-grid" id="groupAlbumsGrid"><p style="color:var(--gray);grid-column:1/-1;text-align:center;padding:20px;">Загрузка альбомов...</p></div></div>`;
   c.innerHTML = html;
   loadGroupAlbums().then(() => { renderGroupAlbums(); });
@@ -1443,7 +1167,7 @@ function renderGroupAlbums() {
     const card = document.createElement('div');
     card.className = 'album-card';
     card.onclick = () => openAlbumModal(album.title, folder + album.fileName);
-    card.innerHTML = `<div class="album-icon"></div><div class="album-title">${escapeHtml(album.title)}</div><div class="album-file">${escapeHtml(album.fileName)}</div>`;
+    card.innerHTML = `<div class="album-icon">📷</div><div class="album-title">${escapeHtml(album.title)}</div><div class="album-file">${escapeHtml(album.fileName)}</div>`;
     grid.appendChild(card);
   });
 }
@@ -1472,11 +1196,9 @@ async function renderAdminAlbums() {
   const container = document.getElementById('admin-albums');
   const g = getGroup(currentGroupId);
   const folder = g ? `photos/group_${g.number}/` : 'photos/';
-  container.innerHTML = `<div class="admin-card"><div class="admin-card-title">➕ Создать фотоальбом</div><div class="hint"> Сначала загрузите HTML-файл галереи в папку <code>${folder}</code> на хостинге, затем укажите его имя ниже.</div><div class="form-group"><label>Название альбома</label><input type="text" id="newAlbumTitle" placeholder="Например: Новый год 2026"></div><div class="form-group"><label>Имя файла (HTML)</label><input type="text" id="newAlbumFile" placeholder="Например: gallery1.html"></div><button class="btn btn-success btn-block" onclick="adminCreateAlbum()">📸 Создать альбом</button></div><div class="admin-card"><div class="admin-card-title">📋 Альбомы группы ${escapeHtml(g ? groupLabel(g) : '')}</div><div id="adminAlbumsList">Загрузка...</div></div>`;
-  await loadGroupAlbums();
-  renderAdminAlbumsList();
+  container.innerHTML = `<div class="admin-card"><div class="admin-card-title">➕ Создать фотоальбом</div><div class="hint">💡 Сначала загрузите HTML-файл галереи в папку <code>${folder}</code> на хостинге, затем укажите его имя ниже.</div><div class="form-group"><label>Название альбома</label><input type="text" id="newAlbumTitle" placeholder="Например: Новый год 2026"></div><div class="form-group"><label>Имя файла (HTML)</label><input type="text" id="newAlbumFile" placeholder="Например: gallery1.html"></div><button class="btn btn-success btn-block" onclick="adminCreateAlbum()">📸 Создать альбом</button></div><div class="admin-card"><div class="admin-card-title">📋 Альбомы группы ${escapeHtml(g ? groupLabel(g) : '')}</div><div id="adminAlbumsList">Загрузка...</div></div>`;
+  await loadGroupAlbums(); renderAdminAlbumsList();
 }
-
 function renderAdminAlbumsList() {
   const list = document.getElementById('adminAlbumsList');
   if (!list) return;
@@ -1489,7 +1211,6 @@ function renderAdminAlbumsList() {
     list.appendChild(div);
   });
 }
-
 async function adminCreateAlbum() {
   const title = document.getElementById('newAlbumTitle').value.trim();
   const fileName = document.getElementById('newAlbumFile').value.trim();
@@ -1498,14 +1219,10 @@ async function adminCreateAlbum() {
   if (!fileName.endsWith('.html')) { alert('Имя файла должно заканчиваться на .html'); return; }
   const success = await createAlbum(currentGroupId, title, fileName);
   if (success) {
-    document.getElementById('newAlbumTitle').value = '';
-    document.getElementById('newAlbumFile').value = '';
-    showToast('✅ Альбом создан!', 'success');
-    await loadGroupAlbums();
-    renderAdminAlbumsList();
+    document.getElementById('newAlbumTitle').value = ''; document.getElementById('newAlbumFile').value = '';
+    showToast('✅ Альбом создан!', 'success'); await loadGroupAlbums(); renderAdminAlbumsList();
   } else { alert('❌ Ошибка создания альбома'); }
 }
-
 async function adminDeleteAlbum(albumId) {
   const success = await deleteAlbum(albumId);
   if (success) { await loadGroupAlbums(); renderAdminAlbumsList(); }
@@ -1520,7 +1237,6 @@ async function renderOwnerAlbums() {
   app.groups.forEach(g => { const option = document.createElement('option'); option.value = g.id; option.textContent = groupLabel(g); groupSelect.appendChild(option); });
   renderOwnerAlbumsList(allAlbums);
 }
-
 function renderOwnerAlbumsList(allAlbums) {
   const list = document.getElementById('ownerAlbumsList');
   if (!list) return;
@@ -1534,7 +1250,6 @@ function renderOwnerAlbumsList(allAlbums) {
     list.appendChild(div);
   });
 }
-
 async function ownerCreateAlbum() {
   const groupId = document.getElementById('ownerAlbumGroup').value;
   const title = document.getElementById('ownerAlbumTitle').value.trim();
@@ -1545,13 +1260,10 @@ async function ownerCreateAlbum() {
   if (!fileName.endsWith('.html')) { alert('Имя файла должно заканчиваться на .html'); return; }
   const success = await createAlbum(groupId, title, fileName);
   if (success) {
-    document.getElementById('ownerAlbumTitle').value = '';
-    document.getElementById('ownerAlbumFile').value = '';
-    showToast('✅ Альбом создан!', 'success');
-    await renderOwnerAlbums();
+    document.getElementById('ownerAlbumTitle').value = ''; document.getElementById('ownerAlbumFile').value = '';
+    showToast('✅ Альбом создан!', 'success'); await renderOwnerAlbums();
   } else { alert('❌ Ошибка создания альбома'); }
 }
-
 async function ownerDeleteAlbum(albumId) {
   const success = await deleteAlbum(albumId);
   if (success) { await renderOwnerAlbums(); }
@@ -1564,10 +1276,8 @@ async function sendMessage() {
   const msg = { senderId: currentUserId, senderName: currentUserName, senderPhone: app.users.find(u => u.id === currentUserId)?.phone || '', groupId: currentGroupId, subject, text, date: new Date().toISOString(), status: 'new', read: false };
   try {
     await db.collection('messages').add(msg);
-    document.getElementById('msgSubject').value = '';
-    document.getElementById('msgText').value = '';
-    showToast('✅ Сообщение отправлено владельцу!', 'success');
-    renderMyMessages();
+    document.getElementById('msgSubject').value = ''; document.getElementById('msgText').value = '';
+    showToast('✅ Сообщение отправлено владельцу!', 'success'); renderMyMessages();
   } catch(e) { alert('❌ Ошибка отправки: ' + e.message); }
 }
 
@@ -1581,7 +1291,7 @@ async function renderMyMessages() {
     snap.docs.forEach(doc => {
       const m = doc.data();
       const statusClass = m.status === 'new' ? 'new' : 'replied';
-      const statusText = m.status === 'new' ? ' Ожидает ответа' : '✅ Отвечено';
+      const statusText = m.status === 'new' ? '🟡 Ожидает ответа' : '✅ Отвечено';
       html += `<div class="message-card ${statusClass}"><div class="message-header"><div class="message-meta">${m.subject ? `<div class="message-subject">${escapeHtml(m.subject)}</div>` : ''}<div class="message-date">${formatDateTime(m.date)}</div></div><span class="message-status ${statusClass}">${statusText}</span></div><div class="message-text">${escapeHtml(m.text)}</div>${m.reply ? `<div class="message-reply"><div class="message-reply-header">💬 Ответ владельца (${formatDateTime(m.reply.date)})</div><div class="message-reply-text">${escapeHtml(m.reply.text)}</div></div>` : ''}</div>`;
     });
     list.innerHTML = html;
@@ -1598,12 +1308,8 @@ async function loadOwnerMessages() {
     const messages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     const newCount = messages.filter(m => m.status === 'new').length;
     const countBadge = document.getElementById('ownerMsgCount');
-    if (countBadge) {
-      if (newCount > 0) { countBadge.textContent = newCount; countBadge.style.display = 'inline'; }
-      else { countBadge.style.display = 'none'; }
-    }
-    updateMessageBadge(newCount);
-    renderOwnerMessages(messages);
+    if (countBadge) { countBadge.textContent = newCount; countBadge.style.display = newCount > 0 ? 'inline' : 'none'; }
+    updateMessageBadge(newCount); renderOwnerMessages(messages);
   } catch(e) { container.innerHTML = '<p style="color:var(--danger)">Ошибка загрузки: ' + e.message + '</p>'; }
 }
 
@@ -1612,7 +1318,7 @@ function renderOwnerMessages(messages) {
   let filtered = messages;
   if (messagesFilter === 'new') filtered = messages.filter(m => m.status === 'new');
   else if (messagesFilter === 'replied') filtered = messages.filter(m => m.status === 'replied');
-  let html = `<div class="messages-stats">📨 Всего сообщений: ${messages.length} ·  Новых: ${messages.filter(m => m.status === 'new').length} · 💬 Отвечено: ${messages.filter(m => m.status === 'replied').length}</div>`;
+  let html = `<div class="messages-stats">📨 Всего сообщений: ${messages.length} · 🆕 Новых: ${messages.filter(m => m.status === 'new').length} · 💬 Отвечено: ${messages.filter(m => m.status === 'replied').length}</div>`;
   html += `<div class="messages-filter"><button class="filter-btn ${messagesFilter === 'all' ? 'active' : ''}" onclick="setMessagesFilter('all')">Все</button><button class="filter-btn ${messagesFilter === 'new' ? 'active' : ''}" onclick="setMessagesFilter('new')">🆕 Новые</button><button class="filter-btn ${messagesFilter === 'replied' ? 'active' : ''}" onclick="setMessagesFilter('replied')">💬 Отвеченные</button></div>`;
   if (!filtered.length) { html += '<div class="news-empty">Нет сообщений по выбранному фильтру</div>'; }
   else {
@@ -1633,8 +1339,7 @@ async function sendReply(msgId) {
   if (!text) { alert('Введите текст ответа'); return; }
   try {
     await db.collection('messages').doc(msgId).update({ reply: { text, date: new Date().toISOString() }, status: 'replied', read: true });
-    showToast('✅ Ответ отправлен!', 'success');
-    loadOwnerMessages();
+    showToast('✅ Ответ отправлен!', 'success'); loadOwnerMessages();
   } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
 
@@ -1647,24 +1352,23 @@ async function deleteChat(msgId) {
     const batch = db.batch();
     snap.docs.forEach(doc => batch.delete(doc.ref));
     await batch.commit();
-    showToast('✅ Чат удалён!', 'success');
-    loadOwnerMessages();
+    showToast('✅ Чат удалён!', 'success'); loadOwnerMessages();
   } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
 
 function renderAdmin() { fillChildrenDatalist(); renderAdminSummary(); renderAdminGroupInfo(); renderAdminPeople(); renderAdminStudents(); renderAdminExpenses(); renderAdminNews(); renderAdminMonths(); renderAdminAccess(); }
 function renderAdminSummary() { const m = getCurrentMonth(); document.getElementById('admin-summary').innerHTML = `<div class="admin-card"><div class="admin-card-title">📊 Сводка: ${escapeHtml(m.name)}</div><div class="admin-cards-grid"><div class="stat-card"><div class="stat-label">Остаток с прош. мес.</div><div class="stat-value"><input type="number" id="editPrevBalance" step="0.01" value="${m.prevBalance}" onchange="markDirty();recalcAdmin()"></div></div><div class="stat-card"><div class="stat-label">Доп. приход</div><div class="stat-value"><input type="number" id="editAddIncome" step="0.01" value="${m.additionalIncome}" onchange="markDirty();recalcAdmin()"></div></div><div class="stat-card green"><div class="stat-label">Приход (авто)</div><div class="stat-value" id="autoIncome">0</div></div><div class="stat-card red"><div class="stat-label">Расход (авто)</div><div class="stat-value" id="autoExpense">0</div></div><div class="stat-card"><div class="stat-label">Бюджет</div><div class="stat-value" id="autoBudget">0</div></div><div class="stat-card green"><div class="stat-label">Остаток</div><div class="stat-value" id="autoBalance">0</div></div></div><div class="hint">💡 Приход и расход считаются автоматически.</div><button class="btn btn-success" onclick="archiveMonth()">📦 Архивировать месяц</button></div>`; recalcAdmin(); }
-function renderAdminGroupInfo() { const g = getGroup(currentGroupId); const m = getCurrentMonth(); const kids = data.children||[]; let evHtml = ''; (data.events||[]).forEach(e => { evHtml += eventRowHtml(e); }); document.getElementById('admin-groupinfo').innerHTML = `<div class="admin-card"><div class="admin-card-title">📋 О группе «${g?escapeHtml(g.name):''}»</div><div class="admin-cards-grid"><div class="stat-card"><div class="stat-label">Группа</div><div class="stat-value">№ ${g?escapeHtml(g.number):''} «${g?escapeHtml(g.name):''}»</div></div><div class="stat-card"><div class="stat-label">👶 Детей</div><div class="stat-value">${kids.length}</div></div><div class="stat-card"><div class="stat-label">🎀 Девочек</div><div class="stat-value">${kids.filter(k=>k.gender==='girl').length}</div></div><div class="stat-card"><div class="stat-label">👦 Мальчиков</div><div class="stat-value">${kids.filter(k=>k.gender==='boy').length}</div></div><div class="stat-card green"><div class="stat-label">👥 Комитет</div><div class="stat-value">${(data.committee||[]).length}</div></div><div class="stat-card green"><div class="stat-label">💰 Остаток</div><div class="stat-value">${formatMoney(calcBalance(m))} ₽</div></div></div></div><div class="admin-card"><div class="admin-card-title">✏️ Переименовать группу / описание</div><div class="hint"> Когда дети переходят в другую группу — поменяйте номер и название, все данные сохранятся.</div><div class="form-group"><label>Номер группы</label><input type="number" id="editGroupNumber" value="${g?escapeHtml(g.number):''}" onchange="markDirty()"></div><div class="form-group"><label>Название группы</label><input type="text" id="editGroupName" value="${g?escapeHtml(g.name):''}" onchange="markDirty()"></div><div class="form-group"><label>Описание</label><textarea id="editGroupDescription" onchange="markDirty()">${escapeHtml(data.description||'')}</textarea></div></div><div class="admin-card"><div class="admin-card-title">🎉 События и праздники</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addEventRow();markDirty()">➕ Добавить событие</button></div><div id="adminEventsList">${evHtml}</div></div>`; }
+function renderAdminGroupInfo() { const g = getGroup(currentGroupId); const m = getCurrentMonth(); const kids = data.children||[]; let evHtml = ''; (data.events||[]).forEach(e => { evHtml += eventRowHtml(e); }); document.getElementById('admin-groupinfo').innerHTML = `<div class="admin-card"><div class="admin-card-title">📋 О группе «${g?escapeHtml(g.name):''}»</div><div class="admin-cards-grid"><div class="stat-card"><div class="stat-label">Группа</div><div class="stat-value">№ ${g?escapeHtml(g.number):''} «${g?escapeHtml(g.name):''}»</div></div><div class="stat-card"><div class="stat-label">👶 Детей</div><div class="stat-value">${kids.length}</div></div><div class="stat-card"><div class="stat-label">🎀 Девочек</div><div class="stat-value">${kids.filter(k=>k.gender==='girl').length}</div></div><div class="stat-card"><div class="stat-label">👦 Мальчиков</div><div class="stat-value">${kids.filter(k=>k.gender==='boy').length}</div></div><div class="stat-card green"><div class="stat-label">👥 Комитет</div><div class="stat-value">${(data.committee||[]).length}</div></div><div class="stat-card green"><div class="stat-label">💰 Остаток</div><div class="stat-value">${formatMoney(calcBalance(m))} ₽</div></div></div></div><div class="admin-card"><div class="admin-card-title">✏️ Переименовать группу / описание</div><div class="hint">💡 Когда дети переходят в другую группу — поменяйте номер и название, все данные сохранятся.</div><div class="form-group"><label>Номер группы</label><input type="number" id="editGroupNumber" value="${g?escapeHtml(g.number):''}" onchange="markDirty()"></div><div class="form-group"><label>Название группы</label><input type="text" id="editGroupName" value="${g?escapeHtml(g.name):''}" onchange="markDirty()"></div><div class="form-group"><label>Описание</label><textarea id="editGroupDescription" onchange="markDirty()">${escapeHtml(data.description||'')}</textarea></div></div><div class="admin-card"><div class="admin-card-title">🎉 События и праздники</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addEventRow();markDirty()">➕ Добавить событие</button></div><div id="adminEventsList">${evHtml}</div></div>`; }
 function eventRowHtml(e = null) { return `<div class="a-row event-row-admin"><input type="text" class="e-title" value="${e?escapeHtml(e.title||''):''}" placeholder="Название события"><input type="date" class="e-date" value="${e?(e.date||''):''}"><input type="text" class="e-desc" value="${e?escapeHtml(e.description||''):''}" placeholder="Описание"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()">🗑</button></div>`; }
 function addEventRow() { document.getElementById('adminEventsList').insertAdjacentHTML('beforeend', eventRowHtml()); }
-function renderAdminPeople() { let comHtml=''; (data.committee||[]).forEach(x => comHtml += committeeRowHtml(x)); let parHtml=''; (data.parents||[]).forEach(p => parHtml += parentRowHtml(p)); let chHtml=''; (data.children||[]).forEach(k => chHtml += childRowHtml(k)); let tHtml=''; (data.teachers||[]).forEach(t => tHtml += teacherRowHtml(t)); document.getElementById('admin-people').innerHTML = `<div class="admin-card"><div class="admin-card-title"> Комитет</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addCommitteeRow();markDirty()">➕ Добавить</button></div><div id="adminCommitteeList">${comHtml}</div></div><div class="admin-card"><div class="admin-card-title">👨👩 Родители</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addParentRow();markDirty()">➕ Добавить</button></div><div id="adminParentsList">${parHtml}</div></div><div class="admin-card"><div class="admin-card-title">👶 Дети</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addChildRow();markDirty()">➕ Добавить ребёнка</button></div><div id="adminChildrenList">${chHtml}</div></div><div class="admin-card"><div class="admin-card-title">👩‍🏫 Воспитатели</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addTeacherRow();markDirty()">➕ Добавить</button></div><div id="adminTeachersList">${tHtml}</div></div>`; }
+function renderAdminPeople() { let comHtml=''; (data.committee||[]).forEach(x => comHtml += committeeRowHtml(x)); let parHtml=''; (data.parents||[]).forEach(p => parHtml += parentRowHtml(p)); let chHtml=''; (data.children||[]).forEach(k => chHtml += childRowHtml(k)); let tHtml=''; (data.teachers||[]).forEach(t => tHtml += teacherRowHtml(t)); document.getElementById('admin-people').innerHTML = `<div class="admin-card"><div class="admin-card-title">👥 Комитет</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addCommitteeRow();markDirty()">➕ Добавить</button></div><div id="adminCommitteeList">${comHtml}</div></div><div class="admin-card"><div class="admin-card-title">👨‍👩 Родители</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addParentRow();markDirty()">➕ Добавить</button></div><div id="adminParentsList">${parHtml}</div></div><div class="admin-card"><div class="admin-card-title">👶 Дети</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addChildRow();markDirty()">➕ Добавить ребёнка</button></div><div id="adminChildrenList">${chHtml}</div></div><div class="admin-card"><div class="admin-card-title">👩‍🏫 Воспитатели</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addTeacherRow();markDirty()">➕ Добавить</button></div><div id="adminTeachersList">${tHtml}</div></div>`; }
 function committeeRowHtml(x=null){return `<div class="a-row committee-row-admin"><input type="text" class="p-name" value="${x?escapeHtml(x.name||''):''}" placeholder="ФИО"><input type="text" class="p-role" value="${x?escapeHtml(x.role||''):''}" placeholder="Роль"><input type="tel" class="p-phone" value="${x?escapeHtml(x.phone||''):''}" placeholder="Телефон"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()">🗑</button></div>`;}
 function addCommitteeRow(){document.getElementById('adminCommitteeList').insertAdjacentHTML('beforeend',committeeRowHtml());}
 function parentRowHtml(p=null){return `<div class="a-row parent-row-admin"><input type="text" class="p-name" value="${p?escapeHtml(p.name||''):''}" placeholder="ФИО"><input type="tel" class="p-phone" value="${p?escapeHtml(p.phone||''):''}" placeholder="Телефон"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()">🗑</button></div>`;}
 function addParentRow(){document.getElementById('adminParentsList').insertAdjacentHTML('beforeend',parentRowHtml());}
-function childRowHtml(k=null){return `<div class="a-row child-row-admin"><input type="text" class="k-name" value="${k?escapeHtml(k.name||''):''}" placeholder="Имя ребёнка"><select class="k-gender"><option value="girl" ${k&&k.gender==='girl'?'selected':''}>🎀 Девочка</option><option value="boy" ${k&&k.gender==='boy'?'selected':''}>👦 Мальчик</option></select><input type="date" class="k-birthday" value="${k?(k.birthday||''):''}"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()"></button></div>`;}
+function childRowHtml(k=null){return `<div class="a-row child-row-admin"><input type="text" class="k-name" value="${k?escapeHtml(k.name||''):''}" placeholder="Имя ребёнка"><select class="k-gender"><option value="girl" ${k&&k.gender==='girl'?'selected':''}>🎀 Девочка</option><option value="boy" ${k&&k.gender==='boy'?'selected':''}>👦 Мальчик</option></select><input type="date" class="k-birthday" value="${k?(k.birthday||''):''}"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()">🗑</button></div>`;}
 function addChildRow(){document.getElementById('adminChildrenList').insertAdjacentHTML('beforeend',childRowHtml());}
-function teacherRowHtml(t=null){return `<div class="a-row committee-row-admin"><input type="text" class="t-name" value="${t?escapeHtml(t.name||''):''}" placeholder="ФИО"><input type="text" class="t-role" value="${t?escapeHtml(t.role||''):''}" placeholder="Должность"><input type="tel" class="t-phone" value="${t?escapeHtml(t.phone||''):''}" placeholder="Телефон"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()"></button></div>`;}
+function teacherRowHtml(t=null){return `<div class="a-row committee-row-admin"><input type="text" class="t-name" value="${t?escapeHtml(t.name||''):''}" placeholder="ФИО"><input type="text" class="t-role" value="${t?escapeHtml(t.role||''):''}" placeholder="Должность"><input type="tel" class="t-phone" value="${t?escapeHtml(t.phone||''):''}" placeholder="Телефон"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();markDirty()">🗑</button></div>`;}
 function addTeacherRow(){document.getElementById('adminTeachersList').insertAdjacentHTML('beforeend',teacherRowHtml());}
 function renderAdminStudents() { const m = getCurrentMonth(); let rows = ''; m.students.forEach(s => { rows += `<div class="a-row student-row"><div style="display:flex;gap:4px;"><input type="text" class="a-name" list="childrenDatalist" value="${escapeHtml(s.name||'')}" placeholder="ФИО или 👶"><button class="btn btn-gold btn-sm" onclick="openChildPicker(this.previousElementSibling)">👶</button></div><input type="number" class="a-amount" value="${s.amount||''}" placeholder="₽" step="0.01"><label class="switch"><input type="checkbox" class="a-paid" ${s.paid?'checked':''}><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button></div>`; }); document.getElementById('admin-students').innerHTML = `<div class="admin-card"><div class="admin-card-title">💰 Взносы</div><div class="admin-toolbar"><input type="text" id="studentSearch" placeholder="🔍 Поиск..." oninput="filterStudents()"><button class="btn btn-success btn-sm" onclick="addStudentRow();markDirty()">➕ Добавить</button><button class="btn btn-primary btn-sm" onclick="markAllPaid()">✅ Все сдали</button><button class="btn btn-secondary btn-sm" onclick="copyFromArchive()">📋 Копировать</button></div><div class="admin-stats" id="studentStats"></div><div id="adminStudents">${rows}</div></div>`; recalcAdmin(); }
 function addStudentRow(){const d=document.createElement('div');d.className='a-row student-row';d.innerHTML=`<div style="display:flex;gap:4px;"><input type="text" class="a-name" list="childrenDatalist" placeholder="ФИО или 👶"><button class="btn btn-gold btn-sm" onclick="openChildPicker(this.previousElementSibling)">👶</button></div><input type="number" class="a-amount" placeholder="₽" step="0.01"><label class="switch"><input type="checkbox" class="a-paid"><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;document.getElementById('adminStudents').appendChild(d);}
@@ -1672,10 +1376,10 @@ function markAllPaid(){document.querySelectorAll('#adminStudents .a-paid').forEa
 function filterStudents(){const q=(document.getElementById('studentSearch').value||'').toLowerCase();document.querySelectorAll('#adminStudents .student-row').forEach(r=>{r.style.display=r.querySelector('.a-name').value.toLowerCase().includes(q)?'':'none';});}
 function copyFromArchive(){const src=data.archive.length?data.archive[data.archive.length-1]:null;if(!src){alert('Нет архива');return;}if(!confirm('Скопировать из "'+src.name+'"?'))return;const c=document.getElementById('adminStudents');c.innerHTML='';src.students.forEach(s=>{if(s.name){const d=document.createElement('div');d.className='a-row student-row';d.innerHTML=`<div style="display:flex;gap:4px;"><input type="text" class="a-name" list="childrenDatalist" value="${escapeHtml(s.name)}"><button class="btn btn-gold btn-sm" onclick="openChildPicker(this.previousElementSibling)">👶</button></div><input type="number" class="a-amount" value="${s.amount||''}" step="0.01"><label class="switch"><input type="checkbox" class="a-paid"><span class="slider"></span></label><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;c.appendChild(d);}});recalcAdmin();markDirty();}
 function renderAdminExpenses() { const m = getCurrentMonth(); let rows = ''; m.expenses.forEach(e => { rows += `<div class="a-row expense-row"><input type="text" class="a-desc" value="${escapeHtml(e.description||'')}" placeholder="На что потрачено"><input type="number" class="a-amount" value="${e.amount||''}" placeholder="₽" step="0.01"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button></div>`; }); document.getElementById('admin-expenses').innerHTML = `<div class="admin-card"><div class="admin-card-title">💸 Расходы</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addExpenseRow();markDirty()">➕ Добавить расход</button></div><div class="admin-stats" id="expenseStats"></div><div id="adminExpenses">${rows}</div></div>`; }
-function addExpenseRow(){const d=document.createElement('div');d.className='a-row expense-row';d.innerHTML=`<input type="text" class="a-desc" placeholder="На что потрачено"><input type="number" class="a-amount" placeholder="₽" step="0.01"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()"></button>`;document.getElementById('adminExpenses').appendChild(d);}
+function addExpenseRow(){const d=document.createElement('div');d.className='a-row expense-row';d.innerHTML=`<input type="text" class="a-desc" placeholder="На что потрачено"><input type="number" class="a-amount" placeholder="₽" step="0.01"><button class="btn btn-danger btn-sm" onclick="this.parentElement.remove();recalcAdmin();markDirty()">🗑</button>`;document.getElementById('adminExpenses').appendChild(d);}
 function renderAdminNews() { let rows = ''; data.news.forEach(n => { rows += `<div class="a-news-card" ${n.date?`data-date="${n.date}"`:''}><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px"><label class="a-urgent-label"><input type="checkbox" class="a-news-urgent" ${n.urgent?'checked':''}> 🔴 Срочно</label><button class="btn btn-danger btn-sm" onclick="this.closest('.a-news-card').remove();markDirty()">🗑</button></div><input type="text" class="a-news-title" placeholder="Заголовок" value="${escapeHtml(n.title||'')}"><textarea class="a-news-text" placeholder="Текст">${escapeHtml(n.text||'')}</textarea></div>`; }); document.getElementById('admin-news').innerHTML = `<div class="admin-card"><div class="admin-card-title">📰 Новости</div><div class="admin-toolbar"><button class="btn btn-success btn-sm" onclick="addNewsRow();markDirty()">➕ Добавить новость</button></div><div id="adminNews">${rows}</div></div>`; }
 function addNewsRow(){const d=document.createElement('div');d.className='a-news-card';d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px"><label class="a-urgent-label"><input type="checkbox" class="a-news-urgent"> 🔴 Срочно</label><button class="btn btn-danger btn-sm" onclick="this.closest('.a-news-card').remove();markDirty()">🗑</button></div><input type="text" class="a-news-title" placeholder="Заголовок"><textarea class="a-news-text" placeholder="Текст"></textarea>`;document.getElementById('adminNews').appendChild(d);}
-function renderAdminMonths() { let html = `<div class="admin-card"><div class="admin-card-title">➕ Создать месяц</div><div class="form-group"><label>Название</label><input type="text" id="newMonthName" placeholder="Например: Сентябрь 2026"></div><button class="btn btn-success" onclick="createNewMonth()">➕ Создать</button></div><div class="admin-card"><div class="admin-card-title">📅 Список месяцев</div><div id="monthsList">`; data.months.forEach(m => { const cur = m.id === currentMonthId; html += `<div class="month-item${cur?' is-current':''}"><div><strong>${escapeHtml(m.name)}</strong>${cur?'<span class="month-current-badge">⭐ текущий</span>':''}<small style="display:block;color:var(--gray);margin-top:4px">Остаток: <b>${formatMoney(calcBalance(m))} ₽</b></small></div><div class="month-item-actions">${cur?'':`<button class="btn btn-primary btn-sm" onclick="setCurrentMonth('${m.id}')">⭐</button>`}<button class="btn btn-secondary btn-sm" onclick="renameMonth('${m.id}')">️</button><button class="btn btn-danger btn-sm" onclick="deleteMonth('${m.id}')"></button></div></div>`; }); html += '</div></div>'; document.getElementById('admin-months').innerHTML = html; }
+function renderAdminMonths() { let html = `<div class="admin-card"><div class="admin-card-title">➕ Создать месяц</div><div class="form-group"><label>Название</label><input type="text" id="newMonthName" placeholder="Например: Сентябрь 2026"></div><button class="btn btn-success" onclick="createNewMonth()">➕ Создать</button></div><div class="admin-card"><div class="admin-card-title">📅 Список месяцев</div><div id="monthsList">`; data.months.forEach(m => { const cur = m.id === currentMonthId; html += `<div class="month-item${cur?' is-current':''}"><div><strong>${escapeHtml(m.name)}</strong>${cur?'<span class="month-current-badge">⭐ текущий</span>':''}<small style="display:block;color:var(--gray);margin-top:4px">Остаток: <b>${formatMoney(calcBalance(m))} ₽</b></small></div><div class="month-item-actions">${cur?'':`<button class="btn btn-primary btn-sm" onclick="setCurrentMonth('${m.id}')">⭐</button>`}<button class="btn btn-secondary btn-sm" onclick="renameMonth('${m.id}')">✏️</button><button class="btn btn-danger btn-sm" onclick="deleteMonth('${m.id}')">🗑</button></div></div>`; }); html += '</div></div>'; document.getElementById('admin-months').innerHTML = html; }
 
 async function renderAdminAccess() {
   let reqs = [];
@@ -1693,9 +1397,9 @@ async function renderAdminAccess() {
   users.forEach(u => {
     const isSelf = u.id === currentUserId;
     let roleBtns = '';
-    if (u.role === 'admin') roleBtns += `<button class="btn btn-secondary btn-sm" onclick="setUserRole('${u.id}','member')">${isSelf?'️ Снять себя в родители':'️ В родители'}</button>`;
+    if (u.role === 'admin') roleBtns += `<button class="btn btn-secondary btn-sm" onclick="setUserRole('${u.id}','member')">${isSelf?'⬇️ Снять себя в родители':'⬇️ В родители'}</button>`;
     else roleBtns += `<button class="btn btn-gold btn-sm" onclick="setUserRole('${u.id}','admin')">⬆️ В админы</button>`;
-    usersHtml += `<div class="user-card${u.role==='admin'?' admin-u':''}"><div><b>${escapeHtml(u.name||u.phone)}</b> <span class="role-badge${u.role==='admin'?' admin-b':''}">${u.role==='admin'?'💎 админ':'👁️ родитель'}</span>${isSelf?' <span class="role-badge" style="background:var(--info)">это вы</span>':''}<br><small style="color:var(--gray)">${u.phone?' '+escapeHtml(u.phone)+' · ':''}пароль: <span class="pwd-chip">${escapeHtml(u.password)}</span></small></div><div style="display:flex;gap:4px;flex-wrap:wrap;">${roleBtns}<button class="btn btn-secondary btn-sm" onclick="changeUserPassword('${u.id}')">🔑</button><button class="btn btn-danger btn-sm" onclick="deleteUser('${u.id}')">🗑</button></div></div>`;
+    usersHtml += `<div class="user-card${u.role==='admin'?' admin-u':''}"><div><b>${escapeHtml(u.name||u.phone)}</b> <span class="role-badge${u.role==='admin'?' admin-b':''}">${u.role==='admin'?'💎 админ':'👁️ родитель'}</span>${isSelf?' <span class="role-badge" style="background:var(--info)">это вы</span>':''}<br><small style="color:var(--gray)">${u.phone?'📞 '+escapeHtml(u.phone)+' · ':''}пароль: <span class="pwd-chip">${escapeHtml(u.password)}</span></small></div><div style="display:flex;gap:4px;flex-wrap:wrap;">${roleBtns}<button class="btn btn-secondary btn-sm" onclick="changeUserPassword('${u.id}')">🔑</button><button class="btn btn-danger btn-sm" onclick="deleteUser('${u.id}')">🗑</button></div></div>`;
   });
   document.getElementById('admin-access').innerHTML = `<div class="admin-card"><div class="admin-card-title">📩 Запросы на вход</div>${reqHtml}</div><div class="admin-card"><div class="admin-card-title">➕ Добавить пользователя</div><div class="hint">🔐 Пользователь получит аккаунт Firebase Auth (вход: телефон + пароль).</div><div class="form-group"><label>ФИО</label><input type="text" id="newUserFullname" placeholder="Например: Наталья"></div><div class="form-group"><label>Телефон</label><input type="tel" id="newUserPhone" placeholder="Полностью или последние 4 цифры"></div><div class="form-group"><label>Пароль</label><div style="display:flex;gap:8px"><input type="text" id="newUserPassword"><button class="btn btn-secondary btn-sm" onclick="document.getElementById('newUserPassword').value=genPassword()">🎲</button></div></div><div class="form-group"><label>Роль</label><select id="newUserRole"><option value="member">👁️ Родитель</option><option value="admin">💎 Админ</option></select></div><button class="btn btn-success" onclick="addUserManual()">➕ Добавить</button></div><div class="admin-card"><div class="admin-card-title">👥 Пользователи группы</div><div class="hint">💎 «⬆️ В админы» — назначить из родителей/комитета. «👁️ В родители» — снять полномочия (в т.ч. себя).</div>${usersHtml}</div>`;
 }
@@ -1762,7 +1466,7 @@ async function changeUserPassword(id) {
 
 async function deleteUser(id) {
   const u = app.users.find(x => x.id === id); if (!u) return;
-  if (u.id === currentUserId) { alert(' Нельзя удалить свой аккаунт!'); return; }
+  if (u.id === currentUserId) { alert('⛔ Нельзя удалить свой аккаунт!'); return; }
   if (!confirm('Удалить ' + (u.name||u.phone) + '?')) return;
   if (protectionEnabled && u.uid) { try { await db.collection('allowlist').doc(u.uid).delete(); } catch(e) {} }
   app.users = app.users.filter(x => x.id !== id);
@@ -1874,10 +1578,7 @@ async function saveAll() {
     await db.collection('public').doc('config').set({ groups: app.groups.map(g => ({ id: g.id, number: g.number, name: g.name })), maintenanceMode: settings.maintenanceMode, protected: true }, { merge: true });
     publicConfig.groups = app.groups.map(g => ({ id: g.id, number: g.number, name: g.name }));
   }
-  fillLoginGroups();
-  renderAll();
-  clearDirty();
-  fillChildrenDatalist();
+  fillLoginGroups(); renderAll(); clearDirty(); fillChildrenDatalist();
   document.getElementById('headerGroupLabel').textContent = groupLabel(getGroup(currentGroupId));
   if (btn) { btn.disabled = false; btn.innerHTML = '💾 Сохранить'; }
   showToast('✅ Все изменения сохранены!', 'success');
@@ -1902,9 +1603,9 @@ function renderOwnerGroups() {
     const kc = gd ? (gd.children || []).length : 0;
     const curM = gd ? (gd.months || []).find(mm => mm.id === gd.currentMonthId) : null;
     const bal = curM ? calcBalance(curM) : 0;
-    groupsHtml += `<div class="month-item${g.id===currentGroupId?' is-current':''}"><div><strong>${groupLabel(g)}</strong>${g.id===currentGroupId?'<span class="month-current-badge">открыта</span>':''}<br><small style="color:var(--gray)">👥 ${uc} польз. · 👶 ${kc} детей · 💰 ${formatMoney(bal)} ₽</small></div><div class="month-item-actions"><button class="btn btn-primary btn-sm" onclick="ownerSwitchGroup('${g.id}')"> Открыть</button><button class="btn btn-warning btn-sm" onclick="ownerSwitchGroup('${g.id}');showSection('admin', document.getElementById('navAdminBtn'))">⚙️ Админ</button><button class="btn btn-danger btn-sm" onclick="deleteGroup('${g.id}')">🗑</button></div></div>`;
+    groupsHtml += `<div class="month-item${g.id===currentGroupId?' is-current':''}"><div><strong>${groupLabel(g)}</strong>${g.id===currentGroupId?'<span class="month-current-badge">открыта</span>':''}<br><small style="color:var(--gray)">👥 ${uc} польз. · 👶 ${kc} детей · 💰 ${formatMoney(bal)} ₽</small></div><div class="month-item-actions"><button class="btn btn-primary btn-sm" onclick="ownerSwitchGroup('${g.id}')">📂 Открыть</button><button class="btn btn-warning btn-sm" onclick="ownerSwitchGroup('${g.id}');showSection('admin', document.getElementById('navAdminBtn'))">⚙️ Админ</button><button class="btn btn-danger btn-sm" onclick="deleteGroup('${g.id}')">🗑</button></div></div>`;
   });
-  document.getElementById('owner-groups').innerHTML = `<div class="admin-card"><div class="admin-card-title">👑 Полное управление сайтом</div><div class="hint">Вы управляете ВСЕМ сайтом и всеми группами. Переключайте группы в шапке или кнопками ниже.</div><div class="admin-card-title"> Защита (Firebase Auth)</div><div class="hint">${protectionEnabled ? '✅ Защита ВКЛЮЧЕНА. Вход только через Firebase Auth.' : '⚠️ Защита пока выключена. Нажмите кнопку, затем опубликуйте новые правила Firestore.'}</div><button class="btn btn-gold btn-block" onclick="enableProtection()">🔐 Включить защиту</button></div><div class="admin-card"><div class="admin-card-title">➕ Создать группу</div><div class="form-group"><label>Номер</label><input type="number" id="newGroupNumber" placeholder="8"></div><div class="form-group"><label>Название</label><input type="text" id="newGroupName" placeholder="Ромашка"></div><button class="btn btn-success" onclick="createGroup()">➕ Создать</button></div><div class="admin-card"><div class="admin-card-title">🏢 Все группы сайта</div>${groupsHtml}</div>`;
+  document.getElementById('owner-groups').innerHTML = `<div class="admin-card"><div class="admin-card-title">👑 Полное управление сайтом</div><div class="hint">Вы управляете ВСЕМ сайтом и всеми группами. Переключайте группы в шапке или кнопками ниже.</div><div class="admin-card-title">🔐 Защита (Firebase Auth)</div><div class="hint">${protectionEnabled ? '✅ Защита ВКЛЮЧЕНА. Вход только через Firebase Auth.' : '⚠️ Защита пока выключена. Нажмите кнопку, затем опубликуйте новые правила Firestore.'}</div><button class="btn btn-gold btn-block" onclick="enableProtection()">🔐 Включить защиту</button></div><div class="admin-card"><div class="admin-card-title">➕ Создать группу</div><div class="form-group"><label>Номер</label><input type="number" id="newGroupNumber" placeholder="8"></div><div class="form-group"><label>Название</label><input type="text" id="newGroupName" placeholder="Ромашка"></div><button class="btn btn-success" onclick="createGroup()">➕ Создать</button></div><div class="admin-card"><div class="admin-card-title">🏢 Все группы сайта</div>${groupsHtml}</div>`;
 }
 
 function renderOwnerSettings() {
