@@ -17,13 +17,16 @@ html, body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans
 button, .top-nav-btn, .btn, .home-tile { user-select:none; -webkit-user-select:none; touch-action:manipulation; }
 input, textarea, select { user-select:text; -webkit-user-select:text; }
 
-/* ===== УВЕДОМЛЕНИЯ И БЕЙДЖИ ===== */
+/* ===== БЕЙДЖИ УВЕДОМЛЕНИЙ В НАВИГАЦИИ ===== */
 .nav-badge { position: absolute; top: 2px; right: 6px; background: var(--danger); color: white; font-size: 0.7em; font-weight: 800; padding: 2px 6px; border-radius: 10px; min-width: 18px; text-align: center; display: none; box-shadow: 0 2px 4px rgba(220,53,69,0.4); animation: pulse-badge 2s infinite; }
-@keyframes pulse-badge { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+.nav-badge.new-change { background: var(--brand-orange); box-shadow: 0 2px 4px rgba(232,119,34,0.4); }
+@keyframes pulse-badge { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
 .toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 20000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
 .toast { pointer-events: auto; background: white; border-left: 4px solid var(--brand-green); padding: 14px 18px; border-radius: var(--radius-md); box-shadow: 0 8px 24px rgba(0,0,0,0.15); animation: slideInToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; align-items: center; gap: 12px; max-width: 320px; cursor: pointer; }
 .toast.urgent { border-left-color: var(--danger); }
+.toast.info { border-left-color: var(--info); }
+.toast.warning { border-left-color: var(--warning); }
 @keyframes slideInToast { from { transform: translateX(120%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
 .login-screen, .maintenance-screen { position:fixed; inset:0; background:linear-gradient(135deg,var(--brand-green) 0%,var(--brand-orange) 100%); z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
@@ -75,13 +78,20 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 @keyframes fadeIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
 .section-title { font-size:1.4em; font-weight:700; color:var(--brand-green); margin-bottom:14px; }
 
-/* Улучшенные блоки для родителей */
 .parent-dashboard-header { background: linear-gradient(135deg, #e8f5e9, #fff); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow-sm); }
 .parent-dashboard-header h3 { color: var(--dark); margin: 0; font-size: 1.1em; }
 
+/* Баннер "Есть новые изменения" */
+.changes-banner { background: linear-gradient(135deg, #fff3cd, #ffe8d6); border: 2px solid var(--warning); border-radius: var(--radius-lg); padding: 14px 18px; margin-bottom: 16px; display: flex; align-items: center; gap: 12px; animation: pulse-banner 2s ease-in-out; }
+@keyframes pulse-banner { 0%,100% { box-shadow: 0 0 0 0 rgba(253,126,20,0.4); } 50% { box-shadow: 0 0 0 8px rgba(253,126,20,0); } }
+.changes-banner .cb-icon { font-size: 1.8em; }
+.changes-banner .cb-text { flex: 1; font-size: 0.92em; color: #5b4300; }
+.changes-banner .cb-text b { color: var(--danger); }
+
 .home-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:16px; }
-.home-tile { background:white; border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-md); border:1px solid var(--border); cursor:pointer; transition: transform 0.2s, box-shadow 0.2s; }
+.home-tile { background:white; border-radius:var(--radius-lg); padding:20px; box-shadow:var(--shadow-md); border:1px solid var(--border); cursor:pointer; transition: transform 0.2s, box-shadow 0.2s; position: relative; }
 .home-tile:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.home-tile.has-changes { border-color: var(--warning); box-shadow: 0 0 0 2px rgba(253,126,20,0.2); }
 .home-tile-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; padding-bottom:10px; border-bottom:2px solid var(--brand-orange); }
 .home-tile-icon { font-size:1.8em; }
 .home-tile-title { font-size:1.1em; font-weight:700; color:var(--brand-green); flex:1; }
@@ -93,6 +103,7 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .home-tile-badge.info { background:#d1ecf1; color:#0c5460; border-color:var(--info); }
 .home-tile-badge.gold { background:#fff9e6; color:#856404; border-color:var(--gold); }
 .home-tile-badge.danger { background:#ffebee; color:var(--danger); border-color:var(--danger); }
+.home-tile-badge.changes { background:var(--warning); color:white; border-color:var(--warning); animation: pulse-badge 2s infinite; }
 
 .balance-hero { background:linear-gradient(135deg,var(--brand-green),var(--brand-orange)); color:white; border-radius:var(--radius-xl); padding:24px; margin-bottom:20px; text-align:center; }
 .balance-hero .balance-value { font-size:2.5em; font-weight:800; margin:6px 0; }
@@ -101,9 +112,9 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .balance-stat-value { font-size:1.3em; font-weight:800; }
 .balance-stat-label { font-size:.7em; margin-top:2px; font-weight:600; }
 
-/* Улучшенные карточки новостей */
 .news-card { background:white; padding:18px; border-radius:var(--radius-lg); margin-bottom:14px; border-left:4px solid var(--info); position: relative; box-shadow: var(--shadow-sm); }
 .news-card.urgent { border-left-color:var(--danger); background:#fff5f5; }
+.news-card.is-new { border-left-color: var(--warning); background: #fffbeb; box-shadow: 0 0 0 2px rgba(253,126,20,0.2); }
 .news-card .news-date { font-size:.75em; color:var(--light-gray); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
 .news-card .news-title { font-weight:700; margin-bottom:8px; font-size: 1.05em; }
 .news-card .news-text { color:#444; font-size:.95em; line-height:1.6; }
@@ -112,6 +123,8 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .data-table { width:100%; border-collapse:collapse; background:white; border-radius:var(--radius-lg); overflow:hidden; box-shadow: var(--shadow-sm); }
 .data-table th { background:var(--bg); padding:12px; text-align:left; font-size:.8em; color:var(--gray); text-transform:uppercase; font-weight: 700; }
 .data-table td { padding:12px; border-top:1px solid var(--border); font-size:.9em; }
+.data-table tr.is-new { background: #fffbeb !important; position: relative; }
+.data-table tr.is-new td:first-child::before { content: '🆕'; margin-right: 4px; }
 .status-paid { color:var(--success); font-weight:700; font-size:0.9em; }
 .status-unpaid { color:var(--warning); font-weight:700; font-size:0.9em; }
 .amount { font-weight:600; }
@@ -218,7 +231,6 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(255,255,255,.3); border-top-color:white; border-radius:50%; animation:spin .8s linear infinite; }
 @keyframes spin { from{transform:rotate(0);} to{transform:rotate(360deg);} }
 
-/* Стили для сообщений */
 .message-card { background: white; border-radius: var(--radius-md); padding: 16px; margin-bottom: 12px; border-left: 4px solid var(--info); box-shadow: var(--shadow-sm); }
 .message-card.new { border-left-color: var(--warning); background: #fffbf0; }
 .message-card.replied { border-left-color: var(--success); }
@@ -243,49 +255,23 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .filter-btn { padding: 6px 14px; border: 1px solid var(--border); background: white; border-radius: 20px; font-size: 0.85em; cursor: pointer; font-weight: 600; color: var(--gray); }
 .filter-btn.active { background: var(--brand-green); color: white; border-color: var(--brand-green); }
 
-/* ===== СТИЛИ ДЛЯ ФОТОАЛЬБОМОВ ===== */
 .albums-section { margin-top: 30px; }
 .albums-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
-.album-card {
-  background: white; border-radius: var(--radius-lg); padding: 20px; text-align: center;
-  box-shadow: var(--shadow-sm); border: 2px solid var(--border); cursor: pointer; transition: all 0.3s;
-  text-decoration: none; color: inherit; display: block;
-}
+.album-card { background: white; border-radius: var(--radius-lg); padding: 20px; text-align: center; box-shadow: var(--shadow-sm); border: 2px solid var(--border); cursor: pointer; transition: all 0.3s; text-decoration: none; color: inherit; display: block; }
 .album-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--brand-orange); }
 .album-icon { font-size: 3em; margin-bottom: 10px; }
 .album-title { font-size: 1.1em; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
 .album-file { font-size: 0.8em; color: var(--gray); font-family: monospace; }
-
-.album-admin-item {
-  background: var(--bg); border-radius: var(--radius-md); padding: 12px; margin-bottom: 10px;
-  display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap;
-  border-left: 4px solid var(--brand-green);
-}
+.album-admin-item { background: var(--bg); border-radius: var(--radius-md); padding: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; border-left: 4px solid var(--brand-green); }
 .album-admin-info { flex: 1; min-width: 200px; }
 .album-admin-title { font-weight: 700; margin-bottom: 4px; }
 .album-admin-file { font-size: 0.85em; color: var(--gray); font-family: monospace; }
 .album-admin-group { font-size: 0.75em; color: var(--info); margin-top: 4px; }
-
-/* ===== МОДАЛЬНОЕ ОКНО ДЛЯ ФОТОАЛЬБОМА ===== */
-.album-modal-overlay {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.9); z-index: 100000;
-  display: none; align-items: center; justify-content: center; padding: 20px;
-}
-.album-modal-content {
-  background: white; border-radius: 16px; width: 100%; max-width: 1200px; height: 90vh;
-  display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-}
-.album-modal-header {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 15px 20px; background: linear-gradient(135deg, var(--brand-green), var(--brand-orange));
-  color: white; border-radius: 16px 16px 0 0;
-}
+.album-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.9); z-index: 100000; display: none; align-items: center; justify-content: center; padding: 20px; }
+.album-modal-content { background: white; border-radius: 16px; width: 100%; max-width: 1200px; height: 90vh; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+.album-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: linear-gradient(135deg, var(--brand-green), var(--brand-orange)); color: white; border-radius: 16px 16px 0 0; }
 .album-modal-header h3 { margin: 0; font-size: 1.3em; }
-.album-close-btn {
-  background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px;
-  border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.95em;
-}
+.album-close-btn { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.3s; font-size: 0.95em; }
 .album-close-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
 .album-modal-body { flex: 1; overflow: hidden; background: #f8f9fa; }
 .album-modal-body iframe { width: 100%; height: 100%; border: none; }
@@ -312,7 +298,6 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </head>
 <body>
 
-<!-- ЗВУКОВОЙ СИГНАЛ (Короткий "дзынь") -->
 <audio id="notifySound" preload="auto">
   <source src="data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWGluZwAAAA8AAAACAAADhAC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjU0AAAAAAAAAAAAAAAAJAAAAAAAAAAAA4T8v7T2AAAAAAD/+9DEAAAHSAVzAIAAANIAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV" type="audio/mpeg">
 </audio>
@@ -367,9 +352,18 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <div class="top-nav-inner">
 <button class="top-nav-btn active" onclick="showSection('home', this)"><span class="nav-icon">🏠</span><span>Главная</span></button>
 <button class="top-nav-btn" onclick="showSection('group', this)"><span class="nav-icon">🏫</span><span>Группа</span></button>
-<button class="top-nav-btn" onclick="showSection('news', this)"><span class="nav-icon">📰</span><span>Новости</span></button>
-<button class="top-nav-btn" onclick="showSection('contributions', this)"><span class="nav-icon">💰</span><span>Взносы</span></button>
-<button class="top-nav-btn" onclick="showSection('expenses', this)"><span class="nav-icon">💸</span><span>Расходы</span></button>
+<button class="top-nav-btn" id="navNewsBtn" onclick="showSection('news', this)">
+  <span class="nav-icon">📰</span><span>Новости</span>
+  <span id="newsBadge" class="nav-badge new-change">0</span>
+</button>
+<button class="top-nav-btn" id="navContribBtn" onclick="showSection('contributions', this)">
+  <span class="nav-icon">💰</span><span>Взносы</span>
+  <span id="contribBadge" class="nav-badge new-change">0</span>
+</button>
+<button class="top-nav-btn" id="navExpensesBtn" onclick="showSection('expenses', this)">
+  <span class="nav-icon">💸</span><span>Расходы</span>
+  <span id="expensesBadge" class="nav-badge new-change">0</span>
+</button>
 <button class="top-nav-btn" onclick="showSection('committee', this)"><span class="nav-icon">👥</span><span>Комитет</span></button>
 <button class="top-nav-btn" onclick="showSection('archive', this)"><span class="nav-icon">📦</span><span>Архив</span></button>
 <button class="top-nav-btn" id="navMessagesBtn" onclick="showSection('messages', this)">
@@ -448,7 +442,6 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 </main>
 
-<!-- Контейнер для Toast-уведомлений -->
 <div id="toastContainer" class="toast-container"></div>
 
 <div class="modal-overlay" id="accessRequestModal">
@@ -521,7 +514,6 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 </div>
 
-<!-- ===== МОДАЛЬНОЕ ОКНО ДЛЯ ФОТОАЛЬБОМА ===== -->
 <div id="albumModal" class="album-modal-overlay">
   <div class="album-modal-content">
     <div class="album-modal-header">
@@ -563,11 +555,19 @@ let publicConfig = { groups: [], maintenanceMode: false, protected: false };
 let messagesFilter = 'all';
 let groupAlbums = [];
 
-// ===== СИСТЕМА УВЕДОМЛЕНИЙ =====
+// ===== СИСТЕМА УВЕДОМЛЕНИЙ О СООБЩЕНИЯХ =====
 let unreadMessagesCount = 0;
 const originalTitle = document.title;
 let messagesUnsubscribe = null;
+let dataUnsubscribe = null;
 let isInitialLoad = true;
+
+// ===== СИСТЕМА ОТСЛЕЖИВАНИЯ ИЗМЕНЕНИЙ В РАЗДЕЛАХ (ДЛЯ РОДИТЕЛЕЙ) =====
+// Ключ в localStorage: "lastSectionState_<groupId>"
+// Хранит: { news: hash, contributions: hash, expenses: hash }
+let lastSectionState = { news: '', contributions: '', expenses: '' };
+let previousSectionState = { news: '', contributions: '', expenses: '' };
+let sectionChanges = { news: 0, contributions: 0, expenses: 0 };
 
 function requestNotificationPermission() {
   if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
@@ -584,7 +584,7 @@ function triggerNotification(title, body, isUrgent = false) {
   unreadMessagesCount++;
   updateBadge();
   document.title = `(${unreadMessagesCount}) ${originalTitle}`;
-  showToast(title, body, isUrgent);
+  showToast(title, body, isUrgent ? 'urgent' : '');
   if ("Notification" in window && Notification.permission === "granted") {
     try { new Notification(title, { body: body, icon: './apple-touch-icon.png' }); } catch(e) {}
   }
@@ -603,17 +603,193 @@ function clearBadge() {
   document.title = originalTitle;
 }
 
-function showToast(title, message, isUrgent = false) {
+function showToast(title, message, type = '') {
   const container = document.getElementById('toastContainer');
   const toast = document.createElement('div');
-  toast.className = `toast ${isUrgent ? 'urgent' : ''}`;
-  toast.innerHTML = `<span style="font-size:1.5em">${isUrgent ? '🔴' : '📩'}</span><div><div style="font-weight:700;font-size:0.9em">${title}</div><div style="font-size:0.8em;color:var(--gray)">${message}</div></div>`;
-  toast.onclick = () => { showSection('messages', document.getElementById('navMessagesBtn')); toast.remove(); };
+  toast.className = `toast ${type}`;
+  const icon = type === 'urgent' ? '🔴' : type === 'warning' ? '⚠️' : type === 'info' ? 'ℹ️' : '📩';
+  toast.innerHTML = `<span style="font-size:1.5em">${icon}</span><div><div style="font-weight:700;font-size:0.9em">${title}</div><div style="font-size:0.8em;color:var(--gray)">${message}</div></div>`;
+  toast.onclick = () => { toast.remove(); };
   container.appendChild(toast);
   setTimeout(() => {
-    toast.style.opacity = '0'; toast.style.transform = 'translateX(120%)';
+    toast.style.opacity = '0'; toast.style.transform = 'translateX(120%)'; toast.style.transition = 'all 0.4s';
     setTimeout(() => toast.remove(), 400);
   }, 5000);
+}
+
+// ===== ВЫЧИСЛЕНИЕ "СЛЕПКА" СОСТОЯНИЯ РАЗДЕЛА =====
+// Возвращает строку, которая меняется при любом изменении в разделе
+function computeSectionHash(section) {
+  if (!data) return '';
+  const m = getCurrentMonth();
+  if (!m) return '';
+  
+  if (section === 'news') {
+    // Хэш = количество новостей + даты + заголовки + признак urgent
+    const items = (data.news || []).map(n => `${n.date||''}|${n.title||''}|${n.urgent?1:0}|${(n.text||'').length}`).join(';');
+    return `${(data.news||[]).length}:${items}`;
+  }
+  
+  if (section === 'contributions') {
+    // Хэш = список студентов с их статусами оплаты и суммами
+    const items = (m.students || []).map(s => `${s.name||''}|${s.amount||0}|${s.paid?1:0}`).join(';');
+    return `${(m.students||[]).length}:${m.additionalIncome||0}:${items}`;
+  }
+  
+  if (section === 'expenses') {
+    // Хэш = список расходов
+    const items = (m.expenses || []).map(e => `${e.description||''}|${e.amount||0}`).join(';');
+    return `${(m.expenses||[]).length}:${items}`;
+  }
+  
+  return '';
+}
+
+// Подсчёт количества изменений между двумя хэшами
+function countChanges(section, oldHash, newHash) {
+  if (oldHash === newHash) return 0;
+  if (!oldHash) return 0; // первый запуск — не считаем изменениями
+  
+  if (section === 'news') {
+    // Считаем количество новостей в новом хэше, которых не было в старом
+    const oldItems = oldHash.split(':').slice(1).join(':').split(';').filter(Boolean);
+    const newItems = newHash.split(':').slice(1).join(':').split(';').filter(Boolean);
+    let count = 0;
+    newItems.forEach(item => { if (!oldItems.includes(item)) count++; });
+    return count || (newItems.length !== oldItems.length ? Math.abs(newItems.length - oldItems.length) : 1);
+  }
+  
+  if (section === 'contributions') {
+    const oldItems = oldHash.split(':').slice(2).join(':').split(';').filter(Boolean);
+    const newItems = newHash.split(':').slice(2).join(':').split(';').filter(Boolean);
+    let changed = 0;
+    // Сравниваем по позициям (имя + сумма + статус)
+    const maxLen = Math.max(oldItems.length, newItems.length);
+    for (let i = 0; i < maxLen; i++) {
+      if (oldItems[i] !== newItems[i]) changed++;
+    }
+    return changed;
+  }
+  
+  if (section === 'expenses') {
+    const oldItems = oldHash.split(':').slice(1).join(':').split(';').filter(Boolean);
+    const newItems = newHash.split(':').slice(1).join(':').split(';').filter(Boolean);
+    let changed = 0;
+    const maxLen = Math.max(oldItems.length, newItems.length);
+    for (let i = 0; i < maxLen; i++) {
+      if (oldItems[i] !== newItems[i]) changed++;
+    }
+    return changed;
+  }
+  
+  return 0;
+}
+
+// Загрузка сохранённого состояния из localStorage
+function loadLastSectionState() {
+  if (!currentGroupId) return;
+  const key = `lastSectionState_${currentGroupId}`;
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw) lastSectionState = JSON.parse(raw);
+    else lastSectionState = { news: '', contributions: '', expenses: '' };
+  } catch(e) {
+    lastSectionState = { news: '', contributions: '', expenses: '' };
+  }
+  previousSectionState = { ...lastSectionState };
+}
+
+// Сохранение текущего состояния как "просмотренного"
+function saveSectionState(section) {
+  if (!currentGroupId) return;
+  const key = `lastSectionState_${currentGroupId}`;
+  lastSectionState[section] = computeSectionHash(section);
+  try { localStorage.setItem(key, JSON.stringify(lastSectionState)); } catch(e) {}
+}
+
+// Сохранить все разделы сразу (при первом входе)
+function saveAllSectionsState() {
+  ['news', 'contributions', 'expenses'].forEach(s => saveSectionState(s));
+}
+
+// Обновление бейджей в навигации и на главной
+function updateSectionBadges(silent = false) {
+  if (!data || currentRole === 'owner') return; // владельцу не нужно
+  
+  const currentHashes = {
+    news: computeSectionHash('news'),
+    contributions: computeSectionHash('contributions'),
+    expenses: computeSectionHash('expenses')
+  };
+  
+  let anyChanges = false;
+  
+  ['news', 'contributions', 'expenses'].forEach(section => {
+    const changes = countChanges(section, lastSectionState[section], currentHashes[section]);
+    sectionChanges[section] = changes;
+    
+    const badgeId = section === 'news' ? 'newsBadge' : section === 'contributions' ? 'contribBadge' : 'expensesBadge';
+    const badge = document.getElementById(badgeId);
+    if (badge) {
+      if (changes > 0) {
+        badge.textContent = changes;
+        badge.style.display = 'inline-block';
+        anyChanges = true;
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+    
+    // Показываем toast ТОЛЬКО если изменения появились прямо сейчас (не при первом входе)
+    if (!silent && changes > 0 && previousSectionState[section] && previousSectionState[section] !== currentHashes[section]) {
+      const titles = {
+        news: '📰 Новые новости',
+        contributions: '💰 Изменения во взносах',
+        expenses: '💸 Новые расходы'
+      };
+      const messages = {
+        news: `Появил${changes === 1 ? 'ась' : 'ось'} ${changes} ${changes === 1 ? 'новость' : (changes < 5 ? 'новости' : 'новостей')}`,
+        contributions: `Изменени${changes === 1 ? 'е' : 'й'}: ${changes} ${changes === 1 ? 'запись' : (changes < 5 ? 'записи' : 'записей')}`,
+        expenses: `Добавлен${changes === 1 ? '' : 'о'} ${changes} ${changes === 1 ? 'расход' : (changes < 5 ? 'расхода' : 'расходов')}`
+      };
+      showToast(titles[section], messages[section], 'warning');
+    }
+  });
+  
+  previousSectionState = { ...currentHashes };
+  
+  // Обновляем плитки на главной
+  updateHomeTilesChanges();
+}
+
+function updateHomeTilesChanges() {
+  // Обновляем бейджи на плитках главной страницы
+  document.querySelectorAll('.home-tile').forEach(tile => {
+    const onclick = tile.getAttribute('onclick') || '';
+    let section = null;
+    if (onclick.includes("'news'")) section = 'news';
+    else if (onclick.includes("'contributions'")) section = 'contributions';
+    else if (onclick.includes("'expenses'")) section = 'expenses';
+    
+    if (!section) return;
+    
+    const changes = sectionChanges[section] || 0;
+    tile.classList.toggle('has-changes', changes > 0);
+    
+    // Удаляем старый бейдж изменений
+    const oldBadge = tile.querySelector('.home-tile-badge.changes');
+    if (oldBadge) oldBadge.remove();
+    
+    if (changes > 0) {
+      const badges = tile.querySelector('.home-tile-badges');
+      if (badges) {
+        const b = document.createElement('span');
+        b.className = 'home-tile-badge changes';
+        b.textContent = `🔔 ${changes} изм.`;
+        badges.insertBefore(b, badges.firstChild);
+      }
+    }
+  });
 }
 
 function startMessagesListener() {
@@ -635,6 +811,39 @@ function startMessagesListener() {
     }
     isInitialLoad = false;
   }, error => { console.error("Ошибка прослушивания сообщений:", error); });
+}
+
+// Слушатель изменений в основных данных (для обновления бейджей разделов в реальном времени)
+function startDataListener() {
+  if (dataUnsubscribe) dataUnsubscribe();
+  dataUnsubscribe = db.collection('data').doc('main').onSnapshot(doc => {
+    if (!doc.exists) return;
+    const newData = doc.data();
+    
+    // Обновляем app только если данные реально изменились
+    if (!app || JSON.stringify(app) !== JSON.stringify(newData)) {
+      const oldData = app;
+      app = newData;
+      if (currentGroupId) {
+        bindGroupData();
+        
+        // Обновляем бейджи разделов (с флагом silent=false, чтобы показать toast)
+        // Но только если пользователь уже заходил (т.е. lastSectionState не пустой)
+        const hasLastState = lastSectionState.news || lastSectionState.contributions || lastSectionState.expenses;
+        updateSectionBadges(!hasLastState);
+        
+        // Если открыт один из разделов — перерисовываем его
+        const activeSection = document.querySelector('.section.active');
+        if (activeSection) {
+          const id = activeSection.id;
+          if (id === 'news') renderNews();
+          else if (id === 'contributions') renderContributions();
+          else if (id === 'expenses') renderExpenses();
+          else if (id === 'home') renderHome();
+        }
+      }
+    }
+  }, error => { console.error("Ошибка прослушивания данных:", error); });
 }
 
 function updateClock() {
@@ -851,8 +1060,23 @@ function enterApp() {
   
   requestNotificationPermission();
   startMessagesListener();
+  startDataListener(); // Запускаем слушатель изменений данных
+  
+  // Загружаем последнее просмотренное состояние разделов
+  loadLastSectionState();
+  
+  // Если у родителя ещё нет сохранённого состояния — сохраняем текущее как "просмотренное"
+  // (чтобы при первом входе не показывать все старые новости как "новые")
+  const isFirstVisit = !lastSectionState.news && !lastSectionState.contributions && !lastSectionState.expenses;
+  if (isFirstVisit && currentRole !== 'owner') {
+    saveAllSectionsState();
+  }
   
   renderAll();
+  
+  // Обновляем бейджи разделов (без toast при первом входе)
+  updateSectionBadges(true);
+  
   loadGroupAlbums();
   if (currentRole === 'owner') loadOwnerMessages();
 }
@@ -862,6 +1086,7 @@ async function doLogout() {
   currentRole = null; currentUserId = null; currentUserName = null;
   localStorage.removeItem('parentBudgetSession');
   if (messagesUnsubscribe) messagesUnsubscribe();
+  if (dataUnsubscribe) dataUnsubscribe();
   clearBadge();
   if (protectionEnabled) await auth.signOut();
   document.getElementById('appHeader').style.display = 'none';
@@ -952,7 +1177,15 @@ function showSection(id, btn) {
   document.querySelectorAll('.top-nav-btn').forEach(b => b.classList.remove('active'));
   if (btn) btn.classList.add('active');
   
+  // Сбрасываем бейдж сообщений
   if (id === 'messages') { clearBadge(); renderMyMessages(); }
+  
+  // Сбрасываем бейдж раздела и сохраняем текущее состояние как просмотренное
+  if (id === 'news' || id === 'contributions' || id === 'expenses') {
+    saveSectionState(id === 'contributions' ? 'contributions' : id);
+    updateSectionBadges(true);
+  }
+  
   if (id === 'home') renderHome();
   if (id === 'group') { renderGroup(); }
   if (id === 'news') renderNews();
@@ -1003,25 +1236,35 @@ function renderHome() {
   const urgentNewsCount = (data.news || []).filter(n => n.urgent).length;
   const unpaidCount = tc - pc;
   
+  // Получаем количество изменений для каждого раздела
+  const newsChanges = sectionChanges.news || 0;
+  const contribChanges = sectionChanges.contributions || 0;
+  const expChanges = sectionChanges.expenses || 0;
+  
   document.getElementById('homeGrid').innerHTML = `
     ${currentRole === 'member' || currentRole === 'admin' ? `<div class="parent-dashboard-header" style="grid-column: 1 / -1;"><span style="font-size:1.5em">👨‍👩‍👧‍👦</span><h3>Панель родителя: важная информация группы</h3></div>` : ''}
-    <div class="home-tile" onclick="showSection('contributions', document.querySelectorAll('.top-nav-btn')[3])">
+    <div class="home-tile ${contribChanges > 0 ? 'has-changes' : ''}" onclick="showSection('contributions', document.getElementById('navContribBtn'))">
       <div class="home-tile-header"><div class="home-tile-icon">💰</div><div class="home-tile-title">Взносы</div></div>
       <div class="home-tile-subtitle">Сдача взносов за текущий месяц</div>
       <div class="home-tile-badges">
+        ${contribChanges > 0 ? `<span class="home-tile-badge changes">🔔 ${contribChanges} изм.</span>` : ''}
         <span class="home-tile-badge ${pc>0?'active':''}">✅ ${pc} сдали</span>
         <span class="home-tile-badge ${unpaidCount>0?'danger':''}">⏳ ${unpaidCount} ожидают</span>
       </div>
     </div>
-    <div class="home-tile" onclick="showSection('expenses', document.querySelectorAll('.top-nav-btn')[4])">
+    <div class="home-tile ${expChanges > 0 ? 'has-changes' : ''}" onclick="showSection('expenses', document.getElementById('navExpensesBtn'))">
       <div class="home-tile-header"><div class="home-tile-icon">💸</div><div class="home-tile-title">Расходы</div></div>
       <div class="home-tile-subtitle">Куда потрачены деньги</div>
-      <div class="home-tile-badges"><span class="home-tile-badge warning">📊 ${formatMoney(exp)} ₽</span></div>
+      <div class="home-tile-badges">
+        ${expChanges > 0 ? `<span class="home-tile-badge changes">🔔 ${expChanges} изм.</span>` : ''}
+        <span class="home-tile-badge warning">📊 ${formatMoney(exp)} ₽</span>
+      </div>
     </div>
-    <div class="home-tile" onclick="showSection('news', document.querySelectorAll('.top-nav-btn')[2])">
+    <div class="home-tile ${newsChanges > 0 ? 'has-changes' : ''}" onclick="showSection('news', document.getElementById('navNewsBtn'))">
       <div class="home-tile-header"><div class="home-tile-icon">📰</div><div class="home-tile-title">Новости</div></div>
       <div class="home-tile-subtitle">Объявления и информация</div>
       <div class="home-tile-badges">
+        ${newsChanges > 0 ? `<span class="home-tile-badge changes">🔔 ${newsChanges} нов.</span>` : ''}
         <span class="home-tile-badge ${data.news.length>0?'info':''}">📄 ${data.news.length}</span>
         ${urgentNewsCount > 0 ? `<span class="home-tile-badge danger">🔴 ${urgentNewsCount} срочных</span>` : ''}
       </div>
@@ -1102,14 +1345,47 @@ function closeAlbumModal() {
 document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAlbumModal(); });
 document.getElementById('albumModal').addEventListener('click', function(e) { if (e.target === this) closeAlbumModal(); });
 
-// ===== УЛУЧШЕННЫЕ ФУНКЦИИ ДЛЯ РОДИТЕЛЕЙ =====
+// ===== ФУНКЦИИ ДЛЯ РОДИТЕЛЕЙ С ПОДСВЕТКОЙ НОВЫХ ЭЛЕМЕНТОВ =====
+
+function isNewsNew(n) {
+  // Новость считается новой, если её нет в сохранённом хэше
+  if (!lastSectionState.news) return false;
+  const itemStr = `${n.date||''}|${n.title||''}|${n.urgent?1:0}|${(n.text||'').length}`;
+  return !lastSectionState.news.includes(itemStr);
+}
+
+function isStudentNew(s, idx) {
+  if (!lastSectionState.contributions) return false;
+  const itemStr = `${s.name||''}|${s.amount||0}|${s.paid?1:0}`;
+  return !lastSectionState.contributions.includes(itemStr);
+}
+
+function isExpenseNew(e, idx) {
+  if (!lastSectionState.expenses) return false;
+  const itemStr = `${e.description||''}|${e.amount||0}`;
+  return !lastSectionState.expenses.includes(itemStr);
+}
 
 function renderNews() { 
   const c = document.getElementById('newsList'); 
-  if (!data.news.length) { c.innerHTML = '<div class="news-empty">Новостей пока нет</div>'; return; } 
-  c.innerHTML = ''; 
   
-  // Сортировка: Срочные всегда сверху, затем по дате
+  // Баннер "Есть новые новости"
+  const changes = sectionChanges.news || 0;
+  let bannerHtml = '';
+  if (changes > 0) {
+    bannerHtml = `<div class="changes-banner">
+      <div class="cb-icon">🔔</div>
+      <div class="cb-text"><b>Новые новости!</b> С вашего последнего визита ${changes === 1 ? 'появилась 1 новость' : `появил${changes < 5 ? 'ось' : 'ось'} ${changes} ${changes === 1 ? 'новость' : (changes < 5 ? 'новости' : 'новостей')}`}. Новые выделены цветом.</div>
+    </div>`;
+  }
+  
+  if (!data.news.length) { 
+    c.innerHTML = bannerHtml + '<div class="news-empty">Новостей пока нет</div>'; 
+    return; 
+  } 
+  
+  c.innerHTML = bannerHtml;
+  
   const sortedNews = [...data.news].sort((a, b) => {
     if (a.urgent && !b.urgent) return -1;
     if (!a.urgent && b.urgent) return 1;
@@ -1119,13 +1395,13 @@ function renderNews() {
   sortedNews.forEach(n => { 
     if (!n.title && !n.text) return; 
     const d = n.date ? new Date(n.date) : null;
-    const isNew = d && (Date.now() - d.getTime() < 3 * 24 * 60 * 60 * 1000); // Новое за последние 3 дня
+    const isNew = isNewsNew(n);
     const dateStr = d ? d.toLocaleString('ru-RU', { day:'2-digit', month:'2-digit', year:'numeric' }) : ''; 
     
     c.innerHTML += `
-    <div class="news-card${n.urgent ? ' urgent' : ''}">
+    <div class="news-card${n.urgent ? ' urgent' : ''}${isNew ? ' is-new' : ''}">
       ${n.urgent ? '<div style="position:absolute;top:-10px;right:-10px;background:var(--danger);color:white;padding:4px 12px;border-radius:12px;font-size:0.75em;font-weight:700;box-shadow:0 2px 4px rgba(0,0,0,0.2);">🔥 СРОЧНО</div>' : ''}
-      ${isNew && !n.urgent ? '<div style="position:absolute;top:-10px;right:-10px;background:var(--info);color:white;padding:4px 12px;border-radius:12px;font-size:0.75em;font-weight:700;">🆕 НОВОЕ</div>' : ''}
+      ${isNew && !n.urgent ? '<div style="position:absolute;top:-10px;right:-10px;background:var(--warning);color:white;padding:4px 12px;border-radius:12px;font-size:0.75em;font-weight:700;">🆕 НОВОЕ</div>' : ''}
       <div class="news-date">📅 ${dateStr}</div>
       <div class="news-title">${escapeHtml(n.title || '')}</div>
       <div class="news-text">${escapeHtml(n.text || '').replace(/\n/g, '<br>')}</div>
@@ -1144,8 +1420,16 @@ function renderContributions() {
   });
   
   const remaining = te - tp;
+  const changes = sectionChanges.contributions || 0;
 
-  // Понятная сводка для родителей
+  // Баннер изменений
+  if (changes > 0) {
+    html += `<div class="changes-banner">
+      <div class="cb-icon">🔔</div>
+      <div class="cb-text"><b>Изменения во взносах!</b> С вашего последнего визита ${changes === 1 ? 'произошло 1 изменение' : `произошл${changes < 5 ? 'о' : 'о'} ${changes} ${changes === 1 ? 'изменение' : (changes < 5 ? 'изменения' : 'изменений')}`} (кто-то сдал или изменилась сумма). Новые/изменённые строки выделены.</div>
+    </div>`;
+  }
+
   html += `<div class="parent-dashboard-header" style="margin-bottom:16px; border-left: 4px solid var(--brand-green);">
     <div style="font-size:2em; margin-right:12px;">💰</div>
     <div>
@@ -1162,7 +1446,8 @@ function renderContributions() {
   m.students.forEach((s, i) => {
     if (!s.name && !s.amount) return;
     const rowBg = s.paid ? 'background:#f0fdf4;' : 'background:#fffbeb;';
-    html += `<tr style="${rowBg}">
+    const isNew = isStudentNew(s, i);
+    html += `<tr class="${isNew ? 'is-new' : ''}" style="${rowBg}">
       <td>${i + 1}</td>
       <td style="font-weight:600;">${escapeHtml(s.name) || '—'}</td>
       <td class="amount">${s.amount ? formatMoney(s.amount) + ' ₽' : '—'}</td>
@@ -1178,8 +1463,6 @@ function renderContributions() {
     html += '<tr><td colspan="4" style="text-align:center;color:var(--light-gray);padding:20px">Нет данных</td></tr>'; 
   }
   html += '</tbody></table></div>'; 
-  
-  // Подсказка для родителей
   html += `<div class="hint" style="margin-top:16px;">💡 <b>Как оплатить:</b> Переводите деньги на карту с пометкой "Имя ребенка" и сообщайте казначею в чате.</div>`;
   
   document.getElementById('contributionsTable').innerHTML = html; 
@@ -1193,8 +1476,16 @@ function renderExpenses() {
   
   const income = calcIncome(m) + Number(m.additionalIncome || 0);
   const balance = income - t + Number(m.prevBalance || 0);
+  const changes = sectionChanges.expenses || 0;
 
-  // Шапка финансовой прозрачности
+  // Баннер изменений
+  if (changes > 0) {
+    html += `<div class="changes-banner">
+      <div class="cb-icon">🔔</div>
+      <div class="cb-text"><b>Новые расходы!</b> С вашего последнего визита ${changes === 1 ? 'добавлен 1 расход' : `добавлен${changes < 5 ? 'о' : 'о'} ${changes} ${changes === 1 ? 'расход' : (changes < 5 ? 'расхода' : 'расходов')}`}. Новые строки выделены.</div>
+    </div>`;
+  }
+
   html += `<div class="parent-dashboard-header" style="margin-bottom:16px; border-left: 4px solid var(--info);">
     <div style="font-size:2em; margin-right:12px;">📊</div>
     <div>
@@ -1208,7 +1499,8 @@ function renderExpenses() {
   html += '<div style="overflow-x:auto;"><table class="data-table"><thead><tr><th style="width:40px">№</th><th>На что потрачено</th><th style="width:120px; text-align:right;">Сумма</th></tr></thead><tbody>'; 
   
   m.expenses.forEach((e, i) => {
-    html += `<tr>
+    const isNew = isExpenseNew(e, i);
+    html += `<tr class="${isNew ? 'is-new' : ''}">
       <td>${i + 1}</td>
       <td style="font-weight:500;">${escapeHtml(e.description) || '—'}</td>
       <td class="amount" style="text-align:right; color:var(--danger);">- ${e.amount ? formatMoney(e.amount) + ' ₽' : '—'}</td>
@@ -1225,7 +1517,6 @@ function renderExpenses() {
   document.getElementById('expensesTable').innerHTML = html; 
 }
 
-// ===== ОСТАЛЬНЫЕ ФУНКЦИИ БЕЗ ИЗМЕНЕНИЙ =====
 function renderCommittee() { const c = document.getElementById('committeeList'); if (!data.committee.length) { c.innerHTML = '<div class="news-empty">Состав комитета ещё не заполнен</div>'; return; } let html = '<div class="committee-grid">'; data.committee.forEach(mb => { if (!mb.name) return; let cls = 'committee-card'; const r = (mb.role||'').toLowerCase(); if (r.includes('председатель')) cls += ' chair'; else if (r.includes('казначей')||r.includes('бухгалтер')) cls += ' treasurer'; const ph = mb.phone ? `<div class="member-phone">📞 <a href="tel:${mb.phone.replace(/[^\d+]/g,'')}">${escapeHtml(mb.phone)}</a></div>` : ''; html += `<div class="${cls}"><div class="member-name">${escapeHtml(mb.name)}</div><div class="member-role">${escapeHtml(mb.role||'Член комитета')}</div>${ph}</div>`; }); html += '</div>'; c.innerHTML = html; }
 function renderArchive() { const c = document.getElementById('archiveList'); if (!data.archive.length) { c.innerHTML = '<div class="news-empty">Архив пуст</div>'; return; } let html = ''; data.archive.slice().reverse().forEach(m => { const inc = calcIncome(m), ai = Number(m.additionalIncome||0), exp = calcExpense(m), bal = Number(m.prevBalance||0)+inc+ai-exp; const pc = m.students.filter(s => s.paid).length, tc = m.students.filter(s => s.name).length; html += `<div class="archive-item"><div class="archive-item-info"><strong>${escapeHtml(m.name)}</strong><small>Приход: ${formatMoney(inc)} ₽ · Расход: ${formatMoney(exp)} ₽ · Остаток: <b>${formatMoney(bal)} ₽</b> · Сдали: ${pc}/${tc}</small></div></div>`; }); c.innerHTML = html; }
 
