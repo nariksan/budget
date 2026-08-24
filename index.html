@@ -17,7 +17,6 @@ html, body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans
 button, .top-nav-btn, .btn, .home-tile { user-select:none; -webkit-user-select:none; touch-action:manipulation; }
 input, textarea, select { user-select:text; -webkit-user-select:text; }
 
-/* ===== БЕЙДЖИ ===== */
 .nav-badge { position: absolute; top: 2px; right: 6px; background: var(--danger); color: white; font-size: 0.7em; font-weight: 800; padding: 2px 6px; border-radius: 10px; min-width: 18px; text-align: center; display: none; box-shadow: 0 2px 4px rgba(220,53,69,0.4); animation: pulse-badge 2s infinite; }
 .nav-badge.new-change { background: var(--brand-orange); box-shadow: 0 2px 4px rgba(232,119,34,0.4); }
 @keyframes pulse-badge { 0% { transform: scale(1); } 50% { transform: scale(1.15); } 100% { transform: scale(1); } }
@@ -253,7 +252,6 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .filter-btn { padding: 6px 14px; border: 1px solid var(--border); background: white; border-radius: 20px; font-size: 0.85em; cursor: pointer; font-weight: 600; color: var(--gray); }
 .filter-btn.active { background: var(--brand-green); color: white; border-color: var(--brand-green); }
 
-/* ===== ЦЕНТР УВЕДОМЛЕНИЙ ===== */
 .notif-toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; padding: 12px; background: white; border-radius: var(--radius-lg); border: 1px solid var(--border); }
 .notif-toolbar select { padding: 8px 12px; border: 2px solid var(--border); border-radius: var(--radius-sm); font-size: 0.9em; background: white; }
 .notif-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 16px; }
@@ -264,10 +262,8 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 .notif-stat .stat-value { font-size: 1.6em; font-weight: 800; color: var(--dark); }
 .notif-stat .stat-label { font-size: 0.75em; color: var(--gray); text-transform: uppercase; margin-top: 4px; font-weight: 600; }
 
-.notif-item { background: white; border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 10px; border-left: 4px solid var(--info); display: flex; gap: 12px; align-items: flex-start; box-shadow: var(--shadow-sm); transition: all 0.2s; }
+.notif-item { background: white; border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 10px; border-left: 4px solid var(--info); display: flex; gap: 12px; align-items: flex-start; box-shadow: var(--shadow-sm); transition: all 0.2s; position: relative; }
 .notif-item.unread { background: #fffbf0; border-left-color: var(--warning); }
-.notif-item.unread::before { content: ''; position: absolute; left: -4px; top: 50%; transform: translateY(-50%); width: 8px; height: 8px; background: var(--warning); border-radius: 50%; }
-.notif-item { position: relative; }
 .notif-item.type-message { border-left-color: var(--warning); }
 .notif-item.type-access { border-left-color: var(--brand-orange); }
 .notif-item.type-reply { border-left-color: var(--success); }
@@ -437,12 +433,9 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
   </div>
 </div>
 
-<!-- ===== НОВЫЙ РАЗДЕЛ: ЦЕНТР УВЕДОМЛЕНИЙ ===== -->
 <div id="notifications" class="section">
   <h2 class="section-title">🔔 Центр уведомлений</h2>
-  
   <div class="notif-stats" id="notifStats"></div>
-  
   <div class="notif-toolbar">
     <div style="display:flex; gap:6px; flex-wrap:wrap; flex:1;">
       <button class="filter-btn active" data-filter="all" onclick="setNotifFilter('all', this)">📋 Все</button>
@@ -455,7 +448,6 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
       <button class="btn btn-danger btn-sm" onclick="deleteAllNotifications()">🗑 Очистить</button>
     </div>
   </div>
-  
   <div id="notificationsList"></div>
 </div>
 
@@ -615,7 +607,6 @@ let publicConfig = { groups: [], maintenanceMode: false, protected: false };
 let messagesFilter = 'all';
 let groupAlbums = [];
 
-// ===== СИСТЕМА УВЕДОМЛЕНИЙ =====
 let unreadMessagesCount = 0;
 const originalTitle = document.title;
 let messagesUnsubscribe = null;
@@ -624,12 +615,10 @@ let notificationsUnsubscribe = null;
 let isInitialLoad = true;
 let isNotifInitialLoad = true;
 
-// ===== ЦЕНТР УВЕДОМЛЕНИЙ (для админов и владельца) =====
 let allNotifications = [];
 let notifFilter = 'all';
 let unreadNotifCount = 0;
 
-// ===== ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЙ В РАЗДЕЛАХ (ДЛЯ РОДИТЕЛЕЙ) =====
 let lastSectionState = { news: '', contributions: '', expenses: '' };
 let previousSectionState = { news: '', contributions: '', expenses: '' };
 let sectionChanges = { news: 0, contributions: 0, expenses: 0 };
@@ -683,78 +672,46 @@ function showToast(title, message, type = '') {
   }, 5000);
 }
 
-// ===== ЦЕНТР УВЕДОМЛЕНИЙ: ФУНКЦИИ =====
-
-// Создание уведомления в Firestore
 async function createNotification({ type, title, text, from, fromPhone, groupId, relatedId, priority = 'normal', forRole = 'admin' }) {
   try {
     await db.collection('notifications').add({
-      type, // 'message' | 'access' | 'reply' | 'system'
-      title,
-      text,
-      from: from || '',
-      fromPhone: fromPhone || '',
-      groupId: groupId || null,
-      relatedId: relatedId || null,
-      priority,
-      forRole, // 'admin' | 'owner' | 'all'
-      status: 'unread',
-      date: new Date().toISOString()
+      type, title, text, from: from || '', fromPhone: fromPhone || '',
+      groupId: groupId || null, relatedId: relatedId || null,
+      priority, forRole, status: 'unread', date: new Date().toISOString()
     });
-  } catch(e) {
-    console.error('Ошибка создания уведомления:', e);
-  }
+  } catch(e) { console.error('Ошибка создания уведомления:', e); }
 }
 
-// Запуск слушателя уведомлений
 function startNotificationsListener() {
   if (notificationsUnsubscribe) notificationsUnsubscribe();
-  
   let query = db.collection('notifications').orderBy('date', 'desc').limit(100);
-  
   notificationsUnsubscribe = query.onSnapshot(snapshot => {
     const prevIds = new Set(allNotifications.map(n => n.id));
     allNotifications = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-    
-    // Считаем непрочитанные
     unreadNotifCount = allNotifications.filter(n => n.status === 'unread').length;
     updateNotifBadge();
     
-    // Уведомляем о новых (только если не первичная загрузка)
     if (!isNotifInitialLoad) {
       snapshot.docChanges().forEach(change => {
         if (change.type === 'added' && !prevIds.has(change.doc.id)) {
           const n = change.doc.data();
-          // Показываем toast и звук
           playNotifySound();
           showToast(`🔔 ${n.title}`, n.text || '', n.priority === 'high' ? 'urgent' : 'warning');
-          
-          // Браузерное уведомление
           if ("Notification" in window && Notification.permission === "granted") {
             try { new Notification(`🔔 ${n.title}`, { body: n.text || '', icon: './apple-touch-icon.png' }); } catch(e) {}
           }
-          
-          // Если открыт раздел уведомлений — перерисовываем
           const activeSection = document.querySelector('.section.active');
-          if (activeSection && activeSection.id === 'notifications') {
-            renderNotifications();
-          }
+          if (activeSection && activeSection.id === 'notifications') renderNotifications();
         }
       });
     }
-    
     isNotifInitialLoad = false;
-  }, error => {
-    console.error('Ошибка прослушивания уведомлений:', error);
-  });
+  }, error => { console.error('Ошибка прослушивания уведомлений:', error); });
 }
 
 function updateNotifBadge() {
   const badge = document.getElementById('notifBadge');
-  if (badge) {
-    badge.textContent = unreadNotifCount;
-    badge.style.display = unreadNotifCount > 0 ? 'inline-block' : 'none';
-  }
+  if (badge) { badge.textContent = unreadNotifCount; badge.style.display = unreadNotifCount > 0 ? 'inline-block' : 'none'; }
 }
 
 function setNotifFilter(filter, btn) {
@@ -767,19 +724,14 @@ function setNotifFilter(filter, btn) {
 function renderNotifications() {
   const list = document.getElementById('notificationsList');
   const stats = document.getElementById('notifStats');
-  
-  // Фильтруем по роли: владелец видит всё, админ — только свою группу
   let filtered = allNotifications;
   if (currentRole === 'admin') {
     filtered = filtered.filter(n => !n.groupId || n.groupId === currentGroupId);
   }
-  
-  // Фильтр по типу
   if (notifFilter !== 'all') {
     filtered = filtered.filter(n => n.type === notifFilter);
   }
   
-  // Статистика
   const totalCount = filtered.length;
   const msgCount = filtered.filter(n => n.type === 'message').length;
   const reqCount = filtered.filter(n => n.type === 'access').length;
@@ -793,11 +745,7 @@ function renderNotifications() {
   `;
   
   if (!filtered.length) {
-    list.innerHTML = `<div class="notif-empty">
-      <div class="notif-empty-icon">🔕</div>
-      <div>Уведомлений пока нет</div>
-      <div style="font-size:0.85em; margin-top:8px;">Здесь будут появляться сообщения, запросы на доступ и ответы</div>
-    </div>`;
+    list.innerHTML = `<div class="notif-empty"><div class="notif-empty-icon">🔕</div><div>Уведомлений пока нет</div></div>`;
     return;
   }
   
@@ -832,11 +780,7 @@ function renderNotifications() {
 }
 
 async function markNotificationRead(id) {
-  try {
-    await db.collection('notifications').doc(id).update({ status: 'read' });
-  } catch(e) {
-    alert('❌ Ошибка: ' + e.message);
-  }
+  try { await db.collection('notifications').doc(id).update({ status: 'read' }); } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
 
 async function markAllNotificationsRead() {
@@ -844,25 +788,15 @@ async function markAllNotificationsRead() {
   if (!confirm('Отметить все уведомления как прочитанные?')) return;
   try {
     const batch = db.batch();
-    allNotifications.forEach(n => {
-      if (n.status === 'unread') {
-        batch.update(db.collection('notifications').doc(n.id), { status: 'read' });
-      }
-    });
+    allNotifications.forEach(n => { if (n.status === 'unread') batch.update(db.collection('notifications').doc(n.id), { status: 'read' }); });
     await batch.commit();
     showToast('✅ Готово', 'Все уведомления отмечены как прочитанные', 'info');
-  } catch(e) {
-    alert('❌ Ошибка: ' + e.message);
-  }
+  } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
 
 async function deleteNotification(id) {
   if (!confirm('Удалить это уведомление?')) return;
-  try {
-    await db.collection('notifications').doc(id).delete();
-  } catch(e) {
-    alert('❌ Ошибка: ' + e.message);
-  }
+  try { await db.collection('notifications').doc(id).delete(); } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
 
 async function deleteAllNotifications() {
@@ -874,12 +808,9 @@ async function deleteAllNotifications() {
     allNotifications.forEach(n => batch.delete(db.collection('notifications').doc(n.id)));
     await batch.commit();
     showToast('🗑 Готово', 'Все уведомления удалены', 'info');
-  } catch(e) {
-    alert('❌ Ошибка: ' + e.message);
-  }
+  } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
 
-// ===== ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЙ В РАЗДЕЛАХ =====
 function computeSectionHash(section) {
   if (!data) return '';
   const m = getCurrentMonth();
@@ -900,8 +831,7 @@ function computeSectionHash(section) {
 }
 
 function countChanges(section, oldHash, newHash) {
-  if (oldHash === newHash) return 0;
-  if (!oldHash) return 0;
+  if (oldHash === newHash || !oldHash) return 0;
   if (section === 'news') {
     const oldItems = oldHash.split(':').slice(1).join(':').split(';').filter(Boolean);
     const newItems = newHash.split(':').slice(1).join(':').split(';').filter(Boolean);
@@ -915,9 +845,7 @@ function countChanges(section, oldHash, newHash) {
     const newItems = newHash.split(':').slice(startIdx).join(':').split(';').filter(Boolean);
     let changed = 0;
     const maxLen = Math.max(oldItems.length, newItems.length);
-    for (let i = 0; i < maxLen; i++) {
-      if (oldItems[i] !== newItems[i]) changed++;
-    }
+    for (let i = 0; i < maxLen; i++) { if (oldItems[i] !== newItems[i]) changed++; }
     return changed;
   }
   return 0;
@@ -930,9 +858,7 @@ function loadLastSectionState() {
     const raw = localStorage.getItem(key);
     if (raw) lastSectionState = JSON.parse(raw);
     else lastSectionState = { news: '', contributions: '', expenses: '' };
-  } catch(e) {
-    lastSectionState = { news: '', contributions: '', expenses: '' };
-  }
+  } catch(e) { lastSectionState = { news: '', contributions: '', expenses: '' }; }
   previousSectionState = { ...lastSectionState };
 }
 
@@ -949,11 +875,7 @@ function saveAllSectionsState() {
 
 function updateSectionBadges(silent = false) {
   if (!data || currentRole === 'owner') return;
-  const currentHashes = {
-    news: computeSectionHash('news'),
-    contributions: computeSectionHash('contributions'),
-    expenses: computeSectionHash('expenses')
-  };
+  const currentHashes = { news: computeSectionHash('news'), contributions: computeSectionHash('contributions'), expenses: computeSectionHash('expenses') };
   ['news', 'contributions', 'expenses'].forEach(section => {
     const changes = countChanges(section, lastSectionState[section], currentHashes[section]);
     sectionChanges[section] = changes;
@@ -1250,8 +1172,6 @@ function enterApp() {
   document.getElementById('currentUserRole').textContent = roleText;
   document.getElementById('navAdminBtn').style.display = (currentRole === 'admin' || currentRole === 'owner') ? '' : 'none';
   document.getElementById('navOwnerBtn').style.display = currentRole === 'owner' ? '' : 'none';
-  
-  // Показываем кнопку уведомлений только админам и владельцу
   document.getElementById('navNotifBtn').style.display = (currentRole === 'admin' || currentRole === 'owner') ? '' : 'none';
   
   const ogs = document.getElementById('ownerGroupSwitcher');
@@ -1265,21 +1185,14 @@ function enterApp() {
   requestNotificationPermission();
   startMessagesListener();
   startDataListener();
-  
-  // Запускаем слушатель уведомлений для админов и владельца
-  if (currentRole === 'admin' || currentRole === 'owner') {
-    startNotificationsListener();
-  }
+  if (currentRole === 'admin' || currentRole === 'owner') startNotificationsListener();
   
   loadLastSectionState();
   const isFirstVisit = !lastSectionState.news && !lastSectionState.contributions && !lastSectionState.expenses;
-  if (isFirstVisit && currentRole !== 'owner') {
-    saveAllSectionsState();
-  }
+  if (isFirstVisit && currentRole !== 'owner') saveAllSectionsState();
   
   renderAll();
   updateSectionBadges(true);
-  
   loadGroupAlbums();
   if (currentRole === 'owner') loadOwnerMessages();
 }
@@ -1324,7 +1237,6 @@ function chooseHelpOption(option) {
   }
 }
 
-// ОТПРАВКА СООБЩЕНИЯ ОТ ГОСТЯ (с экрана входа) — СОЗДАЁМ УВЕДОМЛЕНИЕ
 async function sendGuestMessage() {
   const name = document.getElementById('guestContactName').value.trim();
   const phone = document.getElementById('guestContactPhone').value.trim();
@@ -1336,19 +1248,12 @@ async function sendGuestMessage() {
   const msg = { senderName: name || 'Неизвестно', senderPhone: phone || '', groupId, subject: subject || 'Сообщение с экрана входа', text, date: new Date().toISOString(), status: 'new', read: false, fromGuest: true };
   try {
     const ref = await db.collection('messages').add(msg);
-    
-    // СОЗДАЁМ УВЕДОМЛЕНИЕ для владельца и админов
     await createNotification({
-      type: 'message',
-      title: '📩 Новое сообщение с сайта',
+      type: 'message', title: '📩 Новое сообщение с сайта',
       text: `${subject || 'Без темы'}: ${text.substring(0, 150)}${text.length > 150 ? '...' : ''}`,
-      from: name || 'Гость',
-      fromPhone: phone,
-      groupId: groupId,
-      relatedId: ref.id,
+      from: name || 'Гость', fromPhone: phone, groupId: groupId, relatedId: ref.id,
       priority: (subject && subject.toLowerCase().includes('срочно')) ? 'high' : 'normal'
     });
-    
     document.getElementById('guestContactName').value = '';
     document.getElementById('guestContactPhone').value = '';
     document.getElementById('guestContactSubject').value = '';
@@ -1813,32 +1718,30 @@ async function ownerDeleteAlbum(albumId) {
   if (success) { await renderOwnerAlbums(); }
 }
 
-// ОТПРАВКА СООБЩЕНИЯ ОТ РОДИТЕЛЯ — СОЗДАЁМ УВЕДОМЛЕНИЕ
 async function sendMessage() {
   const subject = document.getElementById('msgSubject').value.trim();
   const text = document.getElementById('msgText').value.trim();
   if (!text) { alert('Введите текст сообщения'); return; }
+  
+  const currentAuthUid = auth.currentUser ? auth.currentUser.uid : null;
+  
   const msg = {
-    senderId: currentUserId, senderName: currentUserName,
+    senderId: currentUserId,
+    authUid: currentAuthUid,
+    senderName: currentUserName,
     senderPhone: app.users.find(u => u.id === currentUserId)?.phone || '',
     groupId: currentGroupId, subject, text,
     date: new Date().toISOString(), status: 'new', read: false
   };
   try {
     const ref = await db.collection('messages').add(msg);
-    
-    // СОЗДАЁМ УВЕДОМЛЕНИЕ
     await createNotification({
-      type: 'message',
-      title: '📩 Новое сообщение от родителя',
+      type: 'message', title: '📩 Новое сообщение от родителя',
       text: `${subject || 'Без темы'}: ${text.substring(0, 150)}${text.length > 150 ? '...' : ''}`,
-      from: currentUserName || 'Родитель',
-      fromPhone: msg.senderPhone,
-      groupId: currentGroupId,
-      relatedId: ref.id,
+      from: currentUserName || 'Родитель', fromPhone: msg.senderPhone,
+      groupId: currentGroupId, relatedId: ref.id,
       priority: (subject && subject.toLowerCase().includes('срочно')) ? 'high' : 'normal'
     });
-    
     document.getElementById('msgSubject').value = '';
     document.getElementById('msgText').value = '';
     alert('✅ Сообщение отправлено владельцу!');
@@ -1895,7 +1798,6 @@ async function loadOwnerMessages() {
   } catch(e) { container.innerHTML = '<p style="color:var(--danger)">Ошибка загрузки: ' + e.message + '</p>'; }
 }
 
-// ОТВЕТ ВЛАДЕЛЬЦА — СОЗДАЁМ УВЕДОМЛЕНИЕ ДЛЯ РОДИТЕЛЯ
 async function sendReply(msgId) {
   const textarea = document.getElementById('reply-' + msgId);
   const text = textarea.value.trim();
@@ -1903,27 +1805,17 @@ async function sendReply(msgId) {
   try {
     const msgDoc = await db.collection('messages').doc(msgId).get();
     const originalMsg = msgDoc.data();
-    
     await db.collection('messages').doc(msgId).update({
-      reply: { text, date: new Date().toISOString() },
-      status: 'replied', read: true
+      reply: { text, date: new Date().toISOString() }, status: 'replied', read: true
     });
-    
-    // СОЗДАЁМ УВЕДОМЛЕНИЕ для родителя-отправителя
     if (originalMsg.senderId) {
       await createNotification({
-        type: 'reply',
-        title: '💬 Вам ответили на сообщение',
+        type: 'reply', title: '💬 Вам ответили на сообщение',
         text: text.substring(0, 150) + (text.length > 150 ? '...' : ''),
-        from: 'Владелец сайта',
-        fromPhone: settings.ownerPhone,
-        groupId: originalMsg.groupId,
-        relatedId: msgId,
-        priority: 'normal',
-        forRole: 'parent'
+        from: 'Владелец сайта', fromPhone: settings.ownerPhone,
+        groupId: originalMsg.groupId, relatedId: msgId, priority: 'normal', forRole: 'parent'
       });
     }
-    
     alert('✅ Ответ отправлен!');
     loadOwnerMessages();
   } catch(e) { alert(' Ошибка: ' + e.message); }
@@ -2140,7 +2032,6 @@ async function deleteUser(id) {
   await saveToFirebase(); renderAdminAccess();
 }
 
-// ОТПРАВКА ЗАПРОСА НА ДОСТУП — СОЗДАЁМ УВЕДОМЛЕНИЕ
 async function submitAccessRequest() {
   const name = document.getElementById('reqName').value.trim();
   const phone = document.getElementById('reqPhone').value.trim();
@@ -2160,17 +2051,11 @@ async function submitAccessRequest() {
     await saveToFirebase(); 
   }
   
-  // СОЗДАЁМ УВЕДОМЛЕНИЕ о запросе доступа
   const g = groupId ? getGroup(groupId) : null;
   await createNotification({
-    type: 'access',
-    title: '🔐 Новый запрос на доступ',
+    type: 'access', title: '🔐 Новый запрос на доступ',
     text: `${name || 'Неизвестно'} просит доступ${g ? ' в группу ' + groupLabel(g) : (groupText ? ' в группу: ' + groupText : '')}. Телефон: ${phone || 'не указан'}`,
-    from: name || 'Неизвестно',
-    fromPhone: phone,
-    groupId: groupId,
-    relatedId: reqId,
-    priority: 'normal'
+    from: name || 'Неизвестно', fromPhone: phone, groupId: groupId, relatedId: reqId, priority: 'normal'
   });
   
   closeModal('accessRequestModal');
