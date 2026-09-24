@@ -7,7 +7,7 @@
 <title>Сводка группы</title>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/4.1.0/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" onerror="window.html2pdf_failed=true"></script>
 <style>
 :root { --success:#28a745; --danger:#dc3545; --warning:#fd7e14; --info:#17a2b8; --brand-green:#2d8b4d; --brand-orange:#e87722; --shadow-soft:0 4px 20px rgba(0,0,0,0.06); --shadow-medium:0 8px 30px rgba(0,0,0,0.1); }
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -54,52 +54,36 @@ body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif
 .summary-value.positive { color:var(--success); }
 .summary-value.negative { color:var(--danger); }
 
-/* === ТАБЛИЦЫ === */
-table { width:100%; border-collapse:separate; border-spacing:0; margin-top:16px; background:white; border-radius:12px; overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid #e9ecef; }
-th { background:linear-gradient(135deg, var(--brand-green), #3fa55d); color:white; padding:13px 12px; text-align:left; font-size:0.8em; text-transform:uppercase; font-weight:700; letter-spacing:0.5px; }
-td { padding:12px; border-top:1px solid #f0f2f5; font-size:0.92em; }
-tbody tr { transition:background 0.2s, transform 0.15s; }
+/* === ТАБЛИЦЫ (ИСПРАВЛЕНО!) === */
+table { width:100%; border-collapse:separate; border-spacing:0; margin-top:16px; background:white; border-radius:12px; overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid #e9ecef; table-layout:fixed; }
+th { background:linear-gradient(135deg, var(--brand-green), #3fa55d); color:white; padding:13px 10px; text-align:left; font-size:0.8em; text-transform:uppercase; font-weight:700; letter-spacing:0.5px; word-wrap:break-word; }
+td { padding:12px 10px; border-top:1px solid #f0f2f5; font-size:0.92em; word-wrap:break-word; overflow-wrap:break-word; }
+tbody tr { transition:background 0.2s; }
 
-/* === 🎨 ЦВЕТНЫЕ СТРОКИ (НОВОЕ!) === */
-.row-paid { 
-  background:linear-gradient(90deg, #f0fdf4 0%, #dcfce7 60%, #ffffff 100%) !important; 
-  position:relative;
+/* === 🎨 ЦВЕТНЫЕ СТРОКИ — НАДЁЖНЫЙ ВАРИАНТ через border-left на td === */
+.row-paid td:first-child { 
+  background:linear-gradient(90deg, #dcfce7 0%, #f0fdf4 100%) !important; 
+  border-left:5px solid var(--success);
+  padding-left:14px;
 }
-.row-paid::before {
-  content:'';
-  position:absolute;
-  left:0; top:0; bottom:0;
-  width:5px;
-  background:linear-gradient(180deg, #28a745, #20c997);
-  border-radius:0 3px 3px 0;
+.row-paid td:not(:first-child) { 
+  background:linear-gradient(90deg, #f0fdf4 0%, #ffffff 100%) !important; 
 }
-.row-paid:hover { 
-  background:linear-gradient(90deg, #dcfce7 0%, #bbf7d0 60%, #f0fdf4 100%) !important; 
-  transform:translateX(2px);
-}
-.row-paid td:first-child { padding-left:18px; }
+.row-paid:hover td { background:linear-gradient(90deg, #bbf7d0 0%, #dcfce7 100%) !important; }
 
-.row-unpaid { 
-  background:linear-gradient(90deg, #fffbeb 0%, #fef3c7 60%, #ffffff 100%) !important;
-  position:relative;
+.row-unpaid td:first-child { 
+  background:linear-gradient(90deg, #fef3c7 0%, #fffbeb 100%) !important; 
+  border-left:5px solid var(--warning);
+  padding-left:14px;
 }
-.row-unpaid::before {
-  content:'';
-  position:absolute;
-  left:0; top:0; bottom:0;
-  width:5px;
-  background:linear-gradient(180deg, #fd7e14, #f59e0b);
-  border-radius:0 3px 3px 0;
+.row-unpaid td:not(:first-child) { 
+  background:linear-gradient(90deg, #fffbeb 0%, #ffffff 100%) !important; 
 }
-.row-unpaid:hover { 
-  background:linear-gradient(90deg, #fef3c7 0%, #fde68a 60%, #fffbeb 100%) !important; 
-  transform:translateX(2px);
-}
-.row-unpaid td:first-child { padding-left:18px; }
+.row-unpaid:hover td { background:linear-gradient(90deg, #fde68a 0%, #fef3c7 100%) !important; }
 
-.status-paid { color:var(--success); font-weight:700; font-size:0.88em; }
-.status-unpaid { color:var(--warning); font-weight:700; font-size:0.88em; }
-.amount { font-weight:700; text-align:right; font-variant-numeric:tabular-nums; }
+.status-paid { color:var(--success); font-weight:700; font-size:0.88em; white-space:nowrap; }
+.status-unpaid { color:var(--warning); font-weight:700; font-size:0.88em; white-space:nowrap; }
+.amount { font-weight:700; text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
 .totals-row { background:linear-gradient(90deg, #fff9e6 0%, #fff3cd 100%) !important; font-weight:700; }
 .totals-row td { padding:15px 12px; font-size:1em; border-top:2px solid var(--brand-orange); }
 .expense-amount { color:var(--danger); font-weight:700; }
@@ -110,7 +94,7 @@ tbody tr { transition:background 0.2s, transform 0.15s; }
 .plans-info strong { color:#1e40af; }
 .no-data { text-align:center; color:#9ca3af; padding:25px; font-style:italic; background:linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%); border-radius:12px; margin-top:12px; border:2px dashed #e5e7eb; }
 
-/* === ЛЕГЕНДА (НОВОЕ!) === */
+/* === ЛЕГЕНДА === */
 .table-legend { display:flex; gap:14px; flex-wrap:wrap; margin-top:10px; font-size:0.82em; color:#666; }
 .legend-item { display:inline-flex; align-items:center; gap:6px; padding:4px 10px; background:#f8f9fa; border-radius:8px; }
 .legend-dot { width:14px; height:14px; border-radius:4px; display:inline-block; }
@@ -165,7 +149,10 @@ tbody tr { transition:background 0.2s, transform 0.15s; }
   .action-buttons { top:10px; right:10px; left:10px; justify-content:center; }
   .action-btn { padding:10px 14px; font-size:0.85em; }
   .container { border-radius:16px; }
-  td, th { padding:10px 8px; font-size:0.85em; }
+  td, th { padding:10px 6px; font-size:0.82em; }
+  /* На мобильном делаем таблицу прокручиваемой */
+  .table-wrapper { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .table-wrapper table { min-width:500px; }
 }
 
 /* === ПЕЧАТЬ === */
@@ -179,9 +166,12 @@ tbody tr { transition:background 0.2s, transform 0.15s; }
   .section { page-break-inside:avoid; }
   table { page-break-inside:auto; }
   tr { page-break-inside:avoid; page-break-after:auto; }
-  /* Сохраняем цвета при печати */
-  .row-paid { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  .row-unpaid { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .row-paid td:first-child, .row-unpaid td:first-child,
+  .row-paid td:not(:first-child), .row-unpaid td:not(:first-child) {
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+    color-adjust:exact !important;
+  }
 }
 </style>
 </head>
@@ -189,7 +179,7 @@ tbody tr { transition:background 0.2s, transform 0.15s; }
 
 <div class="action-buttons no-print" id="actionButtons" style="display:none;">
   <button class="action-btn" onclick="window.print()">🖨️ Распечатать</button>
-  <button class="action-btn pdf" id="pdfBtn" onclick="downloadPDF()">📥 Скачать PDF</button>
+  <button class="action-btn pdf" id="pdfBtn" onclick="downloadPDF()"> Скачать PDF</button>
 </div>
 
 <div id="app">
@@ -261,24 +251,40 @@ async function checkPassword() {
   }
 }
 
-// === СКАЧИВАНИЕ PDF ===
+// === СКАЧИВАНИЕ PDF С FALLBACK ===
 function downloadPDF() {
   const btn = document.getElementById('pdfBtn');
-  btn.classList.add('loading');
-  btn.innerHTML = '⏳ Формирую PDF...';
-  
   const element = document.getElementById('pdfContent');
+  if (!element) { alert('❌ Контент не загружен'); return; }
+  
   const g = reportData.groupInfo || {};
   const archiveName = reportData.archiveMonthName || '';
   const currentName = reportData.currentMonthName || '';
   const period = (archiveName && currentName) ? (archiveName + '-' + currentName) : (archiveName || currentName || 'Сводка');
   const fileName = 'Сводка_Группа' + (g.number || '') + '_' + (g.name || '').replace(/\s+/g, '_') + '_' + period.replace(/\s+/g, '_') + '.pdf';
   
+  // Проверяем, загрузилась ли библиотека
+  if (typeof html2pdf === 'undefined' || window.html2pdf_failed) {
+    // FALLBACK: используем встроенную печать браузера → "Сохранить как PDF"
+    btn.classList.add('loading');
+    btn.innerHTML = ' Открываю печать...';
+    setTimeout(() => {
+      alert(' Библиотека PDF недоступна. Откроется окно печати — выберите "Сохранить как PDF" в списке принтеров.');
+      window.print();
+      btn.classList.remove('loading');
+      btn.innerHTML = '📥 Скачать PDF';
+    }, 300);
+    return;
+  }
+  
+  btn.classList.add('loading');
+  btn.innerHTML = '⏳ Формирую PDF...';
+  
   const opt = {
-    margin: [10, 8, 10, 8],
+    margin: [8, 6, 8, 6],
     filename: fileName,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, letterRendering: true, backgroundColor: '#ffffff' },
+    html2canvas: { scale: 2, useCORS: true, letterRendering: true, backgroundColor: '#ffffff', logging: false },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
   };
@@ -290,7 +296,7 @@ function downloadPDF() {
     console.error(err);
     btn.classList.remove('loading');
     btn.innerHTML = '📥 Скачать PDF';
-    alert('❌ Ошибка формирования PDF: ' + err.message);
+    alert('❌ Ошибка PDF: ' + err.message + '\n\nИспользуйте кнопку "Распечатать" → "Сохранить как PDF"');
   });
 }
 
@@ -327,7 +333,7 @@ function renderReport() {
     const aPc = archiveM.students.filter(s => s.paid).length;
     const aTc = archiveM.students.filter(s => s.name).length;
 
-    html += '<div class="section"><div class="section-title"><span class="section-icon">📊</span>Итоги: ' + escapeHtml(archiveM.name) + '</div>';
+    html += '<div class="section"><div class="section-title"><span class="section-icon"></span>Итоги: ' + escapeHtml(archiveM.name) + '</div>';
     html += '<div class="summary-grid">';
     html += '<div class="summary-card blue"><div class="summary-label">Остаток с прошл. мес.</div><div class="summary-value">' + formatMoney(aPrev) + ' ₽</div></div>';
     html += '<div class="summary-card green"><div class="summary-label">Приход (взносы)</div><div class="summary-value positive">' + formatMoney(aInc) + ' ₽</div></div>';
@@ -337,27 +343,26 @@ function renderReport() {
     html += '</div>';
 
     if (aTc > 0) {
-      html += '<h3 style="color:#2d8b4d;margin:22px 0 12px;font-size:1.1em">👥 Кто сдал взносы</h3>';
-      html += '<table><thead><tr><th style="width:40px">№</th><th>ФИО ребёнка</th><th style="width:110px">Сумма</th><th style="width:110px;text-align:center">Статус</th></tr></thead><tbody>';
+      html += '<h3 style="color:#2d8b4d;margin:22px 0 12px;font-size:1.1em"> Кто сдал взносы</h3>';
+      html += '<div class="table-wrapper"><table><thead><tr><th style="width:8%">№</th><th style="width:52%">ФИО ребёнка</th><th style="width:20%">Сумма</th><th style="width:20%">Статус</th></tr></thead><tbody>';
       archiveM.students.filter(s => s.name).forEach((s, i) => {
         const rowClass = s.paid ? 'row-paid' : 'row-unpaid';
         html += '<tr class="' + rowClass + '"><td>' + (i+1) + '</td><td style="font-weight:500">' + escapeHtml(s.name) + '</td><td class="amount">' + (s.amount ? formatMoney(s.amount) + ' ₽' : '—') + '</td><td style="text-align:center" class="' + (s.paid ? 'status-paid' : 'status-unpaid') + '">' + (s.paid ? '✔ Оплачено' : '⏳ Ожидается') + '</td></tr>';
       });
       html += '<tr class="totals-row"><td colspan="2"><strong>ИТОГО:</strong> сдали ' + aPc + ' из ' + aTc + '</td><td class="amount"><strong>' + formatMoney(aInc) + ' ₽</strong></td><td></td></tr>';
-      html += '</tbody></table>';
-      // Легенда
+      html += '</tbody></table></div>';
       html += '<div class="table-legend"><span class="legend-item"><span class="legend-dot paid"></span>Сдали</span><span class="legend-item"><span class="legend-dot unpaid"></span>Ожидают</span></div>';
     }
 
     // 💸 РАСХОДЫ
     html += '<h3 style="color:#dc3545;margin:25px 0 12px;font-size:1.1em">💸 Расходы за период</h3>';
     if (archiveM.expenses && archiveM.expenses.length > 0) {
-      html += '<table><thead><tr><th style="width:40px">№</th><th>На что потрачено</th><th style="width:120px;text-align:right">Сумма</th></tr></thead><tbody>';
+      html += '<div class="table-wrapper"><table><thead><tr><th style="width:8%">№</th><th style="width:72%">На что потрачено</th><th style="width:20%">Сумма</th></tr></thead><tbody>';
       archiveM.expenses.forEach((e, i) => {
         html += '<tr><td>' + (i+1) + '</td><td>' + escapeHtml(e.description || '—') + '</td><td class="amount expense-amount">- ' + (e.amount ? formatMoney(e.amount) + ' ₽' : '—') + '</td></tr>';
       });
       html += '<tr class="totals-row"><td colspan="2"><strong>ИТОГО РАСХОД:</strong></td><td class="amount expense-amount"><strong>' + formatMoney(aExp) + ' ₽</strong></td></tr>';
-      html += '</tbody></table>';
+      html += '</tbody></table></div>';
     } else {
       html += '<div class="no-data">✅ Расходов в этом периоде не было</div>';
     }
@@ -383,12 +388,12 @@ function renderReport() {
     // 💸 НА ЧТО БЫЛО ПОТРАЧЕНО
     html += '<h3 style="color:#dc3545;margin:22px 0 12px;font-size:1.1em">💸 На что было потрачено</h3>';
     if (currentM.expenses && currentM.expenses.length > 0) {
-      html += '<table><thead><tr><th style="width:40px">№</th><th>Статья расходов</th><th style="width:120px;text-align:right">Сумма</th></tr></thead><tbody>';
+      html += '<div class="table-wrapper"><table><thead><tr><th style="width:8%">№</th><th style="width:72%">Статья расходов</th><th style="width:20%">Сумма</th></tr></thead><tbody>';
       currentM.expenses.forEach((e, i) => {
         html += '<tr><td>' + (i+1) + '</td><td>' + escapeHtml(e.description || '—') + '</td><td class="amount expense-amount">- ' + (e.amount ? formatMoney(e.amount) + ' ₽' : '—') + '</td></tr>';
       });
       html += '<tr class="totals-row"><td colspan="2"><strong>ИТОГО ПОТРАЧЕНО:</strong></td><td class="amount expense-amount"><strong>' + formatMoney(cExp) + ' ₽</strong></td></tr>';
-      html += '</tbody></table>';
+      html += '</tbody></table></div>';
     } else {
       html += '<div class="no-data">💸 Расходов в текущем месяце пока не было</div>';
     }
@@ -409,14 +414,13 @@ function renderReport() {
 
     if (cTc > 0) {
       html += '<h3 style="color:#2d8b4d;margin:22px 0 12px;font-size:1.1em">👥 Сбор взносов по родителям</h3>';
-      html += '<table><thead><tr><th style="width:40px">№</th><th>ФИО ребёнка</th><th style="width:110px">Сумма</th><th style="width:110px;text-align:center">Статус</th></tr></thead><tbody>';
+      html += '<div class="table-wrapper"><table><thead><tr><th style="width:8%">№</th><th style="width:52%">ФИО ребёнка</th><th style="width:20%">Сумма</th><th style="width:20%">Статус</th></tr></thead><tbody>';
       currentM.students.filter(s => s.name).forEach((s, i) => {
         const rowClass = s.paid ? 'row-paid' : 'row-unpaid';
         html += '<tr class="' + rowClass + '"><td>' + (i+1) + '</td><td style="font-weight:500">' + escapeHtml(s.name) + '</td><td class="amount">' + (s.amount ? formatMoney(s.amount) + ' ₽' : '—') + '</td><td style="text-align:center" class="' + (s.paid ? 'status-paid' : 'status-unpaid') + '">' + (s.paid ? '✔ Сдал' : '⏳ Ожидается') + '</td></tr>';
       });
       html += '<tr class="totals-row"><td colspan="2"><strong>ИТОГО:</strong> сдали ' + cPc + ' из ' + cTc + '</td><td class="amount"><strong>' + formatMoney(cInc) + ' ₽</strong></td><td></td></tr>';
-      html += '</tbody></table>';
-      // Легенда
+      html += '</tbody></table></div>';
       html += '<div class="table-legend"><span class="legend-item"><span class="legend-dot paid"></span>Сдали</span><span class="legend-item"><span class="legend-dot unpaid"></span>Ожидают</span></div>';
     }
 
@@ -430,7 +434,7 @@ function renderReport() {
     }
 
     if (reportData.showUnpaid !== false && unpaidList.length > 0) {
-      html += '<div style="margin-top:18px"><h3 style="color:#fd7e14;margin-bottom:10px;font-size:1.05em">⏳ Ещё не сдали (' + unpaidList.length + ')</h3><div class="unpaid-list">';
+      html += '<div style="margin-top:18px"><h3 style="color:#fd7e14;margin-bottom:10px;font-size:1.05em"> Ещё не сдали (' + unpaidList.length + ')</h3><div class="unpaid-list">';
       unpaidList.forEach(s => { html += '<div class="list-item">⏳ ' + escapeHtml(s.name) + (s.amount ? ' — ' + formatMoney(s.amount) + ' ₽' : '') + '</div>'; });
       html += '</div></div>';
     }
