@@ -7,8 +7,7 @@
 <title>Сводка группы</title>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-<!-- ИСПРАВЛЕНО: Стабильная версия 0.10.1 + отлов ошибки загрузки -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" onerror="window.html2pdf_failed=true"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/4.1.0/html2pdf.bundle.min.js"></script>
 <style>
 :root { --success:#28a745; --danger:#dc3545; --warning:#fd7e14; --info:#17a2b8; --brand-green:#2d8b4d; --brand-orange:#e87722; --shadow-soft:0 4px 20px rgba(0,0,0,0.06); --shadow-medium:0 8px 30px rgba(0,0,0,0.1); }
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -55,25 +54,15 @@ body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif
 .summary-value.positive { color:var(--success); }
 .summary-value.negative { color:var(--danger); }
 
-/* === ТАБЛИЦЫ (ИСПРАВЛЕНО ДЛЯ PDF И МОБИЛЬНЫХ) === */
-table { width:100%; border-collapse:separate; border-spacing:0; margin-top:16px; background:white; border-radius:12px; overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid #e9ecef; table-layout:fixed; }
-th { background:linear-gradient(135deg, var(--brand-green), #3fa55d); color:white; padding:10px 8px; text-align:left; font-size:0.8em; text-transform:uppercase; font-weight:700; letter-spacing:0.5px; word-wrap:break-word; }
-td { padding:10px 8px; border-top:1px solid #f0f2f5; font-size:0.9em; word-wrap:break-word; overflow-wrap:break-word; }
+/* === ТАБЛИЦЫ === */
+table { width:100%; border-collapse:separate; border-spacing:0; margin-top:16px; background:white; border-radius:12px; overflow:hidden; box-shadow:var(--shadow-soft); border:1px solid #e9ecef; }
+th { background:linear-gradient(135deg, var(--brand-green), #3fa55d); color:white; padding:13px 12px; text-align:left; font-size:0.8em; text-transform:uppercase; font-weight:700; letter-spacing:0.5px; }
+td { padding:12px; border-top:1px solid #f0f2f5; font-size:0.92em; }
 tbody tr { transition:background 0.15s; }
 tbody tr:hover { background:#fafbfc; }
-
-/* Цветные строки через border-left на первой ячейке (надёжно работает везде) */
-.row-paid td:first-child { background:linear-gradient(90deg, #dcfce7 0%, #f0fdf4 100%) !important; border-left:5px solid var(--success); padding-left:12px; }
-.row-paid td:not(:first-child) { background:linear-gradient(90deg, #f0fdf4 0%, #ffffff 100%) !important; }
-.row-paid:hover td { background:linear-gradient(90deg, #bbf7d0 0%, #dcfce7 100%) !important; }
-
-.row-unpaid td:first-child { background:linear-gradient(90deg, #fef3c7 0%, #fffbeb 100%) !important; border-left:5px solid var(--warning); padding-left:12px; }
-.row-unpaid td:not(:first-child) { background:linear-gradient(90deg, #fffbeb 0%, #ffffff 100%) !important; }
-.row-unpaid:hover td { background:linear-gradient(90deg, #fde68a 0%, #fef3c7 100%) !important; }
-
-.status-paid { color:var(--success); font-weight:700; font-size:0.88em; white-space:nowrap; }
-.status-unpaid { color:var(--warning); font-weight:700; font-size:0.88em; white-space:nowrap; }
-.amount { font-weight:700; text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.status-paid { color:var(--success); font-weight:700; font-size:0.88em; }
+.status-unpaid { color:var(--warning); font-weight:700; font-size:0.88em; }
+.amount { font-weight:700; text-align:right; font-variant-numeric:tabular-nums; }
 .totals-row { background:linear-gradient(90deg, #fff9e6 0%, #fff3cd 100%) !important; font-weight:700; }
 .totals-row td { padding:15px 12px; font-size:1em; border-top:2px solid var(--brand-orange); }
 .expense-amount { color:var(--danger); font-weight:700; }
@@ -122,23 +111,16 @@ tbody tr:hover { background:#fafbfc; }
 .login-btn { display:inline-block; margin-top:12px; padding:11px 22px; background:var(--brand-green); color:white; text-decoration:none; border-radius:10px; font-weight:600; }
 .login-btn:hover { background:#236b3a; }
 
-/* === АДАПТИВ (ИСПРАВЛЕНО: компактные таблицы на мобильных) === */
+/* === АДАПТИВ === */
 @media (max-width:600px) { 
-  body { padding:10px; }
-  .header { padding:30px 15px 25px; } 
-  .header h1 { font-size:1.4em; } 
-  .header h2 { font-size:1em; }
-  .content { padding:15px; } 
-  .summary-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
-  .summary-value { font-size:1.2em; }
-  .summary-label { font-size:0.65em; }
-  .action-buttons { top:8px; right:8px; left:8px; justify-content:center; }
-  .action-btn { padding:8px 12px; font-size:0.78em; }
+  .header { padding:35px 20px 30px; } 
+  .header h1 { font-size:1.5em; } 
+  .content { padding:20px; } 
+  .summary-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+  .summary-value { font-size:1.3em; }
+  .action-buttons { top:10px; right:10px; left:10px; justify-content:center; }
+  .action-btn { padding:10px 14px; font-size:0.85em; }
   .container { border-radius:16px; }
-  
-  /* Компактная таблица на мобильном */
-  th { padding:8px 4px; font-size:0.7em; }
-  td { padding:7px 4px; font-size:0.82em; }
 }
 
 /* === ПЕЧАТЬ === */
@@ -152,12 +134,6 @@ tbody tr:hover { background:#fafbfc; }
   .section { page-break-inside:avoid; }
   table { page-break-inside:auto; }
   tr { page-break-inside:avoid; page-break-after:auto; }
-  .row-paid td:first-child, .row-unpaid td:first-child,
-  .row-paid td:not(:first-child), .row-unpaid td:not(:first-child) {
-    -webkit-print-color-adjust:exact !important;
-    print-color-adjust:exact !important;
-    color-adjust:exact !important;
-  }
 }
 </style>
 </head>
@@ -237,39 +213,24 @@ async function checkPassword() {
   }
 }
 
-// === СКАЧИВАНИЕ PDF (ИСПРАВЛЕНО С FALLBACK) ===
+// === СКАЧИВАНИЕ PDF ===
 function downloadPDF() {
   const btn = document.getElementById('pdfBtn');
-  const element = document.getElementById('pdfContent');
-  if (!element) { alert('❌ Контент не загружен'); return; }
+  btn.classList.add('loading');
+  btn.innerHTML = '⏳ Формирую PDF...';
   
+  const element = document.getElementById('pdfContent');
   const g = reportData.groupInfo || {};
   const archiveName = reportData.archiveMonthName || '';
   const currentName = reportData.currentMonthName || '';
   const period = (archiveName && currentName) ? (archiveName + '-' + currentName) : (archiveName || currentName || 'Сводка');
   const fileName = 'Сводка_Группа' + (g.number || '') + '_' + (g.name || '').replace(/\s+/g, '_') + '_' + period.replace(/\s+/g, '_') + '.pdf';
   
-  // ПРОВЕРКА: загрузилась ли библиотека (защита от блокировок CDN)
-  if (typeof html2pdf === 'undefined' || window.html2pdf_failed) {
-    btn.classList.add('loading');
-    btn.innerHTML = '⏳ Открываю печать...';
-    setTimeout(() => {
-      alert('ℹ️ Библиотека PDF недоступна (возможно, блокировка сети).\n\nСейчас откроется окно печати.\n👉 Выберите в списке принтеров "Сохранить как PDF" или "Microsoft Print to PDF".');
-      window.print();
-      btn.classList.remove('loading');
-      btn.innerHTML = '📥 Скачать PDF';
-    }, 300);
-    return;
-  }
-  
-  btn.classList.add('loading');
-  btn.innerHTML = '⏳ Формирую PDF...';
-  
   const opt = {
-    margin: [8, 6, 8, 6],
+    margin: [10, 8, 10, 8],
     filename: fileName,
     image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, letterRendering: true, backgroundColor: '#ffffff', logging: false },
+    html2canvas: { scale: 2, useCORS: true, letterRendering: true, backgroundColor: '#ffffff' },
     jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
   };
@@ -281,7 +242,7 @@ function downloadPDF() {
     console.error(err);
     btn.classList.remove('loading');
     btn.innerHTML = '📥 Скачать PDF';
-    alert('❌ Ошибка PDF: ' + err.message + '\n\nИспользуйте кнопку "Распечатать" → "Сохранить как PDF"');
+    alert('❌ Ошибка формирования PDF: ' + err.message);
   });
 }
 
@@ -329,10 +290,9 @@ function renderReport() {
 
     if (aTc > 0) {
       html += '<h3 style="color:#2d8b4d;margin:22px 0 12px;font-size:1.1em">👥 Кто сдал взносы</h3>';
-      html += '<table><thead><tr><th style="width:10%">№</th><th style="width:45%">ФИО</th><th style="width:22%">Сумма</th><th style="width:23%">Статус</th></tr></thead><tbody>';
+      html += '<table><thead><tr><th style="width:40px">№</th><th>ФИО ребёнка</th><th style="width:110px">Сумма</th><th style="width:110px;text-align:center">Статус</th></tr></thead><tbody>';
       archiveM.students.filter(s => s.name).forEach((s, i) => {
-        const rowClass = s.paid ? 'row-paid' : 'row-unpaid';
-        html += '<tr class="' + rowClass + '"><td>' + (i+1) + '</td><td style="font-weight:500;word-break:break-word">' + escapeHtml(s.name) + '</td><td class="amount">' + (s.amount ? formatMoney(s.amount) + ' ₽' : '—') + '</td><td style="text-align:center" class="' + (s.paid ? 'status-paid' : 'status-unpaid') + '">' + (s.paid ? '✔' : '⏳') + '</td></tr>';
+        html += '<tr><td>' + (i+1) + '</td><td style="font-weight:500">' + escapeHtml(s.name) + '</td><td class="amount">' + (s.amount ? formatMoney(s.amount) + ' ₽' : '—') + '</td><td style="text-align:center" class="' + (s.paid ? 'status-paid' : 'status-unpaid') + '">' + (s.paid ? '✔ Оплачено' : '⏳ Ожидается') + '</td></tr>';
       });
       html += '<tr class="totals-row"><td colspan="2"><strong>ИТОГО:</strong> сдали ' + aPc + ' из ' + aTc + '</td><td class="amount"><strong>' + formatMoney(aInc) + ' ₽</strong></td><td></td></tr>';
       html += '</tbody></table>';
@@ -341,7 +301,7 @@ function renderReport() {
     // 💸 РАСХОДЫ
     html += '<h3 style="color:#dc3545;margin:25px 0 12px;font-size:1.1em">💸 Расходы за период</h3>';
     if (archiveM.expenses && archiveM.expenses.length > 0) {
-      html += '<table><thead><tr><th style="width:10%">№</th><th style="width:70%">На что потрачено</th><th style="width:20%">Сумма</th></tr></thead><tbody>';
+      html += '<table><thead><tr><th style="width:40px">№</th><th>На что потрачено</th><th style="width:120px;text-align:right">Сумма</th></tr></thead><tbody>';
       archiveM.expenses.forEach((e, i) => {
         html += '<tr><td>' + (i+1) + '</td><td>' + escapeHtml(e.description || '—') + '</td><td class="amount expense-amount">- ' + (e.amount ? formatMoney(e.amount) + ' ₽' : '—') + '</td></tr>';
       });
@@ -372,7 +332,7 @@ function renderReport() {
     // 💸 НА ЧТО БЫЛО ПОТРАЧЕНО
     html += '<h3 style="color:#dc3545;margin:22px 0 12px;font-size:1.1em">💸 На что было потрачено</h3>';
     if (currentM.expenses && currentM.expenses.length > 0) {
-      html += '<table><thead><tr><th style="width:10%">№</th><th style="width:70%">Статья расходов</th><th style="width:20%">Сумма</th></tr></thead><tbody>';
+      html += '<table><thead><tr><th style="width:40px">№</th><th>Статья расходов</th><th style="width:120px;text-align:right">Сумма</th></tr></thead><tbody>';
       currentM.expenses.forEach((e, i) => {
         html += '<tr><td>' + (i+1) + '</td><td>' + escapeHtml(e.description || '—') + '</td><td class="amount expense-amount">- ' + (e.amount ? formatMoney(e.amount) + ' ₽' : '—') + '</td></tr>';
       });
@@ -398,10 +358,9 @@ function renderReport() {
 
     if (cTc > 0) {
       html += '<h3 style="color:#2d8b4d;margin:22px 0 12px;font-size:1.1em">👥 Сбор взносов по родителям</h3>';
-      html += '<table><thead><tr><th style="width:10%">№</th><th style="width:45%">ФИО</th><th style="width:22%">Сумма</th><th style="width:23%">Статус</th></tr></thead><tbody>';
+      html += '<table><thead><tr><th style="width:40px">№</th><th>ФИО ребёнка</th><th style="width:110px">Сумма</th><th style="width:110px;text-align:center">Статус</th></tr></thead><tbody>';
       currentM.students.filter(s => s.name).forEach((s, i) => {
-        const rowClass = s.paid ? 'row-paid' : 'row-unpaid';
-        html += '<tr class="' + rowClass + '"><td>' + (i+1) + '</td><td style="font-weight:500;word-break:break-word">' + escapeHtml(s.name) + '</td><td class="amount">' + (s.amount ? formatMoney(s.amount) + ' ₽' : '—') + '</td><td style="text-align:center" class="' + (s.paid ? 'status-paid' : 'status-unpaid') + '">' + (s.paid ? '✔' : '⏳') + '</td></tr>';
+        html += '<tr><td>' + (i+1) + '</td><td style="font-weight:500">' + escapeHtml(s.name) + '</td><td class="amount">' + (s.amount ? formatMoney(s.amount) + ' ₽' : '—') + '</td><td style="text-align:center" class="' + (s.paid ? 'status-paid' : 'status-unpaid') + '">' + (s.paid ? '✔ Сдал' : '⏳ Ожидается') + '</td></tr>';
       });
       html += '<tr class="totals-row"><td colspan="2"><strong>ИТОГО:</strong> сдали ' + cPc + ' из ' + cTc + '</td><td class="amount"><strong>' + formatMoney(cInc) + ' ₽</strong></td><td></td></tr>';
       html += '</tbody></table>';
