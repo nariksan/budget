@@ -204,7 +204,7 @@ function renderReport() {
     html += '</div>';
   }
 
-  // === ТЕКУЩИЙ МЕСЯЦ (ПЛАНЫ) ===
+  // === ТЕКУЩИЙ МЕСЯЦ (ФАКТ РАСХОДОВ И СБОР) ===
   if (currentM) {
     const cInc = calcIncome(currentM);
     const cAi = Number(currentM.additionalIncome || 0);
@@ -217,20 +217,20 @@ function renderReport() {
     const remaining = totalExpected - cInc;
     const progressPercent = totalExpected > 0 ? Math.round((cInc / totalExpected) * 100) : 0;
 
-    html += '<div class="section"><div class="section-title plans"><span class="section-icon">📋</span>Планы на ' + escapeHtml(currentM.name) + '</div>';
-    html += '<div class="plans-info"><strong>💡 Уважаемые родители!</strong> Ниже представлена информация о планируемом сборе взносов на текущий месяц. Пожалуйста, ознакомьтесь с планами расходов и статусом сбора.</div>';
+    html += '<div class="section"><div class="section-title plans"><span class="section-icon">📋</span>' + escapeHtml(currentM.name) + '</div>';
+    html += '<div class="plans-info"><strong>💡 Уважаемые родители!</strong> Ниже представлена информация о сборе взносов на текущий месяц и фактических расходах. Пожалуйста, ознакомьтесь со статусом сбора.</div>';
 
-    // На что планируется потратить (ОТОБРАЖАЕТСЯ ВСЕГДА)
-    html += '<h3 style="color:#e87722;margin:20px 0 10px;font-size:1.1em">🎯 На что планируется потратить</h3>';
+    // 💸 НА ЧТО БЫЛО ПОТРАЧЕНО (Фактические расходы текущего месяца)
+    html += '<h3 style="color:#dc3545;margin:25px 0 10px;font-size:1.1em">💸 На что было потрачено</h3>';
     if (currentM.expenses && currentM.expenses.length > 0) {
       html += '<table><thead><tr><th style="width:40px">№</th><th>Статья расходов</th><th style="width:120px;text-align:right">Сумма</th></tr></thead><tbody>';
       currentM.expenses.forEach((e, i) => {
-        html += '<tr><td>' + (i+1) + '</td><td>' + escapeHtml(e.description || '—') + '</td><td class="amount expense-amount">' + (e.amount ? formatMoney(e.amount) + ' ₽' : '—') + '</td></tr>';
+        html += '<tr><td>' + (i+1) + '</td><td>' + escapeHtml(e.description || '—') + '</td><td class="amount expense-amount">- ' + (e.amount ? formatMoney(e.amount) + ' ₽' : '—') + '</td></tr>';
       });
-      html += '<tr class="totals-row"><td colspan="2"><strong>ИТОГО ЗАПЛАНИРОВАНО:</strong></td><td class="amount expense-amount"><strong>' + formatMoney(cExp) + ' ₽</strong></td></tr>';
+      html += '<tr class="totals-row"><td colspan="2"><strong>ИТОГО ПОТРАЧЕНО:</strong></td><td class="amount expense-amount"><strong>' + formatMoney(cExp) + ' ₽</strong></td></tr>';
       html += '</tbody></table>';
     } else {
-      html += '<div class="no-data">📝 Планы расходов на текущий месяц ещё не сформированы. Информация будет обновлена.</div>';
+      html += '<div class="no-data">💸 Расходов в текущем месяце пока не было</div>';
     }
 
     // Прогресс сбора
