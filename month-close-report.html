@@ -12,12 +12,9 @@
     .header { background: linear-gradient(135deg, var(--green), var(--orange)); color: white; padding: 24px; text-align: center; }
     .header h1 { margin: 0; font-size: 1.4em; }
     .header p { margin: 4px 0 0; opacity: 0.9; font-size: 0.9em; }
+    .header .created-info { margin-top: 10px; font-size: 0.78em; opacity: 0.8; background: rgba(255,255,255,0.15); padding: 6px 12px; border-radius: 20px; display: inline-block; }
     .content { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-    
-    /* 1. Комментарий */
     .comment-block { background: #eef7ff; border-left: 4px solid #17a2b8; padding: 16px; border-radius: 8px; font-style: italic; color: #444; }
-    
-    /* 2. Сводка */
     .summary-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
     .row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #eee; }
     .row:last-child { border-bottom: none; }
@@ -25,22 +22,16 @@
     .value { font-weight: 700; font-size: 1.1em; }
     .val-green { color: var(--green); }
     .val-red { color: #dc3545; }
-    
-    /* 3. Итог */
     .total-block { background: #e8f5e9; border: 2px solid var(--green); border-radius: 16px; padding: 20px; text-align: center; }
     .total-title { font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; color: var(--green); font-weight: 700; margin-bottom: 8px; }
     .total-amount { font-size: 2.2em; font-weight: 800; color: var(--green); margin: 4px 0; }
     .total-sub { font-size: 0.85em; color: #666; }
-    
-    /* 4. Детализация */
     .details-block { background: #fff9e6; border-left: 4px solid var(--orange); border-radius: 8px; padding: 16px; }
     .details-title { font-weight: 700; color: #856404; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
     .detail-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.95em; }
     .detail-item:last-child { border-bottom: none; }
-    
     .footer { text-align: center; padding: 20px; color: #999; font-size: 0.8em; border-top: 1px solid #eee; }
     .loading { text-align: center; padding: 40px; color: #666; }
-    
     .btn-pdf {
         display: block; width: calc(100% - 40px); margin: 0 20px 20px; padding: 14px;
         border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;
@@ -54,6 +45,7 @@
     <div class="header">
         <h1 id="reportTitle">Загрузка...</h1>
         <p id="reportGroup">Группа</p>
+        <div class="created-info" id="reportCreated"> Создан: ...</div>
     </div>
     <div class="content" id="reportContent">
         <div class="loading">Загрузка данных отчёта...</div>
@@ -78,12 +70,32 @@ const db = firebase.firestore();
 
 function formatMoney(n) { return Number(n || 0).toLocaleString('ru-RU', { maximumFractionDigits: 0 }); }
 
+function formatCreatedDate(ts) {
+    if (!ts) return '—';
+    let date;
+    if (ts.toDate) date = ts.toDate();
+    else if (ts.seconds) date = new Date(ts.seconds * 1000);
+    else date = new Date(ts);
+    
+    const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+    const days = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
+    
+    const day = date.getDate();
+    const month = months[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const dayOfWeek = days[date.getDay()];
+    
+    return `${dayOfWeek}, ${day} ${month} ${year} · ${hours}:${minutes}`;
+}
+
 async function loadReport() {
     const params = new URLSearchParams(window.location.search);
     const reportId = params.get('id');
     
     if (!reportId) {
-        document.getElementById('reportContent').innerHTML = '<div class="loading">❌ Ошибка: не указан ID отчёта</div>';
+        document.getElementById('reportContent').innerHTML = '<div class="loading"> Ошибка: не указан ID отчёта</div>';
         return;
     }
 
@@ -99,6 +111,7 @@ async function loadReport() {
         
         document.getElementById('reportTitle').textContent = r.monthName || 'Отчёт';
         document.getElementById('reportGroup').textContent = `Группа №${r.groupInfo?.number || ''} ${r.groupInfo?.name || ''}`;
+        document.getElementById('reportCreated').textContent = '📅 Создан: ' + formatCreatedDate(r.createdAt);
         
         let html = '';
         
@@ -149,7 +162,7 @@ async function loadReport() {
         
     } catch(e) {
         console.error(e);
-        document.getElementById('reportContent').innerHTML = '<div class="loading">❌ Ошибка загрузки: ' + e.message + '</div>';
+        document.getElementById('reportContent').innerHTML = '<div class="loading"> Ошибка загрузки: ' + e.message + '</div>';
     }
 }
 
