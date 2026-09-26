@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Отчёт закрытия месяца</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
     :root { --green: #2d8b4d; --orange: #e87722; --bg: #f8f9fa; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; line-height: 1.5; }
@@ -39,6 +40,13 @@
     
     .footer { text-align: center; padding: 20px; color: #999; font-size: 0.8em; border-top: 1px solid #eee; }
     .loading { text-align: center; padding: 40px; color: #666; }
+    
+    .btn-pdf {
+        display: block; width: calc(100% - 40px); margin: 0 20px 20px; padding: 14px;
+        border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer;
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: #fff;
+    }
+    .btn-pdf:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4); }
 </style>
 </head>
 <body>
@@ -51,6 +59,7 @@
         <div class="loading">Загрузка данных отчёта...</div>
     </div>
     <div class="footer">Родительский комитет · Отчёт сформирован автоматически</div>
+    <button class="btn-pdf" onclick="downloadPDF()">📄 Скачать PDF</button>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -88,7 +97,6 @@ async function loadReport() {
         const r = doc.data();
         const balance = (r.prevBalance || 0) + (r.income || 0) + (r.additionalIncome || 0) - (r.expense || 0);
         
-        // Обновляем заголовок
         document.getElementById('reportTitle').textContent = r.monthName || 'Отчёт';
         document.getElementById('reportGroup').textContent = `Группа №${r.groupInfo?.number || ''} ${r.groupInfo?.name || ''}`;
         
@@ -115,7 +123,7 @@ async function loadReport() {
                 <span class="value val-green">+${formatMoney(r.additionalIncome)} ₽</span>
             </div>
             <div class="row">
-                <span class="label">📤 Расход:</span>
+                <span class="label"> Расход:</span>
                 <span class="value val-red">-${formatMoney(r.expense)} ₽</span>
             </div>
         </div>`;
@@ -123,14 +131,14 @@ async function loadReport() {
         // 3. ИТОГОВЫЙ ПЕРЕНОС
         html += `
         <div class="total-block">
-            <div class="total-title"> Переносится на следующий месяц</div>
+            <div class="total-title">📊 Переносится на следующий месяц</div>
             <div class="total-amount">${formatMoney(balance)} ₽</div>
             <div class="total-sub">Итоговый остаток</div>
         </div>`;
         
         // 4. ДЕТАЛИЗАЦИЯ РАСХОДОВ
         if (r.expenses && r.expenses.length > 0) {
-            html += `<div class="details-block"><div class="details-title"> Детализация расходов</div>`;
+            html += `<div class="details-block"><div class="details-title">📝 Детализация расходов</div>`;
             r.expenses.forEach(e => {
                 html += `<div class="detail-item"><span>${e.description}</span><span class="val-red">-${formatMoney(e.amount)} ₽</span></div>`;
             });
@@ -143,6 +151,21 @@ async function loadReport() {
         console.error(e);
         document.getElementById('reportContent').innerHTML = '<div class="loading">❌ Ошибка загрузки: ' + e.message + '</div>';
     }
+}
+
+function downloadPDF() {
+    const element = document.querySelector('.container');
+    const month = document.getElementById('reportTitle').textContent.replace(/[^a-zа-яё0-9]/gi, '_');
+    
+    const opt = {
+        margin: 10,
+        filename: `Отчет_закрытия_${month}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, backgroundColor: '#ffffff' },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save();
 }
 
 loadReport();
