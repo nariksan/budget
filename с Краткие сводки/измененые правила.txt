@@ -1,0 +1,112 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // === ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ===
+    function isOwner() {
+      return request.auth != null && 
+             get(/databases/$(database)/documents/allowlist/$(request.auth.uid)).data.role == 'owner';
+    }
+    
+    function isAdminOrOwner() {
+      return request.auth != null && 
+             get(/databases/$(database)/documents/allowlist/$(request.auth.uid)).data.role in ['owner', 'admin'];
+    }
+    
+    function isParent() {
+      return request.auth != null && 
+             get(/databases/$(database)/documents/allowlist/$(request.auth.uid)).data.role == 'member';
+    }
+
+    // === КРАТКИЕ СВОДКИ (НОВОЕ) ===
+    match /short_reports/{reportId} {
+      // Чтение доступно всем (даже без входа) — для публичных ссылок
+      allow read: if true;
+      // Создавать, изменять и удалять могут только администраторы и владелец
+      allow create, update, delete: if isAdminOrOwner();
+    }
+
+    // === ПУБЛИЧНЫЕ СВОДКИ ===
+    match /public_reports/{reportId} {
+      // Чтение доступно всем (даже без входа). Проверка пароля происходит на фронтенде (svodka.html)
+      allow read: if true;
+      // Создавать, изменять и удалять могут только администраторы и владелец
+      allow create, update, delete: if isAdminOrOwner();
+    }
+
+    // === СООБЩЕНИЯ ===
+    match /messages/{messageId} {
+      // Разрешаем создавать сообщения всем (включая гостей через форму связи)
+      allow create: if true;
+      
+      // Чтение:
+      // - Владелец видит всё
+      // - Админ видит сообщения своей группы
+      // - Родитель видит только те сообщения, где authUid совпадает с его UID
+      allow read: if request.auth != null && (
+        isOwner() ||
+        (isAdminOrOwner() && resource.data.groupId == get(/databases/$(database)/documents/allowlist/$(request.auth.uid)).data.groupId) ||
+        (isParent() && resource.data.authUid == request.auth.uid)
+      );
+      
+      allow update, delete: if isOwner();
+    }
+    
+    // === УВЕДОМЛЕНИЯ ===
+    match /notifications/{notificationId} {
+      // Разрешаем создание всем (триггером являются действия родителей или гостей)
+      allow create: if true;
+      
+      // Чтение:
+      // - Владелец видит всё
+      // - Админ видит уведомления своей группы или общие (groupId == null)
+      // - Родитель видит только ответы на свои сообщения
+      allow read: if request.auth != null && (
+        isOwner() || 
+        (isAdminOrOwner() && (resource.data.groupId == null || resource.data.groupId == get(/databases/$(database)/documents/allowlist/$(request.auth.uid)).data.groupId)) ||
+        (isParent() && resource.data.type == 'reply' && resource.data.forRole == 'parent')
+      );
+      
+      allow update, delete: if isOwner();
+    }
+    
+    // === ФОТОАЛЬБОМЫ ===
+    match /albums/{albumId} {
+      // Читать могут все авторизованные пользователи
+      allow read: if request.auth != null;
+      // Управлять (создавать/удалять) могут только админ и владелец
+      allow create, update, delete: if isAdminOrOwner();
+    }
+    
+    // === ПУБЛИЧНЫЕ ДАННЫЕ (конфигурация) ===
+    match /public/{document=**} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+    
+    // === ОСНОВНЫЕ ДАННЫЕ (группы, пользователи, финансы, архив) ===
+    match /data/{document=**} {
+      allow read: if request.auth != null;
+      allow write: if isAdminOrOwner();
+    }
+    
+    // === НАСТРОЙКИ ===
+    match /settings/{document=**} {
+      allow read, write: if isOwner();
+    }
+    
+    // === СПИСОК ДОСТУПА (ALLOWLIST) ===
+    match /allowlist/{userId} {
+      allow read: if request.auth != null;
+      allow write: if isOwner();
+    }
+    
+    // === ЗАПРОСЫ НА ВХОД (INBOX) ===
+    match /inbox/{requestId} {
+      // Гости могут оставлять заявки на вход
+      allow create: if true;
+      // Читать и управлять заявками может только владелец
+      allow read, update, delete: if isOwner();
+    }
+  }
+}
