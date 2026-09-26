@@ -7,6 +7,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <style>
     :root { --green: #2d8b4d; --orange: #e87722; --bg: #f8f9fa; }
+    * { box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; line-height: 1.5; }
     .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
     .header { background: linear-gradient(135deg, var(--green), var(--orange)); color: white; padding: 24px; text-align: center; }
@@ -38,21 +39,22 @@
         background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: #fff;
     }
     .btn-pdf:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4); }
+    .btn-pdf:disabled { opacity: 0.6; cursor: not-allowed; }
 </style>
 </head>
 <body>
-<div class="container">
+<div class="container" id="reportContainer">
     <div class="header">
         <h1 id="reportTitle">Загрузка...</h1>
         <p id="reportGroup">Группа</p>
-        <div class="created-info" id="reportCreated"> Создан: ...</div>
+        <div class="created-info" id="reportCreated">📅 Создан: ...</div>
     </div>
     <div class="content" id="reportContent">
         <div class="loading">Загрузка данных отчёта...</div>
     </div>
     <div class="footer">Родительский комитет · Отчёт сформирован автоматически</div>
-    <button class="btn-pdf" onclick="downloadPDF()">📄 Скачать PDF</button>
 </div>
+<button class="btn-pdf" id="pdfBtn" onclick="downloadPDF()" style="display:none;">📄 Скачать PDF</button>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -76,36 +78,24 @@ function formatCreatedDate(ts) {
     if (ts.toDate) date = ts.toDate();
     else if (ts.seconds) date = new Date(ts.seconds * 1000);
     else date = new Date(ts);
-    
     const months = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
     const days = ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'];
-    
-    const day = date.getDate();
-    const month = months[date.getMonth()];
-    const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    const dayOfWeek = days[date.getDay()];
-    
-    return `${dayOfWeek}, ${day} ${month} ${year} · ${hours}:${minutes}`;
+    return `${days[date.getDay()]}, ${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()} · ${String(date.getHours()).padStart(2,'0')}:${String(date.getMinutes()).padStart(2,'0')}`;
 }
 
 async function loadReport() {
     const params = new URLSearchParams(window.location.search);
     const reportId = params.get('id');
-    
     if (!reportId) {
-        document.getElementById('reportContent').innerHTML = '<div class="loading"> Ошибка: не указан ID отчёта</div>';
+        document.getElementById('reportContent').innerHTML = '<div class="loading">❌ Ошибка: не указан ID отчёта</div>';
         return;
     }
-
     try {
         const doc = await db.collection('month_close_reports').doc(reportId).get();
         if (!doc.exists) {
             document.getElementById('reportContent').innerHTML = '<div class="loading">❌ Отчёт не найден или удалён</div>';
             return;
         }
-        
         const r = doc.data();
         const balance = (r.prevBalance || 0) + (r.income || 0) + (r.additionalIncome || 0) - (r.expense || 0);
         
@@ -114,71 +104,77 @@ async function loadReport() {
         document.getElementById('reportCreated').textContent = '📅 Создан: ' + formatCreatedDate(r.createdAt);
         
         let html = '';
-        
-        // 1. КОММЕНТАРИЙ
-        if (r.comment) {
-            html += `<div class="comment-block">💬 ${r.comment}</div>`;
-        }
-        
-        // 2. ФИНАНСОВАЯ СВОДКА
-        html += `
-        <div class="summary-card">
-            <div class="row">
-                <span class="label">💰 Остаток с прошлого месяца:</span>
-                <span class="value">${formatMoney(r.prevBalance)} ₽</span>
-            </div>
-            <div class="row">
-                <span class="label">📥 Приход (взносы):</span>
-                <span class="value val-green">+${formatMoney(r.income)} ₽</span>
-            </div>
-            <div class="row">
-                <span class="label">💳 Доп. приход:</span>
-                <span class="value val-green">+${formatMoney(r.additionalIncome)} ₽</span>
-            </div>
-            <div class="row">
-                <span class="label"> Расход:</span>
-                <span class="value val-red">-${formatMoney(r.expense)} ₽</span>
-            </div>
+        if (r.comment) html += `<div class="comment-block">💬 ${r.comment}</div>`;
+        html += `<div class="summary-card">
+            <div class="row"><span class="label"> Остаток с прошлого месяца:</span><span class="value">${formatMoney(r.prevBalance)} ₽</span></div>
+            <div class="row"><span class="label">📥 Приход (взносы):</span><span class="value val-green">+${formatMoney(r.income)} ₽</span></div>
+            <div class="row"><span class="label">💳 Доп. приход:</span><span class="value val-green">+${formatMoney(r.additionalIncome)} ₽</span></div>
+            <div class="row"><span class="label"> Расход:</span><span class="value val-red">-${formatMoney(r.expense)} ₽</span></div>
         </div>`;
-        
-        // 3. ИТОГОВЫЙ ПЕРЕНОС
-        html += `
-        <div class="total-block">
+        html += `<div class="total-block">
             <div class="total-title">📊 Переносится на следующий месяц</div>
             <div class="total-amount">${formatMoney(balance)} ₽</div>
             <div class="total-sub">Итоговый остаток</div>
         </div>`;
-        
-        // 4. ДЕТАЛИЗАЦИЯ РАСХОДОВ
         if (r.expenses && r.expenses.length > 0) {
-            html += `<div class="details-block"><div class="details-title">📝 Детализация расходов</div>`;
+            html += `<div class="details-block"><div class="details-title"> Детализация расходов</div>`;
             r.expenses.forEach(e => {
                 html += `<div class="detail-item"><span>${e.description}</span><span class="val-red">-${formatMoney(e.amount)} ₽</span></div>`;
             });
             html += `</div>`;
         }
-        
         document.getElementById('reportContent').innerHTML = html;
-        
+        document.getElementById('pdfBtn').style.display = 'block';
     } catch(e) {
         console.error(e);
-        document.getElementById('reportContent').innerHTML = '<div class="loading"> Ошибка загрузки: ' + e.message + '</div>';
+        document.getElementById('reportContent').innerHTML = '<div class="loading">❌ Ошибка загрузки: ' + e.message + '</div>';
     }
 }
 
 function downloadPDF() {
-    const element = document.querySelector('.container');
+    const btn = document.getElementById('pdfBtn');
+    btn.disabled = true;
+    btn.textContent = '⏳ Генерация PDF...';
+    
+    const element = document.getElementById('reportContainer');
     const month = document.getElementById('reportTitle').textContent.replace(/[^a-zа-яё0-9]/gi, '_');
     
+    // Клонируем элемент и добавляем кнопку внутрь для полного захвата
+    const clone = element.cloneNode(true);
+    clone.style.maxWidth = '600px';
+    clone.style.margin = '0 auto';
+    clone.style.background = 'white';
+    
+    // Добавляем футер с датой формирования PDF
+    const pdfFooter = document.createElement('div');
+    pdfFooter.style.cssText = 'text-align:center; padding:15px; color:#999; font-size:0.8em; border-top:1px solid #eee; margin-top:10px;';
+    pdfFooter.innerHTML = 'PDF сформирован: ' + new Date().toLocaleString('ru-RU');
+    clone.appendChild(pdfFooter);
+    
     const opt = {
-        margin: 10,
+        margin: [10, 10, 10, 10],
         filename: `Отчет_закрытия_${month}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, backgroundColor: '#ffffff' },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas: { 
+            scale: 2, 
+            backgroundColor: '#ffffff',
+            useCORS: true,
+            windowWidth: 640,
+            windowHeight: element.scrollHeight + 100
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
     };
 
-    html2pdf().set(opt).from(element).save();
+    html2pdf().set(opt).from(clone).save().then(() => {
+        btn.disabled = false;
+        btn.textContent = '📄 Скачать PDF';
+    }).catch(err => {
+        console.error(err);
+        alert('Ошибка генерации PDF: ' + err.message);
+        btn.disabled = false;
+        btn.textContent = '📄 Скачать PDF';
+    });
 }
 
 loadReport();
