@@ -489,19 +489,21 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 </main>
 <div id="toastContainer" class="toast-container"></div>
+
 <!-- МОДАЛКА ОТЧЁТА ЗАКРЫТИЯ МЕСЯЦА -->
 <div class="modal-overlay" id="createMonthCloseModal">
-<div class="modal" style="max-width:600px;">
-<h2>📊 Создание отчёта закрытия месяца</h2>
-<div class="hint">💡 Отчёт покажет полную картину по месяцу: остатки, приходы, расходы с детализацией и перенос на следующий месяц.</div>
-<div class="form-group"><label>📅 Выберите месяц для закрытия</label><select id="mcm-month"></select></div>
-<div class="form-group"><label> Комментарий для родителей (необязательно)</label><textarea id="mcm-comment" rows="3" placeholder="Уважаемые родители, подводим итоги месяца..."></textarea></div>
-<div id="mcm-preview" style="background:#f8f9fa; padding:15px; border-radius:8px; margin:15px 0; border-left:4px solid var(--brand-green);"></div>
-<button class="btn btn-success btn-block" onclick="confirmCreateMonthClose()">📊 Создать отчёт закрытия</button>
-<button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('createMonthCloseModal')">Отмена</button>
-</div>
+    <div class="modal" style="max-width:600px;">
+        <h2>📊 Создание отчёта закрытия месяца</h2>
+        <div class="hint">💡 Отчёт покажет полную картину по месяцу: остатки, приходы, расходы с детализацией и перенос на следующий месяц.</div>
+        <div class="form-group"><label>📅 Выберите месяц для закрытия</label><select id="mcm-month"></select></div>
+        <div class="form-group"><label> Комментарий для родителей (необязательно)</label><textarea id="mcm-comment" rows="3" placeholder="Уважаемые родители, подводим итоги месяца..."></textarea></div>
+        <div id="mcm-preview" style="background:#f8f9fa; padding:15px; border-radius:8px; margin:15px 0; border-left:4px solid var(--brand-green);"></div>
+        <button class="btn btn-success btn-block" onclick="confirmCreateMonthClose()">📊 Создать отчёт закрытия</button>
+        <button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('createMonthCloseModal')">Отмена</button>
+    </div>
 </div>
 <!-- КОНЕЦ МОДАЛКИ -->
+
 <div class="modal-overlay" id="accessRequestModal">
 <div class="modal">
 <h2> Запрос на вход</h2>
@@ -588,37 +590,6 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('editReportModal')">Отмена</button>
 </div>
 </div>
-<!-- МОДАЛКА СОЗДАНИЯ КРАТКОЙ СВОДКИ -->
-<div class="modal-overlay" id="createShortReportModal">
-<div class="modal" style="max-width:500px;">
-<h2>📝 Создание краткой сводки</h2>
-<div class="hint">💡 Быстрый отчёт с произвольными цифрами для родительского чата.</div>
-<div class="form-group"><label>Название сводки</label><input type="text" id="sr-title" placeholder="Например: Промежуточный отчёт"></div>
-<div class="form-group"><label>💰 Собрано (₽)</label><input type="number" id="sr-collected" value="0" step="0.01" placeholder="0"></div>
-<div class="form-group"><label>💸 Потрачено (₽)</label><input type="number" id="sr-spent" value="0" step="0.01" placeholder="0"></div>
-<div class="form-group"><label>💳 На карте (₽)</label><input type="number" id="sr-card" value="0" step="0.01" placeholder="0"></div>
-<div class="form-group"><label>💵 Наличными (₽)</label><input type="number" id="sr-cash" value="0" step="0.01" placeholder="0"></div>
-<div class="form-group"><label>💬 Комментарий</label><textarea id="sr-comment" rows="3" placeholder="Дополнительная информация..."></textarea></div>
-<button class="btn btn-success btn-block" onclick="confirmCreateShortReport()">📝 Создать сводку</button>
-<button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('createShortReportModal')">Отмена</button>
-</div>
-</div>
-<!-- КОНЕЦ МОДАЛКИ КРАТКОЙ СВОДКИ -->
-<!-- МОДАЛКА РЕДАКТИРОВАНИЯ КРАТКОЙ СВОДКИ -->
-<div class="modal-overlay" id="editShortReportModal">
-<div class="modal" style="max-width:500px;">
-<h2>✏️ Редактирование краткой сводки</h2>
-<div class="form-group"><label>Название</label><input type="text" id="esr-title" placeholder="Название сводки"></div>
-<div class="form-group"><label>💰 Собрано (₽)</label><input type="number" id="esr-collected" value="0" step="0.01"></div>
-<div class="form-group"><label>💸 Потрачено (₽)</label><input type="number" id="esr-spent" value="0" step="0.01"></div>
-<div class="form-group"><label>💳 На карте (₽)</label><input type="number" id="esr-card" value="0" step="0.01"></div>
-<div class="form-group"><label>💵 Наличными (₽)</label><input type="number" id="esr-cash" value="0" step="0.01"></div>
-<div class="form-group"><label>💬 Комментарий</label><textarea id="esr-comment" rows="3"></textarea></div>
-<button class="btn btn-success btn-block" onclick="confirmEditShortReport()">💾 Сохранить изменения</button>
-<button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('editShortReportModal')">Отмена</button>
-</div>
-</div>
-<!-- КОНЕЦ МОДАЛКИ РЕДАКТИРОВАНИЯ -->
 <datalist id="childrenDatalist"></datalist>
 <div class="modal-overlay" id="childPickerModal">
 <div class="modal">
@@ -1487,8 +1458,7 @@ if (n.urgent) html += '<div style="position:absolute;top:-10px;right:-10px;backg
 if (isNew && !n.urgent) html += '<div style="position:absolute;top:-10px;right:-10px;background:var(--warning);color:white;padding:4px 12px;border-radius:12px;font-size:0.75em;font-weight:700;">🆕 НОВОЕ</div>';
 html += '<div class="news-date"> ' + dateStr + '</div>';
 html += '<div class="news-title">' + escapeHtml(n.title || '') + '</div>';
-html += '<div class="news-text">' + escapeHtml(n.text || '').replace(/
-/g, '<br>') + '</div>';
+html += '<div class="news-text">' + escapeHtml(n.text || '').replace(/\n/g, '<br>') + '</div>';
 html += '</div>';
 c.innerHTML += html;
 });
@@ -1837,272 +1807,308 @@ renderAdminReports();
 } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
 // ============ КОНЕЦ ПУБЛИЧНЫХ СВОДОК ============
+
 // ============ КРАТКИЕ СВОДКИ ============
 function getShortReportUrl(reportId) {
-const base = window.location.href.split('?')[0].replace(/index\.html$/, '');
-return base + 'short-report.html?id=' + reportId;
+    const base = window.location.href.split('?')[0].replace(/index\.html$/, '');
+    return base + 'short-report.html?id=' + reportId;
 }
+
 async function renderAdminShortReports() {
-const container = document.getElementById('admin-short-reports');
-container.innerHTML = '<p style="color:var(--gray)">Загрузка...</p>';
-try {
-const snap = await db.collection('short_reports').where('groupId', '==', currentGroupId).orderBy('createdAt', 'desc').get();
-const reports = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-let html = '<div class="admin-card"><div class="admin-card-title">📝 Краткие сводки (ручной ввод)</div>';
-html += '<div class="hint">💡 Создавайте сводки с произвольными цифрами. Идеально для быстрых промежуточных отчётов в чат.</div>';
-html += '<button class="btn btn-info" onclick="openCreateShortReportModal()">➕ Создать краткую сводку</button></div>';
-if (reports.length === 0) {
-html += '<div class="news-empty" style="padding:30px;">Кратких сводок ещё нет</div>';
-} else {
-reports.forEach(r => {
-let createdDate = '';
-if (r.createdAt) {
-if (r.createdAt.toDate) createdDate = formatDateTime(r.createdAt.toDate().toISOString());
-else if (typeof r.createdAt === 'string') createdDate = formatDateTime(r.createdAt);
+    const container = document.getElementById('admin-short-reports');
+    container.innerHTML = '<p style="color:var(--gray)">Загрузка...</p>';
+    try {
+        const snap = await db.collection('short_reports').where('groupId', '==', currentGroupId).orderBy('createdAt', 'desc').get();
+        const reports = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        
+        let html = '<div class="admin-card"><div class="admin-card-title">📝 Краткие сводки (ручной ввод)</div>';
+        html += '<div class="hint">💡 Создавайте сводки с произвольными цифрами. Идеально для быстрых промежуточных отчётов в чат.</div>';
+        html += '<button class="btn btn-info" onclick="openCreateShortReportModal()">➕ Создать краткую сводку</button></div>';
+        
+        if (reports.length === 0) {
+            html += '<div class="news-empty" style="padding:30px;">Кратких сводок ещё нет</div>';
+        } else {
+            reports.forEach(r => {
+                let createdDate = '';
+                if (r.createdAt) {
+                    if (r.createdAt.toDate) createdDate = formatDateTime(r.createdAt.toDate().toISOString());
+                    else if (typeof r.createdAt === 'string') createdDate = formatDateTime(r.createdAt);
+                }
+                const total = (Number(r.collected)||0) - (Number(r.spent)||0) + (Number(r.card)||0) + (Number(r.cash)||0);
+                
+                html += '<div class="report-card active">';
+                html += '<div class="report-card-header"><div><div class="report-card-title">' + escapeHtml(r.title || 'Без названия') + '</div>';
+                html += '<div class="report-card-meta">📅 Создана: ' + createdDate + ' · Итого: <b>' + formatMoney(total) + ' ₽</b></div>';
+                if (r.comment) html += '<div class="report-card-meta"> ' + escapeHtml(r.comment) + '</div>';
+                html += '</div></div>';
+                html += '<div class="report-link-box"> ' + escapeHtml(getShortReportUrl(r.id)) + '</div>';
+                html += '<div class="report-card-actions">';
+                html += '<button class="btn btn-info btn-sm" onclick="copyShortReportLink(\'' + r.id + '\')"> Копировать ссылку</button>';
+                html += '<button class="btn btn-primary btn-sm" onclick="openEditShortReportModal(\'' + r.id + '\')">✏️ Редактировать</button>';
+                html += '<button class="btn btn-danger btn-sm" onclick="deleteShortReport(\'' + r.id + '\')">🗑 Удалить</button>';
+                html += '</div></div>';
+            });
+        }
+        container.innerHTML = html;
+    } catch(e) { 
+        container.innerHTML = '<p style="color:var(--danger)">Ошибка: ' + e.message + '</p>'; 
+    }
 }
-const total = (Number(r.collected)||0) - (Number(r.spent)||0) + (Number(r.card)||0) + (Number(r.cash)||0);
-html += '<div class="report-card active">';
-html += '<div class="report-card-header"><div><div class="report-card-title">' + escapeHtml(r.title || 'Без названия') + '</div>';
-html += '<div class="report-card-meta">📅 Создана: ' + createdDate + ' · Итого: <b>' + formatMoney(total) + ' ₽</b></div>';
-if (r.comment) html += '<div class="report-card-meta"> ' + escapeHtml(r.comment) + '</div>';
-html += '</div></div>';
-html += '<div class="report-link-box"> ' + escapeHtml(getShortReportUrl(r.id)) + '</div>';
-html += '<div class="report-card-actions">';
-html += '<button class="btn btn-info btn-sm" onclick="copyShortReportLink(\'' + r.id + '\')"> Копировать ссылку</button>';
-html += '<button class="btn btn-primary btn-sm" onclick="openEditShortReportModal(\'' + r.id + '\')">✏️ Редактировать</button>';
-html += '<button class="btn btn-danger btn-sm" onclick="deleteShortReport(\'' + r.id + '\')">🗑 Удалить</button>';
-html += '</div></div>';
-});
-}
-container.innerHTML = html;
-} catch(e) {
-container.innerHTML = '<p style="color:var(--danger)">Ошибка: ' + e.message + '</p>';
-}
-}
+
 function openCreateShortReportModal() {
-document.getElementById('sr-title').value = '';
-document.getElementById('sr-collected').value = 0;
-document.getElementById('sr-spent').value = 0;
-document.getElementById('sr-card').value = 0;
-document.getElementById('sr-cash').value = 0;
-document.getElementById('sr-comment').value = '';
-document.getElementById('createShortReportModal').classList.add('active');
+    document.getElementById('sr-title').value = '';
+    document.getElementById('sr-collected').value = 0;
+    document.getElementById('sr-spent').value = 0;
+    document.getElementById('sr-card').value = 0;
+    document.getElementById('sr-cash').value = 0;
+    document.getElementById('sr-comment').value = '';
+    document.getElementById('createShortReportModal').classList.add('active');
 }
+
 async function confirmCreateShortReport() {
-const title = document.getElementById('sr-title').value.trim();
-const collected = Number(document.getElementById('sr-collected').value) || 0;
-const spent = Number(document.getElementById('sr-spent').value) || 0;
-const card = Number(document.getElementById('sr-card').value) || 0;
-const cash = Number(document.getElementById('sr-cash').value) || 0;
-const comment = document.getElementById('sr-comment').value.trim();
-if (!title) { alert('Введите название сводки'); return; }
-const reportData = {
-groupId: currentGroupId,
-title: title,
-collected: collected,
-spent: spent,
-card: card,
-cash: cash,
-comment: comment,
-createdBy: currentUserId,
-createdAt: firebase.firestore.FieldValue.serverTimestamp()
-};
-try {
-await db.collection('short_reports').add(reportData);
-closeModal('createShortReportModal');
-showToast('✅ Готово', 'Краткая сводка создана! Скопируйте ссылку.', 'info');
-renderAdminShortReports();
-} catch(e) { alert('❌ Ошибка: ' + e.message); }
+    const title = document.getElementById('sr-title').value.trim();
+    const collected = Number(document.getElementById('sr-collected').value) || 0;
+    const spent = Number(document.getElementById('sr-spent').value) || 0;
+    const card = Number(document.getElementById('sr-card').value) || 0;
+    const cash = Number(document.getElementById('sr-cash').value) || 0;
+    const comment = document.getElementById('sr-comment').value.trim();
+    
+    if (!title) { alert('Введите название сводки'); return; }
+    
+    const reportData = {
+        groupId: currentGroupId,
+        title: title,
+        collected: collected,
+        spent: spent,
+        card: card,
+        cash: cash,
+        comment: comment,
+        createdBy: currentUserId,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    try {
+        await db.collection('short_reports').add(reportData);
+        closeModal('createShortReportModal');
+        showToast('✅ Готово', 'Краткая сводка создана! Скопируйте ссылку.', 'info');
+        renderAdminShortReports();
+    } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
+
 async function copyShortReportLink(reportId) {
-const url = getShortReportUrl(reportId);
-try {
-await navigator.clipboard.writeText(url);
-showToast('📋 Скопировано', 'Ссылка скопирована в буфер обмена', 'info');
-} catch(e) {
-prompt('Скопируйте ссылку вручную:', url);
+    const url = getShortReportUrl(reportId);
+    try {
+        await navigator.clipboard.writeText(url);
+        showToast('📋 Скопировано', 'Ссылка скопирована в буфер обмена', 'info');
+    } catch(e) {
+        prompt('Скопируйте ссылку вручную:', url);
+    }
 }
-}
+
 let currentEditingShortReportId = null;
 async function openEditShortReportModal(reportId) {
-try {
-const doc = await db.collection('short_reports').doc(reportId).get();
-if (!doc.exists) { alert('Сводка не найдена'); return; }
-const r = doc.data();
-currentEditingShortReportId = reportId;
-document.getElementById('esr-title').value = r.title || '';
-document.getElementById('esr-collected').value = r.collected || 0;
-document.getElementById('esr-spent').value = r.spent || 0;
-document.getElementById('esr-card').value = r.card || 0;
-document.getElementById('esr-cash').value = r.cash || 0;
-document.getElementById('esr-comment').value = r.comment || '';
-document.getElementById('editShortReportModal').classList.add('active');
-} catch(e) { alert('❌ Ошибка: ' + e.message); }
+    try {
+        const doc = await db.collection('short_reports').doc(reportId).get();
+        if (!doc.exists) { alert('Сводка не найдена'); return; }
+        const r = doc.data();
+        currentEditingShortReportId = reportId;
+        document.getElementById('esr-title').value = r.title || '';
+        document.getElementById('esr-collected').value = r.collected || 0;
+        document.getElementById('esr-spent').value = r.spent || 0;
+        document.getElementById('esr-card').value = r.card || 0;
+        document.getElementById('esr-cash').value = r.cash || 0;
+        document.getElementById('esr-comment').value = r.comment || '';
+        document.getElementById('editShortReportModal').classList.add('active');
+    } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
+
 async function confirmEditShortReport() {
-if (!currentEditingShortReportId) return;
-const title = document.getElementById('esr-title').value.trim();
-const collected = Number(document.getElementById('esr-collected').value) || 0;
-const spent = Number(document.getElementById('esr-spent').value) || 0;
-const card = Number(document.getElementById('esr-card').value) || 0;
-const cash = Number(document.getElementById('esr-cash').value) || 0;
-const comment = document.getElementById('esr-comment').value.trim();
-if (!title) { alert('Введите название'); return; }
-try {
-await db.collection('short_reports').doc(currentEditingShortReportId).update({
-title: title, collected: collected, spent: spent, card: card, cash: cash, comment: comment,
-updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-});
-closeModal('editShortReportModal');
-showToast('✅ Сохранено', 'Изменения применены', 'info');
-renderAdminShortReports();
-} catch(e) { alert('❌ Ошибка: ' + e.message); }
+    if (!currentEditingShortReportId) return;
+    const title = document.getElementById('esr-title').value.trim();
+    const collected = Number(document.getElementById('esr-collected').value) || 0;
+    const spent = Number(document.getElementById('esr-spent').value) || 0;
+    const card = Number(document.getElementById('esr-card').value) || 0;
+    const cash = Number(document.getElementById('esr-cash').value) || 0;
+    const comment = document.getElementById('esr-comment').value.trim();
+    
+    if (!title) { alert('Введите название'); return; }
+    
+    try {
+        await db.collection('short_reports').doc(currentEditingShortReportId).update({
+            title: title, collected: collected, spent: spent, card: card, cash: cash, comment: comment,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        closeModal('editShortReportModal');
+        showToast('✅ Сохранено', 'Изменения применены', 'info');
+        renderAdminShortReports();
+    } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
+
 async function deleteShortReport(reportId) {
-if (!confirm('Удалить эту краткую сводку? Это действие нельзя отменить.')) return;
-if (!confirm('Точно удалить?')) return;
-try {
-await db.collection('short_reports').doc(reportId).delete();
-showToast('🗑 Удалено', 'Сводка удалена', 'info');
-renderAdminShortReports();
-} catch(e) { alert(' Ошибка: ' + e.message); }
+    if (!confirm('Удалить эту краткую сводку? Это действие нельзя отменить.')) return;
+    if (!confirm('Точно удалить?')) return;
+    try {
+        await db.collection('short_reports').doc(reportId).delete();
+        showToast('🗑 Удалено', 'Сводка удалена', 'info');
+        renderAdminShortReports();
+    } catch(e) { alert(' Ошибка: ' + e.message); }
 }
 // ============ КОНЕЦ КРАТКИХ СВОДОК ============
+
 // ============ ОТЧЁТ ЗАКРЫТИЯ МЕСЯЦА ============
 function getMonthCloseUrl(reportId) {
-const base = window.location.href.split('?')[0].replace(/index\.html$/, '');
-return base + 'month-close-report.html?id=' + reportId;
+    const base = window.location.href.split('?')[0].replace(/index\.html$/, '');
+    return base + 'month-close-report.html?id=' + reportId;
 }
+
 async function renderAdminMonthClose() {
-const container = document.getElementById('admin-month-close');
-container.innerHTML = '<p style="color:var(--gray)">Загрузка...</p>';
-try {
-const snap = await db.collection('month_close_reports').where('groupId', '==', currentGroupId).orderBy('createdAt', 'desc').get();
-const reports = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-let html = '<div class="admin-card"><div class="admin-card-title">📊 Отчёты закрытия месяца</div>';
-html += '<div class="hint">💡 Создавайте отчёты закрытия месяца с полной детализацией: остатки, приходы, расходы с разбивкой и перенос на следующий месяц.</div>';
-html += '<button class="btn btn-success" onclick="openCreateMonthCloseModal()">➕ Создать отчёт закрытия</button></div>';
-if (reports.length === 0) {
-html += '<div class="news-empty" style="padding:30px;">Отчётов закрытия ещё нет</div>';
-} else {
-reports.forEach(r => {
-let createdDate = '';
-if (r.createdAt) {
-if (r.createdAt.toDate) createdDate = formatDateTime(r.createdAt.toDate().toISOString());
-else if (typeof r.createdAt === 'string') createdDate = formatDateTime(r.createdAt);
+    const container = document.getElementById('admin-month-close');
+    container.innerHTML = '<p style="color:var(--gray)">Загрузка...</p>';
+    try {
+        const snap = await db.collection('month_close_reports').where('groupId', '==', currentGroupId).orderBy('createdAt', 'desc').get();
+        const reports = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        
+        let html = '<div class="admin-card"><div class="admin-card-title">📊 Отчёты закрытия месяца</div>';
+        html += '<div class="hint">💡 Создавайте отчёты закрытия месяца с полной детализацией: остатки, приходы, расходы с разбивкой и перенос на следующий месяц.</div>';
+        html += '<button class="btn btn-success" onclick="openCreateMonthCloseModal()">➕ Создать отчёт закрытия</button></div>';
+        
+        if (reports.length === 0) {
+            html += '<div class="news-empty" style="padding:30px;">Отчётов закрытия ещё нет</div>';
+        } else {
+            reports.forEach(r => {
+                let createdDate = '';
+                if (r.createdAt) {
+                    if (r.createdAt.toDate) createdDate = formatDateTime(r.createdAt.toDate().toISOString());
+                    else if (typeof r.createdAt === 'string') createdDate = formatDateTime(r.createdAt);
+                }
+                
+                html += '<div class="report-card active">';
+                html += '<div class="report-card-header"><div><div class="report-card-title">📊 ' + escapeHtml(r.monthName || 'Без названия') + '</div>';
+                html += '<div class="report-card-meta">📅 Создан: ' + createdDate + ' · Перенос: <b style="color:var(--brand-green);">' + formatMoney(r.transferAmount) + ' ₽</b></div>';
+                if (r.comment) html += '<div class="report-card-meta">💬 ' + escapeHtml(r.comment) + '</div>';
+                html += '</div></div>';
+                html += '<div class="report-link-box">🔗 ' + escapeHtml(getMonthCloseUrl(r.id)) + '</div>';
+                html += '<div class="report-card-actions">';
+                html += '<button class="btn btn-info btn-sm" onclick="copyMonthCloseLink(\'' + r.id + '\')">📋 Копировать ссылку</button>';
+                html += '<button class="btn btn-danger btn-sm" onclick="deleteMonthCloseReport(\'' + r.id + '\')"> Удалить</button>';
+                html += '</div></div>';
+            });
+        }
+        container.innerHTML = html;
+    } catch(e) { 
+        container.innerHTML = '<p style="color:var(--danger)">Ошибка: ' + e.message + '</p>'; 
+    }
 }
-html += '<div class="report-card active">';
-html += '<div class="report-card-header"><div><div class="report-card-title">📊 ' + escapeHtml(r.monthName || 'Без названия') + '</div>';
-html += '<div class="report-card-meta">📅 Создан: ' + createdDate + ' · Перенос: <b style="color:var(--brand-green);">' + formatMoney(r.transferAmount) + ' ₽</b></div>';
-if (r.comment) html += '<div class="report-card-meta">💬 ' + escapeHtml(r.comment) + '</div>';
-html += '</div></div>';
-html += '<div class="report-link-box">🔗 ' + escapeHtml(getMonthCloseUrl(r.id)) + '</div>';
-html += '<div class="report-card-actions">';
-html += '<button class="btn btn-info btn-sm" onclick="copyMonthCloseLink(\'' + r.id + '\')">📋 Копировать ссылку</button>';
-html += '<button class="btn btn-danger btn-sm" onclick="deleteMonthCloseReport(\'' + r.id + '\')"> Удалить</button>';
-html += '</div></div>';
-});
-}
-container.innerHTML = html;
-} catch(e) {
-container.innerHTML = '<p style="color:var(--danger)">Ошибка: ' + e.message + '</p>';
-}
-}
+
 function openCreateMonthCloseModal() {
-const monthSelect = document.getElementById('mcm-month');
-monthSelect.innerHTML = '';
-data.months.forEach(m => {
-const o = document.createElement('option');
-o.value = m.id;
-o.textContent = m.name + (m.id === currentMonthId ? ' (текущий)' : '');
-if (m.id === currentMonthId) o.selected = true;
-monthSelect.appendChild(o);
-});
-document.getElementById('mcm-comment').value = '';
-updateMonthClosePreview();
-document.getElementById('createMonthCloseModal').classList.add('active');
+    const monthSelect = document.getElementById('mcm-month');
+    monthSelect.innerHTML = '';
+    data.months.forEach(m => {
+        const o = document.createElement('option');
+        o.value = m.id;
+        o.textContent = m.name + (m.id === currentMonthId ? ' (текущий)' : '');
+        if (m.id === currentMonthId) o.selected = true;
+        monthSelect.appendChild(o);
+    });
+    document.getElementById('mcm-comment').value = '';
+    updateMonthClosePreview();
+    document.getElementById('createMonthCloseModal').classList.add('active');
 }
+
 function updateMonthClosePreview() {
-const monthId = document.getElementById('mcm-month').value;
-const m = data.months.find(x => x.id === monthId);
-if (!m) return;
-const prevBal = Number(m.prevBalance || 0);
-const income = calcIncome(m);
-const ai = Number(m.additionalIncome || 0);
-const expense = calcExpense(m);
-const balance = prevBal + income + ai - expense;
-let previewHtml = '<h4 style="margin-bottom:10px; color:var(--brand-green);">📊 Предварительный просмотр:</h4>';
-previewHtml += '<div style="display:grid; gap:8px;">';
-previewHtml += '<div>💰 Остаток с прошлого месяца: <b>' + formatMoney(prevBal) + ' ₽</b></div>';
-previewHtml += '<div>📥 Приход (взносы): <b style="color:var(--success);">' + formatMoney(income) + ' ₽</b></div>';
-previewHtml += '<div>💳 Доп. приход: <b style="color:var(--info);">' + formatMoney(ai) + ' ₽</b></div>';
-previewHtml += '<div>📤 Расход: <b style="color:var(--danger);">-' + formatMoney(expense) + ' ₽</b></div>';
-previewHtml += '<div style="border-top:2px solid var(--border); padding-top:8px; margin-top:8px;">';
-previewHtml += '<div style="font-size:1.1em;">📊 Итого переносится: <b style="color:var(--brand-green); font-size:1.2em;">' + formatMoney(balance) + ' ₽</b></div>';
-previewHtml += '</div>';
-previewHtml += '</div>';
-if (m.expenses.length > 0) {
-previewHtml += '<div style="margin-top:12px; padding-top:12px; border-top:1px dashed var(--border);">';
-previewHtml += '<h5 style="margin-bottom:8px;">📝 Расходы (' + m.expenses.length + '):</h5>';
-previewHtml += '<div style="font-size:0.9em; color:var(--gray);">';
-m.expenses.forEach(e => {
-previewHtml += '<div>• ' + escapeHtml(e.description) + ': <b>' + formatMoney(e.amount) + ' ₽</b></div>';
-});
-previewHtml += '</div></div>';
+    const monthId = document.getElementById('mcm-month').value;
+    const m = data.months.find(x => x.id === monthId);
+    if (!m) return;
+    
+    const prevBal = Number(m.prevBalance || 0);
+    const income = calcIncome(m);
+    const ai = Number(m.additionalIncome || 0);
+    const expense = calcExpense(m);
+    const balance = prevBal + income + ai - expense;
+    
+    let previewHtml = '<h4 style="margin-bottom:10px; color:var(--brand-green);">📊 Предварительный просмотр:</h4>';
+    previewHtml += '<div style="display:grid; gap:8px;">';
+    previewHtml += '<div>💰 Остаток с прошлого месяца: <b>' + formatMoney(prevBal) + ' ₽</b></div>';
+    previewHtml += '<div>📥 Приход (взносы): <b style="color:var(--success);">' + formatMoney(income) + ' ₽</b></div>';
+    previewHtml += '<div>💳 Доп. приход: <b style="color:var(--info);">' + formatMoney(ai) + ' ₽</b></div>';
+    previewHtml += '<div>📤 Расход: <b style="color:var(--danger);">-' + formatMoney(expense) + ' ₽</b></div>';
+    previewHtml += '<div style="border-top:2px solid var(--border); padding-top:8px; margin-top:8px;">';
+    previewHtml += '<div style="font-size:1.1em;">📊 Итого переносится: <b style="color:var(--brand-green); font-size:1.2em;">' + formatMoney(balance) + ' ₽</b></div>';
+    previewHtml += '</div>';
+    previewHtml += '</div>';
+    
+    if (m.expenses.length > 0) {
+        previewHtml += '<div style="margin-top:12px; padding-top:12px; border-top:1px dashed var(--border);">';
+        previewHtml += '<h5 style="margin-bottom:8px;">📝 Расходы (' + m.expenses.length + '):</h5>';
+        previewHtml += '<div style="font-size:0.9em; color:var(--gray);">';
+        m.expenses.forEach(e => {
+            previewHtml += '<div>• ' + escapeHtml(e.description) + ': <b>' + formatMoney(e.amount) + ' ₽</b></div>';
+        });
+        previewHtml += '</div></div>';
+    }
+    
+    document.getElementById('mcm-preview').innerHTML = previewHtml;
 }
-document.getElementById('mcm-preview').innerHTML = previewHtml;
-}
+
 async function confirmCreateMonthClose() {
-const monthId = document.getElementById('mcm-month').value;
-const comment = document.getElementById('mcm-comment').value.trim();
-const m = data.months.find(x => x.id === monthId);
-if (!m) { alert('Месяц не найден'); return; }
-const prevBal = Number(m.prevBalance || 0);
-const income = calcIncome(m);
-const ai = Number(m.additionalIncome || 0);
-const expense = calcExpense(m);
-const balance = prevBal + income + ai - expense;
-const reportData = {
-groupId: currentGroupId,
-monthId: monthId,
-monthName: m.name,
-prevBalance: prevBal,
-income: income,
-additionalIncome: ai,
-expense: expense,
-transferAmount: balance,
-expenses: m.expenses,
-comment: comment,
-createdBy: currentUserId,
-createdAt: firebase.firestore.FieldValue.serverTimestamp()
-};
-try {
-await db.collection('month_close_reports').add(reportData);
-closeModal('createMonthCloseModal');
-showToast('✅ Готово', 'Отчёт закрытия месяца создан! Скопируйте ссылку.', 'info');
-renderAdminMonthClose();
-} catch(e) { alert('❌ Ошибка: ' + e.message); }
+    const monthId = document.getElementById('mcm-month').value;
+    const comment = document.getElementById('mcm-comment').value.trim();
+    const m = data.months.find(x => x.id === monthId);
+    
+    if (!m) { alert('Месяц не найден'); return; }
+    
+    const prevBal = Number(m.prevBalance || 0);
+    const income = calcIncome(m);
+    const ai = Number(m.additionalIncome || 0);
+    const expense = calcExpense(m);
+    const balance = prevBal + income + ai - expense;
+    
+    const reportData = {
+        groupId: currentGroupId,
+        monthId: monthId,
+        monthName: m.name,
+        prevBalance: prevBal,
+        income: income,
+        additionalIncome: ai,
+        expense: expense,
+        transferAmount: balance,
+        expenses: m.expenses,
+        comment: comment,
+        createdBy: currentUserId,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    
+    try {
+        await db.collection('month_close_reports').add(reportData);
+        closeModal('createMonthCloseModal');
+        showToast('✅ Готово', 'Отчёт закрытия месяца создан! Скопируйте ссылку.', 'info');
+        renderAdminMonthClose();
+    } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
+
 async function copyMonthCloseLink(reportId) {
-const url = getMonthCloseUrl(reportId);
-try {
-await navigator.clipboard.writeText(url);
-showToast('📋 Скопировано', 'Ссылка скопирована в буфер обмена', 'info');
-} catch(e) {
-prompt('Скопируйте ссылку вручную:', url);
+    const url = getMonthCloseUrl(reportId);
+    try {
+        await navigator.clipboard.writeText(url);
+        showToast('📋 Скопировано', 'Ссылка скопирована в буфер обмена', 'info');
+    } catch(e) {
+        prompt('Скопируйте ссылку вручную:', url);
+    }
 }
-}
+
 async function deleteMonthCloseReport(reportId) {
-if (!confirm('Удалить этот отчёт закрытия месяца? Это действие нельзя отменить.')) return;
-if (!confirm('Точно удалить?')) return;
-try {
-await db.collection('month_close_reports').doc(reportId).delete();
-showToast('🗑 Удалено', 'Отчёт удалён', 'info');
-renderAdminMonthClose();
-} catch(e) { alert('❌ Ошибка: ' + e.message); }
+    if (!confirm('Удалить этот отчёт закрытия месяца? Это действие нельзя отменить.')) return;
+    if (!confirm('Точно удалить?')) return;
+    try {
+        await db.collection('month_close_reports').doc(reportId).delete();
+        showToast('🗑 Удалено', 'Отчёт удалён', 'info');
+        renderAdminMonthClose();
+    } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
+
 document.getElementById('mcm-month').addEventListener('change', updateMonthClosePreview);
 // ============ КОНЕЦ ОТЧЁТА ЗАКРЫТИЯ МЕСЯЦА ============
+
 async function renderAdminAlbums() {
 const container = document.getElementById('admin-albums');
 const g = getGroup(currentGroupId);
@@ -2498,8 +2504,7 @@ else { skipped++; }
 }
 await saveToFirebase();
 await db.collection('public').doc('config').set({ groups: app.groups.map(g => ({ id: g.id, number: g.number, name: g.name })), maintenanceMode: settings.maintenanceMode, protected: true });
-alert('✅ Готово! Создано аккаунтов: ' + created + ', пропущено: ' + skipped + '.
-ТЕПЕРЬ: Firestore Database → Rules → вставь новые правила → Publish.');
+alert('✅ Готово! Создано аккаунтов: ' + created + ', пропущено: ' + skipped + '.\nТЕПЕРЬ: Firestore Database → Rules → вставь новые правила → Publish.');
 }
 function recalcAdmin() { let inc=0,pc=0,tc=0,exp=0; document.querySelectorAll('#adminStudents .student-row').forEach(r => { const name=r.querySelector('.a-name').value.trim(); const amount=Number(r.querySelector('.a-amount').value)||0; const paid=r.querySelector('.a-paid').checked; if(name||amount){tc++;if(paid){inc+=amount;pc++;}} }); document.querySelectorAll('#adminExpenses .expense-row').forEach(r => { exp += Number(r.querySelector('.a-amount').value)||0; }); const pb=Number(document.getElementById('editPrevBalance')?document.getElementById('editPrevBalance').value:0)||0; const ai=Number(document.getElementById('editAddIncome')?document.getElementById('editAddIncome').value:0)||0; const e1=document.getElementById('autoIncome'); if(e1)e1.textContent=formatMoney(inc)+' ₽'; const e2=document.getElementById('autoExpense'); if(e2)e2.textContent=formatMoney(exp)+' ₽'; const e3=document.getElementById('autoBudget'); if(e3)e3.textContent=formatMoney(inc+ai)+' ₽'; const e4=document.getElementById('autoBalance'); if(e4)e4.textContent=formatMoney(pb+inc+ai-exp)+' ₽'; const e5=document.getElementById('studentStats'); if(e5)e5.innerHTML='Сдали: <b>' + pc + ' из ' + tc + '</b> · Собрано: <b>' + formatMoney(inc) + ' ₽</b>'; const e6=document.getElementById('expenseStats'); if(e6)e6.innerHTML='Итого расход: <b>' + formatMoney(exp) + ' ₽</b>'; }
 function collectAdminData() {
