@@ -106,10 +106,10 @@ async function loadReport() {
         let html = '';
         if (r.comment) html += `<div class="comment-block">💬 ${r.comment}</div>`;
         html += `<div class="summary-card">
-            <div class="row"><span class="label"> Остаток с прошлого месяца:</span><span class="value">${formatMoney(r.prevBalance)} ₽</span></div>
+            <div class="row"><span class="label">💰 Остаток с прошлого месяца:</span><span class="value">${formatMoney(r.prevBalance)} ₽</span></div>
             <div class="row"><span class="label">📥 Приход (взносы):</span><span class="value val-green">+${formatMoney(r.income)} ₽</span></div>
             <div class="row"><span class="label">💳 Доп. приход:</span><span class="value val-green">+${formatMoney(r.additionalIncome)} ₽</span></div>
-            <div class="row"><span class="label"> Расход:</span><span class="value val-red">-${formatMoney(r.expense)} ₽</span></div>
+            <div class="row"><span class="label">📤 Расход:</span><span class="value val-red">-${formatMoney(r.expense)} ₽</span></div>
         </div>`;
         html += `<div class="total-block">
             <div class="total-title">📊 Переносится на следующий месяц</div>
@@ -117,7 +117,7 @@ async function loadReport() {
             <div class="total-sub">Итоговый остаток</div>
         </div>`;
         if (r.expenses && r.expenses.length > 0) {
-            html += `<div class="details-block"><div class="details-title"> Детализация расходов</div>`;
+            html += `<div class="details-block"><div class="details-title">📝 Детализация расходов</div>`;
             r.expenses.forEach(e => {
                 html += `<div class="detail-item"><span>${e.description}</span><span class="val-red">-${formatMoney(e.amount)} ₽</span></div>`;
             });
@@ -136,45 +136,51 @@ function downloadPDF() {
     btn.disabled = true;
     btn.textContent = '⏳ Генерация PDF...';
     
-    const element = document.getElementById('reportContainer');
+    const source = document.getElementById('reportContainer');
     const month = document.getElementById('reportTitle').textContent.replace(/[^a-zа-яё0-9]/gi, '_');
     
-    // Клонируем элемент и добавляем кнопку внутрь для полного захвата
-    const clone = element.cloneNode(true);
-    clone.style.maxWidth = '600px';
-    clone.style.margin = '0 auto';
-    clone.style.background = 'white';
+    // Создаём клон и добавляем его в body (скрыто), чтобы html2canvas корректно измерил высоту
+    const clone = source.cloneNode(true);
+    clone.style.cssText = 'position:absolute; left:-9999px; top:0; width:600px; background:white; border-radius:20px; overflow:visible;';
+    document.body.appendChild(clone);
     
-    // Добавляем футер с датой формирования PDF
+    // Добавляем футер с датой PDF
     const pdfFooter = document.createElement('div');
     pdfFooter.style.cssText = 'text-align:center; padding:15px; color:#999; font-size:0.8em; border-top:1px solid #eee; margin-top:10px;';
     pdfFooter.innerHTML = 'PDF сформирован: ' + new Date().toLocaleString('ru-RU');
     clone.appendChild(pdfFooter);
     
-    const opt = {
-        margin: [10, 10, 10, 10],
-        filename: `Отчет_закрытия_${month}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { 
-            scale: 2, 
-            backgroundColor: '#ffffff',
-            useCORS: true,
-            windowWidth: 640,
-            windowHeight: element.scrollHeight + 100
-        },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-    };
+    // Ждём немного, чтобы браузер отрендерил клон
+    setTimeout(() => {
+        const opt = {
+            margin: [10, 10, 10, 10],
+            filename: `Отчет_закрытия_${month}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { 
+                scale: 2, 
+                backgroundColor: '#ffffff',
+                useCORS: true,
+                windowWidth: 640,
+                windowHeight: clone.scrollHeight + 50,
+                scrollY: 0,
+                scrollX: 0
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        };
 
-    html2pdf().set(opt).from(clone).save().then(() => {
-        btn.disabled = false;
-        btn.textContent = '📄 Скачать PDF';
-    }).catch(err => {
-        console.error(err);
-        alert('Ошибка генерации PDF: ' + err.message);
-        btn.disabled = false;
-        btn.textContent = '📄 Скачать PDF';
-    });
+        html2pdf().set(opt).from(clone).save().then(() => {
+            document.body.removeChild(clone);
+            btn.disabled = false;
+            btn.textContent = '📄 Скачать PDF';
+        }).catch(err => {
+            console.error(err);
+            document.body.removeChild(clone);
+            alert('Ошибка генерации PDF: ' + err.message);
+            btn.disabled = false;
+            btn.textContent = ' Скачать PDF';
+        });
+    }, 100);
 }
 
 loadReport();
