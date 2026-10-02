@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💵 Кассовый отчёт</title>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #fff5f5 100%);
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
+}
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+.header {
+    background: linear-gradient(135deg, #dc3545 0%, #e87722 100%);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
+}
+.header-icon { font-size: 3em; margin-bottom: 10px; }
+.header h1 { font-size: 2em; margin-bottom: 8px; font-weight: 800; }
+.header h2 { font-size: 1.3em; opacity: 0.95; font-weight: 600; }
+.header .subtitle { font-size: 0.9em; opacity: 0.85; margin-top: 8px; }
+.content { padding: 30px; }
+.section { margin-bottom: 30px; }
+.section-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.section-title.expenses { color: #dc3545; border-bottom: 3px solid #dc3545; }
+.section-title.budget { color: #2d8b4d; border-bottom: 3px solid #2d8b4d; }
+.section-icon { font-size: 1.2em; }
+.expense-list {
+    background: #fff5f5;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #dc3545;
+}
+.expense-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #ffebee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.expense-item:last-child { border-bottom: none; }
+.expense-desc { font-weight: 500; flex: 1; min-width: 200px; }
+.expense-amount { color: #dc3545; font-weight: 700; font-size: 1.05em; }
+.expense-total {
+    padding: 15px 0 0;
+    margin-top: 10px;
+    border-top: 2px solid #dc3545;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2em;
+    font-weight: 800;
+}
+.budget-box {
+    background: #e8f5e9;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #2d8b4d;
+}
+.budget-row {
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #c8e6c9;
+}
+.budget-row:last-child { border-bottom: none; }
+.budget-label { color: #555; }
+.budget-value { font-weight: 700; font-size: 1.05em; }
+.budget-value.positive { color: #28a745; }
+.budget-value.negative { color: #dc3545; }
+.budget-total {
+    padding: 15px 0 0;
+    margin-top: 10px;
+    border-top: 3px solid #2d8b4d;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3em;
+    font-weight: 800;
+}
+.budget-total .budget-value { color: #2d8b4d; font-size: 1.2em; }
+.comment-box {
+    background: #fffbeb;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-style: italic;
+    color: #5b4300;
+}
+.footer {
+    background: #f8f9fa;
+    padding: 20px 30px;
+    text-align: center;
+    color: #666;
+    font-size: 0.85em;
+    border-top: 2px solid #e9ecef;
+}
+.footer strong { color: #2d8b4d; }
+.login-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #dc3545 0%, #e87722 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+}
+.login-box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+.login-box h2 { color: #dc3545; margin-bottom: 10px; }
+.login-box p { color: #666; margin-bottom: 20px; font-size: 0.9em; }
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1em;
+    margin-bottom: 12px;
+}
+.login-box input:focus { outline: none; border-color: #dc3545; }
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+}
+.login-box button:hover { background: #b02a37; }
+.error-msg { color: #dc3545; font-size: 0.85em; margin-top: 10px; display: none; }
+.print-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
+}
+.print-button:hover { background: #b02a37; transform: translateY(-2px); }
+.no-data { text-align: center; color: #999; padding: 30px; font-style: italic; }
+@media print {
+    body { background: white; padding: 0; }
+    .container { box-shadow: none; border-radius: 0; }
+    .no-print { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+    <div class="login-box">
+        <div style="font-size:3em; margin-bottom:10px;">💵</div>
+        <h2>Кассовый отчёт</h2>
+        <p>Введите пароль для доступа</p>
+        <input type="password" id="pwdInput" placeholder="Пароль" onkeypress="if(event.key==='Enter')checkPassword()">
+        <button onclick="checkPassword()">🔓 Войти</button>
+        <div class="error-msg" id="errorMsg">❌ Неверный пароль</div>
+    </div>
+</div>
+
+<button class="print-button no-print" onclick="window.print()">🖨️ Распечатать / PDF</button>
+
+<div class="container" id="reportContainer" style="display:none;">
+    <div class="header">
+        <div class="header-icon">💵</div>
+        <h1>Кассовый отчёт</h1>
+        <h2 id="monthName">—</h2>
+        <div class="subtitle" id="groupInfo">—</div>
+    </div>
+    <div class="content">
+        <div id="commentBlock"></div>
+        
+        <div class="section">
+            <div class="section-title expenses"><span class="section-icon">💸</span>Расходы</div>
+            <div id="expensesBlock"></div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title budget"><span class="section-icon">💰</span>Бюджет</div>
+            <div id="budgetBlock"></div>
+        </div>
+    </div>
+    <div class="footer">
+        <p><strong>Родительский комитет</strong></p>
+        <p style="margin-top:8px;">Документ сформирован: <span id="generatedDate">—</span></p>
+        <p style="margin-top:8px; font-size:0.8em; opacity:0.7;">Этот документ можно распечатать или сохранить как PDF</p>
+    </div>
+</div>
+
+<script>
+const firebaseConfig = {
+    apiKey: "AIzaSyDKi0CkhA5jPr7fNkPerItkLDKNLMcLpMw",
+    authDomain: "parent-budget-70c5a.firebaseapp.com",
+    projectId: "parent-budget-70c5a",
+    storageBucket: "parent-budget-70c5a.firebasestorage.app",
+    messagingSenderId: "214835144455",
+    appId: "1:214835144455:web:b1d91914f16c66004507a2"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let reportData = null;
+const reportId = new URLSearchParams(window.location.search).get('id');
+
+function formatMoney(n) {
+    return Number(n || 0).toLocaleString('ru-RU', { maximumFractionDigits: 2 });
+}
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+async function loadReport() {
+    if (!reportId) {
+        document.body.innerHTML = '<div style="text-align:center;padding:40px;color:#dc3545;">❌ Ссылка недействительна</div>';
+        return;
+    }
+    try {
+        const doc = await db.collection('cash_reports').doc(reportId).get();
+        if (!doc.exists) {
+            document.body.innerHTML = '<div style="text-align:center;padding:40px;color:#dc3545;">❌ Отчёт не найден</div>';
+            return;
+        }
+        reportData = doc.data();
+        document.getElementById('loginScreen').style.display = 'flex';
+    } catch(e) {
+        document.body.innerHTML = '<div style="text-align:center;padding:40px;color:#dc3545;">❌ Ошибка загрузки: ' + e.message + '</div>';
+    }
+}
+
+function checkPassword() {
+    const pwd = document.getElementById('pwdInput').value;
+    if (pwd === reportData.password) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('reportContainer').style.display = 'block';
+        document.querySelector('.print-button').style.display = 'block';
+        renderReport();
+    } else {
+        document.getElementById('errorMsg').style.display = 'block';
+        document.getElementById('pwdInput').value = '';
+        document.getElementById('pwdInput').focus();
+    }
+}
+
+function renderReport() {
+    const r = reportData;
+    document.getElementById('monthName').textContent = r.monthName || '—';
+    const g = r.groupInfo || {};
+    document.getElementById('groupInfo').textContent = 'Группа №' + (g.number || '') + ' «' + (g.name || '') + '»';
+    
+    if (r.comment) {
+        document.getElementById('commentBlock').innerHTML = '<div class="comment-box">💬 ' + escapeHtml(r.comment) + '</div>';
+    }
+    
+    // 💸 РАСХОДЫ (первым!)
+    let expHtml = '';
+    if (!r.expenses || r.expenses.length === 0) {
+        expHtml = '<div class="no-data">💸 Расходов в этом месяце не было</div>';
+    } else {
+        expHtml = '<div class="expense-list">';
+        r.expenses.forEach((e, i) => {
+            expHtml += '<div class="expense-item">';
+            expHtml += '<div class="expense-desc">' + (i+1) + '. ' + escapeHtml(e.description || '—') + '</div>';
+            expHtml += '<div class="expense-amount">- ' + formatMoney(e.amount) + ' ₽</div>';
+            expHtml += '</div>';
+        });
+        expHtml += '<div class="expense-total"><span>💸 ИТОГО РАСХОД:</span><span style="color:#dc3545;">- ' + formatMoney(r.totalExpense) + ' ₽</span></div>';
+        expHtml += '</div>';
+    }
+    document.getElementById('expensesBlock').innerHTML = expHtml;
+    
+    // 💰 БЮДЖЕТ (вторым)
+    let budHtml = '<div class="budget-box">';
+    budHtml += '<div class="budget-row"><span class="budget-label">💰 Остаток с прошлого месяца:</span><span class="budget-value">' + formatMoney(r.prevBalance) + ' ₽</span></div>';
+    budHtml += '<div class="budget-row"><span class="budget-label">📥 Приход (взносы):</span><span class="budget-value positive">+' + formatMoney(r.income) + ' ₽</span></div>';
+    if (r.additionalIncome > 0) {
+        budHtml += '<div class="budget-row"><span class="budget-label">💳 Дополнительный приход:</span><span class="budget-value positive">+' + formatMoney(r.additionalIncome) + ' ₽</span></div>';
+    }
+    budHtml += '<div class="budget-row"><span class="budget-label">💸 Расход:</span><span class="budget-value negative">-' + formatMoney(r.totalExpense) + ' ₽</span></div>';
+    budHtml += '<div class="budget-total"><span>📊 ИТОГО БАЛАНС:</span><span class="budget-value">' + formatMoney(r.balance) + ' ₽</span></div>';
+    budHtml += '</div>';
+    document.getElementById('budgetBlock').innerHTML = budHtml;
+    
+    document.getElementById('generatedDate').textContent = new Date().toLocaleString('ru-RU', {
+        day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+}
+
+loadReport();
+</script>
+</body>
+</html>
