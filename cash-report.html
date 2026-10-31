@@ -3,618 +3,233 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Кассовый отчёт — Звездочки</title>
+<title>💵 Кассовый отчёт</title>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { 
-  font-family: 'Courier New', 'Consolas', monospace; 
-  min-height: 100vh; 
-  background: #0a0e27; 
-  color: #e8e8ff; 
-  padding: 20px; 
-  overflow-x: hidden; 
-  position: relative;
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #fff5f5 100%);
+    color: #333;
+    line-height: 1.6;
+    padding: 20px;
+    min-height: 100vh;
 }
-
-/* Сетка приборной панели */
-body::before { 
-  content: ''; 
-  position: fixed; 
-  top: 0; left: 0; right: 0; bottom: 0; 
-  background-image: 
-    linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
-  background-size: 30px 30px;
-  pointer-events: none;
-  z-index: 0;
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    overflow: hidden;
 }
-
-/* Звёзды */
-body::after { 
-  content: ''; 
-  position: fixed; 
-  top: 0; left: 0; right: 0; bottom: 0; 
-  background-image: 
-    radial-gradient(1px 1px at 10% 20%, white, transparent),
-    radial-gradient(1px 1px at 30% 60%, white, transparent),
-    radial-gradient(1px 1px at 70% 30%, white, transparent),
-    radial-gradient(1px 1px at 90% 80%, white, transparent);
-  background-size: 100% 100%;
-  opacity: 0.4;
-  pointer-events: none;
-  z-index: 0;
+.header {
+    background: linear-gradient(135deg, #dc3545 0%, #e87722 100%);
+    color: white;
+    padding: 40px 30px;
+    text-align: center;
 }
-
-/* Экран входа */
-.login-screen { 
-  display: flex; align-items: center; justify-content: center; 
-  min-height: 100vh; padding: 20px; position: relative; z-index: 1; 
+.header-icon { font-size: 3em; margin-bottom: 10px; }
+.header h1 { font-size: 2em; margin-bottom: 8px; font-weight: 800; }
+.header h2 { font-size: 1.3em; opacity: 0.95; font-weight: 600; }
+.header .subtitle { font-size: 0.9em; opacity: 0.85; margin-top: 8px; }
+.content { padding: 30px; }
+.section { margin-bottom: 30px; }
+.section-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-.login-box { 
-  background: rgba(10, 14, 39, 0.9); 
-  border: 2px solid #00e5ff; 
-  border-radius: 8px; 
-  padding: 40px 30px; 
-  max-width: 400px; width: 100%; 
-  text-align: center; 
-  box-shadow: 0 0 30px rgba(0, 229, 255, 0.3), inset 0 0 20px rgba(0, 229, 255, 0.1); 
-  position: relative;
+.section-title.expenses { color: #dc3545; border-bottom: 3px solid #dc3545; }
+.section-title.budget { color: #2d8b4d; border-bottom: 3px solid #2d8b4d; }
+.section-icon { font-size: 1.2em; }
+.expense-list {
+    background: #fff5f5;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #dc3545;
 }
-.login-box::before, .login-box::after {
-  content: '⚙';
-  position: absolute;
-  font-size: 1.2em;
-  color: #00e5ff;
-  opacity: 0.5;
+.expense-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #ffebee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
 }
-.login-box::before { top: 8px; left: 8px; }
-.login-box::after { top: 8px; right: 8px; }
-
-.login-box h2 { 
-  color: #00e5ff; 
-  margin-bottom: 10px; 
-  font-size: 1.5em;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(0, 229, 255, 0.5); 
-}
-.login-box .subtitle {
-  color: #ff9100;
-  font-size: 0.9em;
-  margin-bottom: 20px;
-  letter-spacing: 1px;
-}
-.login-box input { 
-  width: 100%; 
-  padding: 14px; 
-  background: rgba(0, 0, 0, 0.5); 
-  border: 1px solid #00e5ff; 
-  border-radius: 4px; 
-  color: #00e5ff; 
-  font-family: 'Courier New', monospace;
-  font-size: 1em; 
-  margin-bottom: 12px; 
-  text-align: center; 
-  letter-spacing: 2px;
-}
-.login-box input::placeholder { color: rgba(0, 229, 255, 0.4); }
-.login-box input:focus { outline: none; box-shadow: 0 0 15px rgba(0, 229, 255, 0.5); }
-.login-box button { 
-  width: 100%; 
-  padding: 14px; 
-  background: linear-gradient(135deg, #00e5ff, #7b61ff); 
-  color: white; 
-  border: none; 
-  border-radius: 4px; 
-  font-family: 'Courier New', monospace;
-  font-size: 1em; 
-  font-weight: 700; 
-  cursor: pointer; 
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.4); 
-}
-.login-box button:hover { box-shadow: 0 0 30px rgba(0, 229, 255, 0.7); }
-.login-error { color: #ff3d71; font-size: 0.9em; margin-top: 10px; display: none; }
-
-/* Основной контейнер */
-.container { 
-  max-width: 1100px; 
-  margin: 0 auto; 
-  position: relative; 
-  z-index: 1; 
-}
-
-/* Шапка приборной панели */
-.header { 
-  text-align: center; 
-  padding: 30px; 
-  background: rgba(10, 14, 39, 0.8); 
-  border: 2px solid #00e5ff; 
-  border-radius: 8px; 
-  margin-bottom: 24px; 
-  position: relative;
-  box-shadow: 0 0 30px rgba(0, 229, 255, 0.2), inset 0 0 20px rgba(0, 229, 255, 0.05);
-}
-.header::before, .header::after {
-  content: '◆';
-  position: absolute;
-  color: #00e5ff;
-  font-size: 1.2em;
-}
-.header::before { top: 10px; left: 15px; }
-.header::after { top: 10px; right: 15px; }
-
-.header-icon { font-size: 3em; margin-bottom: 10px; filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.6)); }
-.header h1 { 
-  font-size: 1.8em; 
-  font-weight: 800; 
-  color: #00e5ff;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  text-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
-  margin-bottom: 8px; 
-}
-.header h2 { 
-  font-size: 1.1em; 
-  color: #fff; 
-  font-weight: 600; 
-  margin-bottom: 4px; 
-  letter-spacing: 1px;
-}
-.header .subtitle { 
-  font-size: 0.9em; 
-  color: #ff9100; 
-  font-weight: 700; 
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-/* Панель индикаторов - СЕТКА 2x2 */
-.indicators-panel {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.indicator {
-  background: rgba(10, 14, 39, 0.8);
-  border: 2px solid;
-  border-radius: 8px;
-  padding: 20px;
-  text-align: center;
-  position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-}
-.indicator::before {
-  content: '◈';
-  position: absolute;
-  top: 5px;
-  left: 8px;
-  font-size: 0.8em;
-  opacity: 0.5;
-}
-
-.indicator.balance { border-color: #00e5ff; box-shadow: 0 0 20px rgba(0, 229, 255, 0.2); }
-.indicator.income { border-color: #00ff88; box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
-.indicator.expense { border-color: #ff3d71; box-shadow: 0 0 20px rgba(255, 61, 113, 0.2); }
-.indicator.prev { border-color: #7b61ff; box-shadow: 0 0 20px rgba(123, 97, 255, 0.2); }
-
-.indicator-label {
-  font-size: 0.7em;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 8px;
-  opacity: 0.7;
-}
-.indicator.balance .indicator-label { color: #00e5ff; }
-.indicator.income .indicator-label { color: #00ff88; }
-.indicator.expense .indicator-label { color: #ff3d71; }
-.indicator.prev .indicator-label { color: #7b61ff; }
-
-.indicator-value {
-  font-size: 1.8em;
-  font-weight: 800;
-  font-family: 'Courier New', monospace;
-  text-shadow: 0 0 10px currentColor;
-}
-.indicator.balance .indicator-value { color: #00e5ff; }
-.indicator.income .indicator-value { color: #00ff88; }
-.indicator.expense .indicator-value { color: #ff3d71; }
-.indicator.prev .indicator-value { color: #7b61ff; }
-
-.indicator-sub {
-  font-size: 0.75em;
-  margin-top: 6px;
-  opacity: 0.6;
-  letter-spacing: 1px;
-}
-
-/* ТОПЛИВНЫЙ БАК */
-.fuel-tank-section {
-  background: rgba(10, 14, 39, 0.8);
-  border: 2px solid #00e5ff;
-  border-radius: 8px;
-  padding: 24px;
-  margin-bottom: 24px;
-  position: relative;
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
-}
-.fuel-tank-section::before {
-  content: '⚡ ТОПЛИВНЫЙ БАК БЮДЖЕТА ';
-  position: absolute;
-  top: -12px;
-  left: 20px;
-  background: #0a0e27;
-  padding: 0 10px;
-  color: #00e5ff;
-  font-size: 0.75em;
-  letter-spacing: 2px;
-  font-weight: 700;
-}
-
-.fuel-tank {
-  width: 100%;
-  height: 60px;
-  background: rgba(0, 0, 0, 0.5);
-  border: 2px solid #333;
-  border-radius: 4px;
-  position: relative;
-  overflow: hidden;
-  margin: 15px 0;
-}
-.fuel-level {
-  height: 100%;
-  background: linear-gradient(90deg, #ff3d71 0%, #ff9100 50%, #00ff88 100%);
-  border-radius: 2px;
-  transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  box-shadow: 0 0 20px currentColor;
-}
-.fuel-level::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-  animation: fuel-shine 2s linear infinite;
-}
-@keyframes fuel-shine {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-.fuel-markers {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.7em;
-  color: rgba(255, 255, 255, 0.5);
-  letter-spacing: 1px;
-}
-
-.fuel-info {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
-  font-size: 0.85em;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.fuel-info .collected { color: #00ff88; font-weight: 700; }
-.fuel-info .remaining { color: #ff9100; font-weight: 700; }
-.fuel-percent {
-  text-align: center;
-  font-size: 1.5em;
-  font-weight: 800;
-  color: #00e5ff;
-  margin-top: 10px;
-  text-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
-  font-family: 'Courier New', monospace;
-}
-
-/* Секции */
-.section { 
-  background: rgba(10, 14, 39, 0.8); 
-  border: 2px solid; 
-  border-radius: 8px; 
-  padding: 24px; 
-  margin-bottom: 24px; 
-  position: relative;
-}
-.section.expenses-section { border-color: #ff3d71; box-shadow: 0 0 20px rgba(255, 61, 113, 0.15); }
-.section.budget-section { border-color: #00e5ff; box-shadow: 0 0 20px rgba(0, 229, 255, 0.15); }
-
-.section::before {
-  content: attr(data-title);
-  position: absolute;
-  top: -12px;
-  left: 20px;
-  background: #0a0e27;
-  padding: 0 10px;
-  font-size: 0.75em;
-  letter-spacing: 2px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-.section.expenses-section::before { color: #ff3d71; content: '⚠ МОДУЛИ РАСХОДОВ '; }
-.section.budget-section::before { color: #00e5ff; content: '📊 ТЕЛЕМЕТРИЯ БЮДЖЕТА 📊'; }
-
-.section-title { 
-  font-size: 1.2em; 
-  font-weight: 700; 
-  margin-bottom: 16px; 
-  display: flex; 
-  align-items: center; 
-  gap: 10px; 
-  padding-bottom: 10px; 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-  text-transform: uppercase;
-  letter-spacing: 2px;
-}
-.section-title.expenses { color: #ff3d71; }
-.section-title.budget { color: #00e5ff; }
-
-/* Модули расходов (карточки) */
-.expense-modules {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 12px;
-}
-
-.expense-module {
-  background: rgba(255, 61, 113, 0.05);
-  border: 1px solid rgba(255, 61, 113, 0.3);
-  border-radius: 6px;
-  padding: 14px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: all 0.3s;
-  position: relative;
-}
-.expense-module:hover {
-  border-color: #ff3d71;
-  box-shadow: 0 0 15px rgba(255, 61, 113, 0.3);
-  transform: translateY(-2px);
-}
-.expense-module::before {
-  content: attr(data-num);
-  position: absolute;
-  top: 5px;
-  right: 8px;
-  font-size: 0.7em;
-  color: rgba(255, 61, 113, 0.5);
-  font-weight: 700;
-}
-
-.module-icon {
-  font-size: 1.8em;
-  filter: drop-shadow(0 0 8px rgba(255, 61, 113, 0.5));
-}
-.module-info { flex: 1; }
-.module-desc {
-  font-size: 0.9em;
-  color: #e8e8ff;
-  margin-bottom: 4px;
-  font-weight: 500;
-}
-.module-amount {
-  font-size: 1.1em;
-  color: #ff3d71;
-  font-weight: 700;
-  font-family: 'Courier New', monospace;
-  text-shadow: 0 0 8px rgba(255, 61, 113, 0.4);
-}
-
+.expense-item:last-child { border-bottom: none; }
+.expense-desc { font-weight: 500; flex: 1; min-width: 200px; }
+.expense-amount { color: #dc3545; font-weight: 700; font-size: 1.05em; }
 .expense-total {
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 2px solid rgba(255, 61, 113, 0.5);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.2em;
-  font-weight: 800;
-  color: #ff3d71;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+    padding: 15px 0 0;
+    margin-top: 10px;
+    border-top: 2px solid #dc3545;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2em;
+    font-weight: 800;
 }
-.expense-total .amount {
-  font-family: 'Courier New', monospace;
-  text-shadow: 0 0 15px rgba(255, 61, 113, 0.6);
+.budget-box {
+    background: #e8f5e9;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #2d8b4d;
 }
-
-/* Телеметрия бюджета */
-.telemetry-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
-  font-size: 0.95em;
+.budget-row {
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed #c8e6c9;
 }
-.telemetry-row:last-child { border-bottom: none; }
-.telemetry-label {
-  color: rgba(255, 255, 255, 0.7);
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.budget-row:last-child { border-bottom: none; }
+.budget-label { color: #555; }
+.budget-value { font-weight: 700; font-size: 1.05em; }
+.budget-value.positive { color: #28a745; }
+.budget-value.negative { color: #dc3545; }
+.budget-total {
+    padding: 15px 0 0;
+    margin-top: 10px;
+    border-top: 3px solid #2d8b4d;
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.3em;
+    font-weight: 800;
 }
-.telemetry-value {
-  font-family: 'Courier New', monospace;
-  font-weight: 700;
-  font-size: 1.1em;
+.budget-total .budget-value { color: #2d8b4d; font-size: 1.2em; }
+.comment-box {
+    background: #fffbeb;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-style: italic;
+    color: #5b4300;
 }
-.telemetry-value.positive { color: #00ff88; text-shadow: 0 0 10px rgba(0, 255, 136, 0.4); }
-.telemetry-value.negative { color: #ff3d71; text-shadow: 0 0 10px rgba(255, 61, 113, 0.4); }
-.telemetry-value.neutral { color: #00e5ff; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
-
-.telemetry-total {
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 3px solid #00e5ff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.3em;
-  font-weight: 800;
-  color: #00e5ff;
-  text-transform: uppercase;
-  letter-spacing: 2px;
+.footer {
+    background: #f8f9fa;
+    padding: 20px 30px;
+    text-align: center;
+    color: #666;
+    font-size: 0.85em;
+    border-top: 2px solid #e9ecef;
 }
-.telemetry-total .value {
-  font-family: 'Courier New', monospace;
-  text-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
-  font-size: 1.2em;
+.footer strong { color: #2d8b4d; }
+.login-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #dc3545 0%, #e87722 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
 }
-
-/* Комментарий */
-.comment-box { 
-  background: rgba(255, 145, 0, 0.08); 
-  border: 1px solid rgba(255, 145, 0, 0.4); 
-  border-radius: 8px; 
-  padding: 16px 20px; 
-  margin-bottom: 24px; 
-  position: relative; 
+.login-box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
 }
-.comment-box::before {
-  content: '📡 СООБЩЕНИЕ С БОРТА';
-  position: absolute;
-  top: -10px;
-  left: 15px;
-  background: #0a0e27;
-  padding: 0 8px;
-  color: #ff9100;
-  font-size: 0.7em;
-  letter-spacing: 2px;
-  font-weight: 700;
+.login-box h2 { color: #dc3545; margin-bottom: 10px; }
+.login-box p { color: #666; margin-bottom: 20px; font-size: 0.9em; }
+.login-box input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1em;
+    margin-bottom: 12px;
 }
-.comment-text { 
-  color: rgba(255, 255, 255, 0.9); 
-  line-height: 1.6; 
-  font-style: italic; 
+.login-box input:focus { outline: none; border-color: #dc3545; }
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
 }
-
-/* Футер */
-.footer { 
-  text-align: center; 
-  padding: 20px; 
-  color: rgba(255, 255, 255, 0.5); 
-  font-size: 0.8em; 
-  margin-top: 20px; 
-  border-top: 1px solid rgba(0, 229, 255, 0.2);
-  letter-spacing: 1px;
+.login-box button:hover { background: #b02a37; }
+.error-msg { color: #dc3545; font-size: 0.85em; margin-top: 10px; display: none; }
+.print-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 1000;
 }
-.footer strong { color: #00e5ff; }
-
-/* Кнопка печати */
-.print-button { 
-  position: fixed; 
-  top: 20px; 
-  right: 20px; 
-  background: linear-gradient(135deg, #00e5ff, #7b61ff); 
-  color: white; 
-  border: none; 
-  padding: 12px 24px; 
-  border-radius: 4px; 
-  font-family: 'Courier New', monospace;
-  font-size: 0.9em; 
-  font-weight: 700; 
-  cursor: pointer; 
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.4); 
-  z-index: 1000; 
-  transition: all 0.3s ease; 
-}
-.print-button:hover { box-shadow: 0 0 30px rgba(0, 229, 255, 0.7); transform: translateY(-2px); }
-
-.no-data { text-align: center; color: rgba(255, 255, 255, 0.5); padding: 30px; font-style: italic; }
-
-/* Адаптив */
-@media (max-width: 768px) { 
-  body { padding: 12px; } 
-  .header { padding: 20px 16px; } 
-  .header h1 { font-size: 1.3em; letter-spacing: 1px; } 
-  .indicator-value { font-size: 1.4em; } 
-  .section { padding: 16px; } 
-  .print-button { top: 10px; right: 10px; padding: 10px 16px; font-size: 0.8em; } 
-  .expense-modules { grid-template-columns: 1fr; }
-  /* На мобильных - ОДНА колонка */
-  .indicators-panel { grid-template-columns: 1fr; }
-}
-
-/* Для очень маленьких экранов */
-@media (max-width: 480px) {
-  .indicator-value { font-size: 1.2em; }
-  .indicator-label { font-size: 0.65em; }
-}
-
-/* ПЕЧАТЬ */
+.print-button:hover { background: #b02a37; transform: translateY(-2px); }
+.no-data { text-align: center; color: #999; padding: 30px; font-style: italic; }
 @media print {
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-  body { 
-    background: #0a0e27 !important; 
-    padding: 10mm; 
-  }
-  body::before, body::after { display: none; }
-  .container { max-width: 100%; }
-  .print-button { display: none; }
-  .section, .indicator, .fuel-tank-section, .comment-box, .header { 
-    page-break-inside: avoid; 
-  }
-  /* При печати - 2 колонки */
-  .indicators-panel { grid-template-columns: repeat(2, 1fr) !important; }
+    body { background: white; padding: 0; }
+    .container { box-shadow: none; border-radius: 0; }
+    .no-print { display: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- Экран входа -->
 <div class="login-screen" id="loginScreen">
     <div class="login-box">
-        <div style="font-size:3em; margin-bottom:12px;">🚀</div>
+        <div style="font-size:3em; margin-bottom:10px;">💵</div>
         <h2>Кассовый отчёт</h2>
-        <div class="subtitle">Группа «Звездочки»</div>
-        <input type="password" id="pwdInput" placeholder="ВВЕДИТЕ ПАРОЛЬ" onkeypress="if(event.key==='Enter')checkPassword()">
-        <button onclick="checkPassword()"> ДОСТУП</button>
-        <div class="login-error" id="loginError">❌ НЕВЕРНЫЙ ПАРОЛЬ</div>
+        <p>Введите пароль для доступа</p>
+        <input type="password" id="pwdInput" placeholder="Пароль" onkeypress="if(event.key==='Enter')checkPassword()">
+        <button onclick="checkPassword()">🔓 Войти</button>
+        <div class="error-msg" id="errorMsg">❌ Неверный пароль</div>
     </div>
 </div>
 
-<!-- Отчёт -->
+<button class="print-button no-print" onclick="window.print()">🖨️ Распечатать / PDF</button>
+
 <div class="container" id="reportContainer" style="display:none;">
-    <button class="print-button" onclick="window.print()">🖨️ ПЕЧАТЬ / PDF</button>
-    
     <div class="header">
-        <div class="header-icon">🚀</div>
+        <div class="header-icon">💵</div>
         <h1>Кассовый отчёт</h1>
         <h2 id="monthName">—</h2>
-        <div class="subtitle">Группа «Звездочки»</div>
+        <div class="subtitle" id="groupInfo">—</div>
     </div>
-    
-    <div id="commentBlock"></div>
-    
-    <!-- Индикаторы -->
-    <div class="indicators-panel" id="indicatorsPanel"></div>
-    
-    <!-- Топливный бак -->
-    <div class="fuel-tank-section" id="fuelTankSection"></div>
-    
-    <!-- Расходы -->
-    <div class="section expenses-section" id="expensesSection" data-title=""></div>
-    
-    <!-- Телеметрия бюджета -->
-    <div class="section budget-section" id="budgetSection" data-title=""></div>
-    
+    <div class="content">
+        <div id="commentBlock"></div>
+        
+        <div class="section">
+            <div class="section-title expenses"><span class="section-icon">💸</span>Расходы</div>
+            <div id="expensesBlock"></div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title budget"><span class="section-icon">💰</span>Бюджет</div>
+            <div id="budgetBlock"></div>
+        </div>
+    </div>
     <div class="footer">
-        <p><strong>РОДИТЕЛЬСКИЙ КОМИТЕТ «ЗВЕЗДОЧКИ»</strong></p>
-        <p style="margin-top:8px;">ДОКУМЕНТ СФОРМИРОВАН: <span id="generatedDate">—</span></p>
+        <p><strong>Родительский комитет</strong></p>
+        <p style="margin-top:8px;">Документ сформирован: <span id="generatedDate">—</span></p>
+        <p style="margin-top:8px; font-size:0.8em; opacity:0.7;">Этот документ можно распечатать или сохранить как PDF</p>
     </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script>
 const firebaseConfig = {
     apiKey: "AIzaSyDKi0CkhA5jPr7fNkPerItkLDKNLMcLpMw",
@@ -638,35 +253,21 @@ function escapeHtml(str) {
     return String(str).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
 }
 
-// Анимация счётчика
-function animateValue(element, start, end, duration) {
-    const startTime = performance.now();
-    const update = (currentTime) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const current = start + (end - start) * eased;
-        element.textContent = formatMoney(current) + ' ₽';
-        if (progress < 1) requestAnimationFrame(update);
-    };
-    requestAnimationFrame(update);
-}
-
 async function loadReport() {
     if (!reportId) {
-        document.body.innerHTML = '<div style="text-align:center;padding:40px;color:#ff3d71;position:relative;z-index:1;font-family:monospace;">❌ СИСТЕМА: ССЫЛКА НЕДЕЙСТВИТЕЛЬНА</div>';
+        document.body.innerHTML = '<div style="text-align:center;padding:40px;color:#dc3545;">❌ Ссылка недействительна</div>';
         return;
     }
     try {
         const doc = await db.collection('cash_reports').doc(reportId).get();
         if (!doc.exists) {
-            document.body.innerHTML = '<div style="text-align:center;padding:40px;color:#ff3d71;position:relative;z-index:1;font-family:monospace;">❌ СИСТЕМА: ОТЧЁТ НЕ НАЙДЕН</div>';
+            document.body.innerHTML = '<div style="text-align:center;padding:40px;color:#dc3545;">❌ Отчёт не найден</div>';
             return;
         }
         reportData = doc.data();
         document.getElementById('loginScreen').style.display = 'flex';
     } catch(e) {
-        document.body.innerHTML = '<div style="text-align:center;padding:40px;color:#ff3d71;position:relative;z-index:1;font-family:monospace;">❌ ОШИБКА ЗАГРУЗКИ: ' + e.message + '</div>';
+        document.body.innerHTML = '<div style="text-align:center;padding:40px;color:#dc3545;">❌ Ошибка загрузки: ' + e.message + '</div>';
     }
 }
 
@@ -675,9 +276,10 @@ function checkPassword() {
     if (pwd === reportData.password) {
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('reportContainer').style.display = 'block';
+        document.querySelector('.print-button').style.display = 'block';
         renderReport();
     } else {
-        document.getElementById('loginError').style.display = 'block';
+        document.getElementById('errorMsg').style.display = 'block';
         document.getElementById('pwdInput').value = '';
         document.getElementById('pwdInput').focus();
     }
@@ -686,147 +288,45 @@ function checkPassword() {
 function renderReport() {
     const r = reportData;
     document.getElementById('monthName').textContent = r.monthName || '—';
+    const g = r.groupInfo || {};
+    document.getElementById('groupInfo').textContent = 'Группа №' + (g.number || '') + ' «' + (g.name || '') + '»';
     
     if (r.comment) {
-        document.getElementById('commentBlock').innerHTML = '<div class="comment-box"><div class="comment-text">' + escapeHtml(r.comment) + '</div></div>';
+        document.getElementById('commentBlock').innerHTML = '<div class="comment-box">💬 ' + escapeHtml(r.comment) + '</div>';
     }
     
-    const prevBal = Number(r.prevBalance || 0);
-    const income = Number(r.income || 0);
-    const addIncome = Number(r.additionalIncome || 0);
-    const totalExpense = Number(r.totalExpense || 0);
-    const balance = Number(r.balance || 0);
-    const totalBudget = prevBal + income + addIncome;
-    const fuelPercent = totalBudget > 0 ? Math.max(0, Math.min(100, (balance / totalBudget) * 100)) : 0;
-    
-    // Индикаторы
-    const indicatorsHtml = `
-        <div class="indicator prev">
-            <div class="indicator-label">◈ Остаток с прошл. месяца</div>
-            <div class="indicator-value" data-target="${prevBal}">0 ₽</div>
-            <div class="indicator-sub">ПЕРЕХОДЯЩИЙ БАЛАНС</div>
-        </div>
-        <div class="indicator income">
-            <div class="indicator-label">◈ Приход (взносы)</div>
-            <div class="indicator-value" data-target="${income}">0 ₽</div>
-            <div class="indicator-sub">ПОПОЛНЕНИЕ ТОПЛИВА</div>
-        </div>
-        <div class="indicator expense">
-            <div class="indicator-label">◈ Расход</div>
-            <div class="indicator-value" data-target="${totalExpense}">0 ₽</div>
-            <div class="indicator-sub">ПОТРЕБЛЕНИЕ РЕСУРСОВ</div>
-        </div>
-        <div class="indicator balance">
-            <div class="indicator-label">◈ Итого баланс</div>
-            <div class="indicator-value" data-target="${balance}">0 ₽</div>
-            <div class="indicator-sub">ТЕКУЩИЙ ЗАПАС</div>
-        </div>
-    `;
-    document.getElementById('indicatorsPanel').innerHTML = indicatorsHtml;
-    
-    // Анимация счётчиков
-    setTimeout(() => {
-        document.querySelectorAll('.indicator-value').forEach(el => {
-            const target = parseFloat(el.dataset.target);
-            animateValue(el, 0, target, 1500);
-        });
-    }, 100);
-    
-    // Топливный бак
-    const fuelHtml = `
-        <div class="fuel-tank">
-            <div class="fuel-level" style="width: 0%;" id="fuelLevel"></div>
-        </div>
-        <div class="fuel-markers">
-            <span>0%</span>
-            <span>25%</span>
-            <span>50%</span>
-            <span>75%</span>
-            <span>100%</span>
-        </div>
-        <div class="fuel-info">
-            <span class="collected">◈ ПОПОЛНЕНО: ${formatMoney(totalBudget)} ₽</span>
-            <span class="remaining">◈ ПОТРАЧЕНО: ${formatMoney(totalExpense)} ₽</span>
-        </div>
-        <div class="fuel-percent" id="fuelPercent">0%</div>
-    `;
-    document.getElementById('fuelTankSection').innerHTML = fuelHtml;
-    
-    // Анимация топливного бака
-    setTimeout(() => {
-        document.getElementById('fuelLevel').style.width = fuelPercent + '%';
-        animatePercent(document.getElementById('fuelPercent'), 0, fuelPercent, 1500);
-    }, 300);
-    
-    // Расходы (модули)
-    const expenses = r.expenses || [];
-    let expensesHtml = '<div class="section-title expenses">⚠ Модули расходов</div>';
-    if (expenses.length === 0) {
-        expensesHtml += '<div class="no-data"> РАСХОДЫ НЕ ЗАФИКСИРОВАНЫ</div>';
+    // 💸 РАСХОДЫ (первым!)
+    let expHtml = '';
+    if (!r.expenses || r.expenses.length === 0) {
+        expHtml = '<div class="no-data">💸 Расходов в этом месяце не было</div>';
     } else {
-        expensesHtml += '<div class="expense-modules">';
-        expenses.forEach((e, i) => {
-            const icons = ['🔧', '🛠️', '📦', '', '🧹', '', '🎨', '📚', '🎭', '⚙️'];
-            const icon = icons[i % icons.length];
-            expensesHtml += `
-                <div class="expense-module" data-num="#${String(i+1).padStart(2, '0')}">
-                    <div class="module-icon">${icon}</div>
-                    <div class="module-info">
-                        <div class="module-desc">${escapeHtml(e.description || '—')}</div>
-                        <div class="module-amount">- ${formatMoney(e.amount)} ₽</div>
-                    </div>
-                </div>
-            `;
+        expHtml = '<div class="expense-list">';
+        r.expenses.forEach((e, i) => {
+            expHtml += '<div class="expense-item">';
+            expHtml += '<div class="expense-desc">' + (i+1) + '. ' + escapeHtml(e.description || '—') + '</div>';
+            expHtml += '<div class="expense-amount">- ' + formatMoney(e.amount) + ' ₽</div>';
+            expHtml += '</div>';
         });
-        expensesHtml += '</div>';
-        expensesHtml += `<div class="expense-total"><span>◈ ИТОГО РАСХОД:</span><span class="amount">- ${formatMoney(totalExpense)} ₽</span></div>`;
+        expHtml += '<div class="expense-total"><span>💸 ИТОГО РАСХОД:</span><span style="color:#dc3545;">- ' + formatMoney(r.totalExpense) + ' ₽</span></div>';
+        expHtml += '</div>';
     }
-    document.getElementById('expensesSection').innerHTML = expensesHtml;
+    document.getElementById('expensesBlock').innerHTML = expHtml;
     
-    // Телеметрия бюджета
-    const budgetHtml = `
-        <div class="section-title budget"> Телеметрия бюджета</div>
-        <div class="telemetry-row">
-            <span class="telemetry-label">◈ Остаток с прошлого месяца:</span>
-            <span class="telemetry-value neutral">${formatMoney(prevBal)} ₽</span>
-        </div>
-        <div class="telemetry-row">
-            <span class="telemetry-label">◈ Приход (взносы):</span>
-            <span class="telemetry-value positive">+${formatMoney(income)} ₽</span>
-        </div>
-        ${addIncome > 0 ? `
-        <div class="telemetry-row">
-            <span class="telemetry-label">◈ Дополнительный приход:</span>
-            <span class="telemetry-value positive">+${formatMoney(addIncome)} ₽</span>
-        </div>
-        ` : ''}
-        <div class="telemetry-row">
-            <span class="telemetry-label">◈ Расход:</span>
-            <span class="telemetry-value negative">-${formatMoney(totalExpense)} ₽</span>
-        </div>
-        <div class="telemetry-total">
-            <span>◈ ИТОГО БАЛАНС:</span>
-            <span class="value">${formatMoney(balance)} ₽</span>
-        </div>
-    `;
-    document.getElementById('budgetSection').innerHTML = budgetHtml;
+    // 💰 БЮДЖЕТ (вторым)
+    let budHtml = '<div class="budget-box">';
+    budHtml += '<div class="budget-row"><span class="budget-label">💰 Остаток с прошлого месяца:</span><span class="budget-value">' + formatMoney(r.prevBalance) + ' ₽</span></div>';
+    budHtml += '<div class="budget-row"><span class="budget-label">📥 Приход (взносы):</span><span class="budget-value positive">+' + formatMoney(r.income) + ' ₽</span></div>';
+    if (r.additionalIncome > 0) {
+        budHtml += '<div class="budget-row"><span class="budget-label">💳 Дополнительный приход:</span><span class="budget-value positive">+' + formatMoney(r.additionalIncome) + ' ₽</span></div>';
+    }
+    budHtml += '<div class="budget-row"><span class="budget-label">💸 Расход:</span><span class="budget-value negative">-' + formatMoney(r.totalExpense) + ' ₽</span></div>';
+    budHtml += '<div class="budget-total"><span>📊 ИТОГО БАЛАНС:</span><span class="budget-value">' + formatMoney(r.balance) + ' ₽</span></div>';
+    budHtml += '</div>';
+    document.getElementById('budgetBlock').innerHTML = budHtml;
     
     document.getElementById('generatedDate').textContent = new Date().toLocaleString('ru-RU', {
         day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
     });
-}
-
-function animatePercent(element, start, end, duration) {
-    const startTime = performance.now();
-    const update = (currentTime) => {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3);
-        const current = start + (end - start) * eased;
-        element.textContent = Math.round(current) + '%';
-        if (progress < 1) requestAnimationFrame(update);
-    };
-    requestAnimationFrame(update);
 }
 
 loadReport();
