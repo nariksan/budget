@@ -3,69 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Краткий отчёт</title>
+    <title>Краткая сводка — Звездочки</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: linear-gradient(135deg, #2d8b4d 0%, #e87722 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%);
             min-height: 100vh;
             padding: 20px;
             display: flex;
             justify-content: center;
             align-items: flex-start;
+            color: #e8e8ff;
+            position: relative;
+            overflow-x: hidden;
         }
-        .container { max-width: 480px; width: 100%; }
+
+        /* Звёздный фон */
+        body::before { 
+            content: ''; 
+            position: fixed; 
+            top: 0; left: 0; right: 0; bottom: 0; 
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, white, transparent),
+                radial-gradient(1px 1px at 50% 50%, white, transparent),
+                radial-gradient(1px 1px at 80% 10%, white, transparent),
+                radial-gradient(2px 2px at 90% 60%, white, transparent);
+            background-size: 200% 200%;
+            animation: stars 20s linear infinite;
+            opacity: 0.6;
+            pointer-events: none;
+            z-index: 0;
+        }
+        @keyframes stars { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
+
+        .container { max-width: 500px; width: 100%; position: relative; z-index: 1; }
+
         .report {
-            background: #fff; border-radius: 16px; padding: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.6s ease;
         }
-        .header { text-align: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
-        .header h1 { color: #333; font-size: 22px; }
-        .header .date { color: #888; font-size: 14px; margin-top: 5px; }
-        .row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 16px; }
-        .row .label { color: #555; }
-        .row .value { font-weight: 600; font-family: 'Courier New', monospace; }
-        .income { color: #27ae60; }
-        .expense { color: #e74c3c; }
-        .card { color: #2980b9; }
-        .cash { color: #e67e22; }
-        .divider { border-top: 1px dashed #ccc; margin: 10px 0; }
-        .total { display: flex; justify-content: space-between; padding: 15px 0 5px; font-size: 22px; font-weight: 700; color: #2d8b4d; }
-        .breakdown { background: #f7f7fb; border-radius: 10px; padding: 15px; margin-top: 20px; }
-        .breakdown h2 { font-size: 16px; color: #333; margin-bottom: 10px; }
-        .breakdown p { font-size: 14px; color: #555; line-height: 1.7; font-family: 'Courier New', monospace; }
-        .breakdown .result { margin-top: 10px; font-weight: 700; color: #2d8b4d; font-size: 15px; }
-        .comment-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 14px; color: #856404; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header { text-align: center; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 20px; margin-bottom: 25px; }
+        .header h1 { 
+            font-size: 24px; font-weight: 800; 
+            background: linear-gradient(135deg, #00e5ff 0%, #ff9100 100%); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; 
+        }
+        .header .date { color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-top: 8px; letter-spacing: 0.5px; }
+
+        .row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; font-size: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .row:last-of-type { border-bottom: none; }
+        .row .label { color: rgba(255, 255, 255, 0.8); display: flex; align-items: center; gap: 8px; }
+        .row .value { font-weight: 700; font-family: 'Courier New', monospace; font-size: 1.1em; text-shadow: 0 0 10px currentColor; }
         
+        .income { color: #00ff88; }
+        .expense { color: #ff3d71; }
+        .card { color: #00e5ff; }
+        .cash { color: #ff9100; }
+
+        .divider { border-top: 1px dashed rgba(255, 255, 255, 0.2); margin: 15px 0; }
+
+        .total { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 20px 0 10px; font-size: 22px; font-weight: 800; 
+            color: #00e5ff; text-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+        }
+
+        .breakdown { 
+            background: rgba(0, 0, 0, 0.2); 
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 16px; 
+            padding: 20px; 
+            margin-top: 25px; 
+        }
+        .breakdown h2 { font-size: 15px; color: #00e5ff; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+        .breakdown p { font-size: 14px; color: rgba(255, 255, 255, 0.8); line-height: 1.8; font-family: 'Courier New', monospace; margin-bottom: 8px; }
+        .breakdown p b { color: #fff; }
+        .breakdown .result { 
+            margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(0, 229, 255, 0.2);
+            font-weight: 700; color: #00ff88; font-size: 16px; text-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+        }
+
+        .comment-box { 
+            background: rgba(255, 145, 0, 0.1); 
+            border: 1px solid rgba(255, 145, 0, 0.3); 
+            border-left: 4px solid #ff9100; 
+            padding: 16px; 
+            border-radius: 12px; 
+            margin-top: 20px; 
+            font-size: 14px; 
+            color: rgba(255, 255, 255, 0.9); 
+            font-style: italic;
+            position: relative;
+        }
+        .comment-box::before {
+            content: '📡';
+            position: absolute;
+            top: -12px;
+            left: 15px;
+            font-size: 1.2em;
+            background: #1a1a3e;
+            padding: 0 6px;
+            border-radius: 50%;
+        }
+
         .btn-pdf {
-            width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 16px;
-            font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 20px;
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: #fff;
+            width: 100%; padding: 16px; border: none; border-radius: 12px; font-size: 16px;
+            font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 25px;
+            background: linear-gradient(135deg, #00e5ff, #7b61ff); color: #fff;
+            box-shadow: 0 4px 20px rgba(0, 229, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .btn-pdf:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4); }
+        .btn-pdf:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0, 229, 255, 0.5); }
         
-        .loading { text-align: center; padding: 40px; color: white; font-size: 18px; }
-        .error { text-align: center; padding: 40px; background: #fff5f5; color: #dc3545; border-radius: 16px; }
+        .loading { text-align: center; padding: 60px 20px; color: rgba(255, 255, 255, 0.7); font-size: 18px; position: relative; z-index: 1; }
+        .error { text-align: center; padding: 40px 20px; background: rgba(255, 61, 113, 0.1); color: #ff3d71; border: 1px solid rgba(255, 61, 113, 0.3); border-radius: 16px; position: relative; z-index: 1; }
 
         @media print {
-            body { background: #fff; padding: 0; }
+            body { background: #0a0e27 !important; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body::before { display: none; }
             .btn-pdf { display: none; }
-            .report { box-shadow: none; }
+            .report { box-shadow: none; border: 1px solid rgba(255, 255, 255, 0.2); }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div id="loading" class="loading">⏳ Загрузка данных...</div>
+        <div id="loading" class="loading">⏳ Загрузка данных из системы...</div>
         <div id="error" class="error" style="display:none;"></div>
         
         <div class="report" id="report" style="display:none;">
             <div class="header">
-                <h1 id="out-title">📊 Краткий отчёт</h1>
+                <h1 id="out-title">📊 Краткая сводка</h1>
                 <div class="date" id="date"></div>
             </div>
 
@@ -78,11 +161,11 @@
                 <span class="value expense" id="out-spent">0</span>
             </div>
             <div class="row">
-                <span class="label">💳 Доп. приход по карте:</span>
+                <span class="label">💳 Доп. приход (карта):</span>
                 <span class="value card" id="out-card">0</span>
             </div>
             <div class="row">
-                <span class="label">💵 Доп. приход наличными:</span>
+                <span class="label">💵 Доп. приход (наличные):</span>
                 <span class="value cash" id="out-cash">0</span>
             </div>
 
@@ -94,7 +177,7 @@
             </div>
 
             <div class="breakdown" id="breakdown">
-                <h2>🔍 Расшифровка расчёта:</h2>
+                <h2>🔍 Телеметрия расчёта:</h2>
                 <div id="steps"></div>
             </div>
             
@@ -146,7 +229,7 @@
                 const cash = Number(r.cash) || 0;
                 const total = collected - spent + card + cash;
 
-                document.getElementById('out-title').textContent = '📊 ' + (r.title || 'Краткий отчёт');
+                document.getElementById('out-title').textContent = '📊 ' + (r.title || 'Краткая сводка');
                 document.getElementById('out-collected').textContent = format(collected) + ' ₽';
                 document.getElementById('out-spent').textContent = '−' + format(spent) + ' ₽';
                 document.getElementById('out-card').textContent = '+' + format(card) + ' ₽';
@@ -163,7 +246,7 @@
 
                 if (r.comment) {
                     document.getElementById('comment-box').style.display = 'block';
-                    document.getElementById('comment-box').textContent = '💬 ' + r.comment;
+                    document.getElementById('comment-box').textContent = r.comment;
                 }
 
                 document.getElementById('report').style.display = 'block';
@@ -179,10 +262,11 @@
             const title = document.getElementById('out-title').textContent.replace(/[^a-zа-яё0-9]/gi, '_');
             
             const opt = {
-                margin: 10,
-                filename: `Отчет_${title}.pdf`,
+                margin: 15,
+                filename: `Сводка_${title}.pdf`,
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, backgroundColor: '#ffffff' },
+                // Устанавливаем тёмный фон, чтобы PDF соответствовал экрану
+                html2canvas: { scale: 2, backgroundColor: '#0a0e27', useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
