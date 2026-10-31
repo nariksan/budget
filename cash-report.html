@@ -60,7 +60,6 @@ body::after {
   box-shadow: 0 0 30px rgba(0, 229, 255, 0.3), inset 0 0 20px rgba(0, 229, 255, 0.1); 
   position: relative;
 }
-/* Угловые заклёпки */
 .login-box::before, .login-box::after {
   content: '⚙';
   position: absolute;
@@ -243,7 +242,7 @@ body::after {
   box-shadow: 0 0 20px rgba(0, 229, 255, 0.15);
 }
 .fuel-tank-section::before {
-  content: '⚡ ТОПЛИВНЫЙ БАК БЮДЖЕТА ⚡';
+  content: '⚡ ТОПЛИВНЫЙ БАК БЮДЖЕТА ';
   position: absolute;
   top: -12px;
   left: 20px;
@@ -337,7 +336,7 @@ body::after {
   font-weight: 700;
   text-transform: uppercase;
 }
-.section.expenses-section::before { color: #ff3d71; content: '⚠ МОДУЛИ РАСХОДОВ ⚠'; }
+.section.expenses-section::before { color: #ff3d71; content: '⚠ МОДУЛИ РАСХОДОВ '; }
 .section.budget-section::before { color: #00e5ff; content: '📊 ТЕЛЕМЕТРИЯ БЮДЖЕТА 📊'; }
 
 .section-title { 
@@ -479,7 +478,7 @@ body::after {
   position: relative; 
 }
 .comment-box::before {
-  content: ' СООБЩЕНИЕ С БОРТА';
+  content: '📡 СООБЩЕНИЕ С БОРТА';
   position: absolute;
   top: -10px;
   left: 15px;
@@ -541,7 +540,7 @@ body::after {
   .section { padding: 16px; } 
   .print-button { top: 10px; right: 10px; padding: 10px 16px; font-size: 0.8em; } 
   .expense-modules { grid-template-columns: 1fr; }
-  /* На мобильных - одна колонка */
+  /* На мобильных - ОДНА колонка */
   .indicators-panel { grid-template-columns: 1fr; }
 }
 
@@ -565,7 +564,7 @@ body::after {
     page-break-inside: avoid; 
   }
   /* При печати - 2 колонки */
-  .indicators-panel { grid-template-columns: repeat(2, 1fr); }
+  .indicators-panel { grid-template-columns: repeat(2, 1fr) !important; }
 }
 </style>
 </head>
@@ -574,18 +573,18 @@ body::after {
 <!-- Экран входа -->
 <div class="login-screen" id="loginScreen">
     <div class="login-box">
-        <div style="font-size:3em; margin-bottom:12px;"></div>
+        <div style="font-size:3em; margin-bottom:12px;">🚀</div>
         <h2>Кассовый отчёт</h2>
         <div class="subtitle">Группа «Звездочки»</div>
         <input type="password" id="pwdInput" placeholder="ВВЕДИТЕ ПАРОЛЬ" onkeypress="if(event.key==='Enter')checkPassword()">
-        <button onclick="checkPassword()">🔓 ДОСТУП</button>
+        <button onclick="checkPassword()"> ДОСТУП</button>
         <div class="login-error" id="loginError">❌ НЕВЕРНЫЙ ПАРОЛЬ</div>
     </div>
 </div>
 
 <!-- Отчёт -->
 <div class="container" id="reportContainer" style="display:none;">
-    <button class="print-button" onclick="window.print()">️ ПЕЧАТЬ / PDF</button>
+    <button class="print-button" onclick="window.print()">🖨️ ПЕЧАТЬ / PDF</button>
     
     <div class="header">
         <div class="header-icon">🚀</div>
@@ -747,7 +746,7 @@ function renderReport() {
         </div>
         <div class="fuel-info">
             <span class="collected">◈ ПОПОЛНЕНО: ${formatMoney(totalBudget)} ₽</span>
-            <span class="remaining"> ПОТРАЧЕНО: ${formatMoney(totalExpense)} ₽</span>
+            <span class="remaining">◈ ПОТРАЧЕНО: ${formatMoney(totalExpense)} ₽</span>
         </div>
         <div class="fuel-percent" id="fuelPercent">0%</div>
     `;
@@ -763,11 +762,11 @@ function renderReport() {
     const expenses = r.expenses || [];
     let expensesHtml = '<div class="section-title expenses">⚠ Модули расходов</div>';
     if (expenses.length === 0) {
-        expensesHtml += '<div class="no-data">⚠ РАСХОДЫ НЕ ЗАФИКСИРОВАНЫ</div>';
+        expensesHtml += '<div class="no-data"> РАСХОДЫ НЕ ЗАФИКСИРОВАНЫ</div>';
     } else {
         expensesHtml += '<div class="expense-modules">';
         expenses.forEach((e, i) => {
-            const icons = ['🔧', '🛠️', '', '🎁', '🧹', '💡', '🎨', '📚', '🎭', '️'];
+            const icons = ['🔧', '🛠️', '📦', '', '🧹', '', '🎨', '📚', '🎭', '⚙️'];
             const icon = icons[i % icons.length];
             expensesHtml += `
                 <div class="expense-module" data-num="#${String(i+1).padStart(2, '0')}">
@@ -786,7 +785,7 @@ function renderReport() {
     
     // Телеметрия бюджета
     const budgetHtml = `
-        <div class="section-title budget">📊 Телеметрия бюджета</div>
+        <div class="section-title budget"> Телеметрия бюджета</div>
         <div class="telemetry-row">
             <span class="telemetry-label">◈ Остаток с прошлого месяца:</span>
             <span class="telemetry-value neutral">${formatMoney(prevBal)} ₽</span>
@@ -797,7 +796,7 @@ function renderReport() {
         </div>
         ${addIncome > 0 ? `
         <div class="telemetry-row">
-            <span class="telemetry-label"> Дополнительный приход:</span>
+            <span class="telemetry-label">◈ Дополнительный приход:</span>
             <span class="telemetry-value positive">+${formatMoney(addIncome)} ₽</span>
         </div>
         ` : ''}
