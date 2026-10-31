@@ -122,7 +122,7 @@ body::before {
 .summary-card.orange .summary-value { color: #ff9100; }
 .summary-card.red .summary-value { color: #ff3d71; }
 
-/* КОСМИЧЕСКИЙ ПРОГРЕСС (Реактор) */
+/* Космический прогресс (Реактор) */
 .progress-container {
   display: flex; flex-direction: column; align-items: center;
   padding: 24px; background: rgba(255, 255, 255, 0.03);
@@ -141,7 +141,7 @@ body::before {
 .progress-ring-circle-bg { fill: none; stroke: rgba(255, 255, 255, 0.1); stroke-width: 8; }
 .progress-ring-circle {
   fill: none; stroke: url(#gradient); stroke-width: 8; stroke-linecap: round;
-  stroke-dasharray: 440; /* 2 * PI * 70 ≈ 440 */
+  stroke-dasharray: 440;
   stroke-dashoffset: 440;
   transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
   filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));
@@ -157,16 +157,6 @@ body::before {
   font-family: 'Courier New', monospace;
 }
 .progress-label { font-size: 0.75em; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
-
-.progress-stats {
-  display: flex; justify-content: space-around; width: 100%;
-  margin-top: 20px; padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1); z-index: 1;
-}
-.progress-stat-item { text-align: center; }
-.progress-stat-value { font-size: 1.3em; font-weight: 700; color: #00ff88; font-family: 'Courier New', monospace; }
-.progress-stat-value.remaining { color: #ff9100; }
-.progress-stat-label { font-size: 0.75em; color: rgba(255, 255, 255, 0.6); margin-top: 4px; }
 
 /* Секции и Таблица */
 .section { 
@@ -238,14 +228,23 @@ tr:hover { background: rgba(255, 255, 255, 0.03); }
   .progress-percent { font-size: 1.8em; }
 }
 
-/* ПЕЧАТЬ */
+/* ПЕЧАТЬ — Сохранение тёмного фона */
 @media print {
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-  body { background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%) !important; padding: 10mm; }
+  * { 
+    -webkit-print-color-adjust: exact !important; 
+    print-color-adjust: exact !important; 
+    color-adjust: exact !important; 
+  }
+  body { 
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%) !important; 
+    padding: 10mm; 
+  }
   body::before { display: none; }
   .container { max-width: 100%; }
   .print-button { display: none; }
-  .section, .summary-card, .progress-container, .comment-box, .header { page-break-inside: avoid; }
+  .summary-card, .section, .progress-container, .comment-box, .header { 
+    page-break-inside: avoid; 
+  }
 }
 </style>
 </head>
@@ -368,7 +367,7 @@ function renderReport() {
     html += '<div class="summary-card red"><div class="summary-label">Осталось</div><div class="summary-value">' + formatMoney(remaining) + ' ₽</div></div>';
     html += '</div>';
     
-    // КОСМИЧЕСКИЙ ПРОГРЕСС (Реактор)
+    // Космический прогресс (только процент, без дублирования сумм)
     html += '<div class="progress-container">';
     html += '  <div class="progress-ring">';
     html += '    <svg width="160" height="160">';
@@ -384,16 +383,6 @@ function renderReport() {
     html += '    <div class="progress-center">';
     html += '      <div class="progress-percent" id="progressPercent">0%</div>';
     html += '      <div class="progress-label">Собрано</div>';
-    html += '    </div>';
-    html += '  </div>';
-    html += '  <div class="progress-stats">';
-    html += '    <div class="progress-stat-item">';
-    html += '      <div class="progress-stat-value" id="statCollected">0 ₽</div>';
-    html += '      <div class="progress-stat-label">Собрано</div>';
-    html += '    </div>';
-    html += '    <div class="progress-stat-item">';
-    html += '      <div class="progress-stat-value remaining" id="statRemaining">0 ₽</div>';
-    html += '      <div class="progress-stat-label">Осталось</div>';
     html += '    </div>';
     html += '  </div>';
     html += '</div>';
@@ -430,8 +419,6 @@ function renderReport() {
         const offset = circumference - (percent / 100) * circumference;
         document.getElementById('progressCircle').style.strokeDashoffset = offset;
         animateValueText(document.getElementById('progressPercent'), 0, percent, 1500, '%');
-        document.getElementById('statCollected').textContent = formatMoney(totalPaid) + ' ₽';
-        document.getElementById('statRemaining').textContent = formatMoney(remaining) + ' ₽';
     }, 300);
 }
 </script>
