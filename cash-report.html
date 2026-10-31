@@ -171,10 +171,10 @@ body::after {
   text-transform: uppercase;
 }
 
-/* Панель индикаторов */
+/* Панель индикаторов - СЕТКА 2x2 */
 .indicators-panel {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
   margin-bottom: 24px;
 }
@@ -479,7 +479,7 @@ body::after {
   position: relative; 
 }
 .comment-box::before {
-  content: '📡 СООБЩЕНИЕ С БОРТА';
+  content: ' СООБЩЕНИЕ С БОРТА';
   position: absolute;
   top: -10px;
   left: 15px;
@@ -541,6 +541,14 @@ body::after {
   .section { padding: 16px; } 
   .print-button { top: 10px; right: 10px; padding: 10px 16px; font-size: 0.8em; } 
   .expense-modules { grid-template-columns: 1fr; }
+  /* На мобильных - одна колонка */
+  .indicators-panel { grid-template-columns: 1fr; }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 480px) {
+  .indicator-value { font-size: 1.2em; }
+  .indicator-label { font-size: 0.65em; }
 }
 
 /* ПЕЧАТЬ */
@@ -556,6 +564,8 @@ body::after {
   .section, .indicator, .fuel-tank-section, .comment-box, .header { 
     page-break-inside: avoid; 
   }
+  /* При печати - 2 колонки */
+  .indicators-panel { grid-template-columns: repeat(2, 1fr); }
 }
 </style>
 </head>
@@ -564,7 +574,7 @@ body::after {
 <!-- Экран входа -->
 <div class="login-screen" id="loginScreen">
     <div class="login-box">
-        <div style="font-size:3em; margin-bottom:12px;">🚀</div>
+        <div style="font-size:3em; margin-bottom:12px;"></div>
         <h2>Кассовый отчёт</h2>
         <div class="subtitle">Группа «Звездочки»</div>
         <input type="password" id="pwdInput" placeholder="ВВЕДИТЕ ПАРОЛЬ" onkeypress="if(event.key==='Enter')checkPassword()">
@@ -575,7 +585,7 @@ body::after {
 
 <!-- Отчёт -->
 <div class="container" id="reportContainer" style="display:none;">
-    <button class="print-button" onclick="window.print()">🖨️ ПЕЧАТЬ / PDF</button>
+    <button class="print-button" onclick="window.print()">️ ПЕЧАТЬ / PDF</button>
     
     <div class="header">
         <div class="header-icon">🚀</div>
@@ -737,7 +747,7 @@ function renderReport() {
         </div>
         <div class="fuel-info">
             <span class="collected">◈ ПОПОЛНЕНО: ${formatMoney(totalBudget)} ₽</span>
-            <span class="remaining">◈ ПОТРАЧЕНО: ${formatMoney(totalExpense)} ₽</span>
+            <span class="remaining"> ПОТРАЧЕНО: ${formatMoney(totalExpense)} ₽</span>
         </div>
         <div class="fuel-percent" id="fuelPercent">0%</div>
     `;
@@ -757,7 +767,7 @@ function renderReport() {
     } else {
         expensesHtml += '<div class="expense-modules">';
         expenses.forEach((e, i) => {
-            const icons = ['🔧', '🛠️', '📦', '🎁', '🧹', '💡', '🎨', '📚', '🎭', '⚙️'];
+            const icons = ['🔧', '🛠️', '', '🎁', '🧹', '💡', '🎨', '📚', '🎭', '️'];
             const icon = icons[i % icons.length];
             expensesHtml += `
                 <div class="expense-module" data-num="#${String(i+1).padStart(2, '0')}">
@@ -787,7 +797,7 @@ function renderReport() {
         </div>
         ${addIncome > 0 ? `
         <div class="telemetry-row">
-            <span class="telemetry-label">◈ Дополнительный приход:</span>
+            <span class="telemetry-label"> Дополнительный приход:</span>
             <span class="telemetry-value positive">+${formatMoney(addIncome)} ₽</span>
         </div>
         ` : ''}
