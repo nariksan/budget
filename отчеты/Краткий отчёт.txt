@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Краткий отчёт</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #2d8b4d 0%, #e87722 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .container { max-width: 480px; width: 100%; }
+        .report {
+            background: #fff; border-radius: 16px; padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        .header { text-align: center; border-bottom: 2px solid #eee; padding-bottom: 15px; margin-bottom: 20px; }
+        .header h1 { color: #333; font-size: 22px; }
+        .header .date { color: #888; font-size: 14px; margin-top: 5px; }
+        .row { display: flex; justify-content: space-between; padding: 10px 0; font-size: 16px; }
+        .row .label { color: #555; }
+        .row .value { font-weight: 600; font-family: 'Courier New', monospace; }
+        .income { color: #27ae60; }
+        .expense { color: #e74c3c; }
+        .card { color: #2980b9; }
+        .cash { color: #e67e22; }
+        .divider { border-top: 1px dashed #ccc; margin: 10px 0; }
+        .total { display: flex; justify-content: space-between; padding: 15px 0 5px; font-size: 22px; font-weight: 700; color: #2d8b4d; }
+        .breakdown { background: #f7f7fb; border-radius: 10px; padding: 15px; margin-top: 20px; }
+        .breakdown h2 { font-size: 16px; color: #333; margin-bottom: 10px; }
+        .breakdown p { font-size: 14px; color: #555; line-height: 1.7; font-family: 'Courier New', monospace; }
+        .breakdown .result { margin-top: 10px; font-weight: 700; color: #2d8b4d; font-size: 15px; }
+        .comment-box { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px; border-radius: 8px; margin-top: 15px; font-size: 14px; color: #856404; }
+        
+        .btn-pdf {
+            width: 100%; padding: 14px; border: none; border-radius: 10px; font-size: 16px;
+            font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 20px;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); color: #fff;
+        }
+        .btn-pdf:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4); }
+        
+        .loading { text-align: center; padding: 40px; color: white; font-size: 18px; }
+        .error { text-align: center; padding: 40px; background: #fff5f5; color: #dc3545; border-radius: 16px; }
+
+        @media print {
+            body { background: #fff; padding: 0; }
+            .btn-pdf { display: none; }
+            .report { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="loading" class="loading">⏳ Загрузка данных...</div>
+        <div id="error" class="error" style="display:none;"></div>
+        
+        <div class="report" id="report" style="display:none;">
+            <div class="header">
+                <h1 id="out-title">📊 Краткий отчёт</h1>
+                <div class="date" id="date"></div>
+            </div>
+
+            <div class="row">
+                <span class="label">✅ Собрано:</span>
+                <span class="value income" id="out-collected">0</span>
+            </div>
+            <div class="row">
+                <span class="label">❌ Потрачено:</span>
+                <span class="value expense" id="out-spent">0</span>
+            </div>
+            <div class="row">
+                <span class="label">💳 Доп. приход по карте:</span>
+                <span class="value card" id="out-card">0</span>
+            </div>
+            <div class="row">
+                <span class="label">💵 Доп. приход наличными:</span>
+                <span class="value cash" id="out-cash">0</span>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="total">
+                <span>ИТОГО на балансе:</span>
+                <span id="out-total">0</span>
+            </div>
+
+            <div class="breakdown" id="breakdown">
+                <h2>🔍 Расшифровка расчёта:</h2>
+                <div id="steps"></div>
+            </div>
+            
+            <div id="comment-box" class="comment-box" style="display:none;"></div>
+            
+            <button class="btn-pdf" onclick="downloadPDF()">📄 Скачать PDF</button>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDKi0CkhA5jPr7fNkPerItkLDKNLMcLpMw",
+            authDomain: "parent-budget-70c5a.firebaseapp.com",
+            projectId: "parent-budget-70c5a",
+            storageBucket: "parent-budget-70c5a.firebasestorage.app",
+            messagingSenderId: "214835144455",
+            appId: "1:214835144455:web:b1d91914f16c66004507a2"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const format = (n) => Number(n || 0).toLocaleString('ru-RU');
+        const today = new Date();
+        document.getElementById('date').textContent = 'от ' + today.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        function loadReport() {
+            const params = new URLSearchParams(window.location.search);
+            const reportId = params.get('id');
+            
+            if (!reportId) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = '❌ Не указан ID отчёта в ссылке.';
+                return;
+            }
+
+            db.collection('short_reports').doc(reportId).get().then(doc => {
+                document.getElementById('loading').style.display = 'none';
+                if (!doc.exists) {
+                    document.getElementById('error').style.display = 'block';
+                    document.getElementById('error').textContent = '❌ Отчёт не найден или был удалён.';
+                    return;
+                }
+                
+                const r = doc.data();
+                const collected = Number(r.collected) || 0;
+                const spent = Number(r.spent) || 0;
+                const card = Number(r.card) || 0;
+                const cash = Number(r.cash) || 0;
+                const total = collected - spent + card + cash;
+
+                document.getElementById('out-title').textContent = '📊 ' + (r.title || 'Краткий отчёт');
+                document.getElementById('out-collected').textContent = format(collected) + ' ₽';
+                document.getElementById('out-spent').textContent = '−' + format(spent) + ' ₽';
+                document.getElementById('out-card').textContent = '+' + format(card) + ' ₽';
+                document.getElementById('out-cash').textContent = '+' + format(cash) + ' ₽';
+                document.getElementById('out-total').textContent = format(total) + ' ₽';
+
+                document.getElementById('steps').innerHTML = `
+                    <p>1. Взносы: <b>${format(collected)} ₽</b></p>
+                    <p>2. Минус расходы: ${format(collected)} − ${format(spent)} = <b>${format(collected - spent)} ₽</b></p>
+                    <p>3. Плюс карта: ${format(collected - spent)} + ${format(card)} = <b>${format(collected - spent + card)} ₽</b></p>
+                    <p>4. Плюс наличные: ${format(collected - spent + card)} + ${format(cash)} = <b>${format(total)} ₽</b></p>
+                    <p class="result">💡 Итоговый баланс: ${format(total)} ₽</p>
+                `;
+
+                if (r.comment) {
+                    document.getElementById('comment-box').style.display = 'block';
+                    document.getElementById('comment-box').textContent = '💬 ' + r.comment;
+                }
+
+                document.getElementById('report').style.display = 'block';
+            }).catch(err => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = '❌ Ошибка загрузки: ' + err.message;
+            });
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('report');
+            const title = document.getElementById('out-title').textContent.replace(/[^a-zа-яё0-9]/gi, '_');
+            
+            const opt = {
+                margin: 10,
+                filename: `Отчет_${title}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, backgroundColor: '#ffffff' },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+
+        loadReport();
+    </script>
+</body>
+</html>
