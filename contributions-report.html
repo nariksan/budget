@@ -53,342 +53,199 @@ body::before {
   text-align: center; 
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); 
 }
-.login-box h2 { 
-  color: #00e5ff; 
-  margin-bottom: 10px; 
-  text-shadow: 0 0 20px rgba(0, 229, 255, 0.5); 
-}
+.login-box h2 { color: #00e5ff; margin-bottom: 10px; text-shadow: 0 0 20px rgba(0, 229, 255, 0.5); }
 .login-box p { color: rgba(255, 255, 255, 0.7); margin-bottom: 20px; }
 .login-box input { 
-  width: 100%; 
-  padding: 14px; 
-  background: rgba(0, 0, 0, 0.3); 
-  border: 1px solid rgba(255, 255, 255, 0.2); 
-  border-radius: 12px; 
-  color: white; 
-  font-size: 1em; 
-  margin-bottom: 12px; 
-  text-align: center; 
+  width: 100%; padding: 14px; background: rgba(0, 0, 0, 0.3); 
+  border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; 
+  color: white; font-size: 1em; margin-bottom: 12px; text-align: center; 
 }
 .login-box input::placeholder { color: rgba(255, 255, 255, 0.4); }
 .login-box input:focus { outline: none; border-color: #00e5ff; box-shadow: 0 0 20px rgba(0, 229, 255, 0.3); }
 .login-box button { 
-  width: 100%; 
-  padding: 14px; 
-  background: linear-gradient(135deg, #00e5ff, #7b61ff); 
-  color: white; 
-  border: none; 
-  border-radius: 12px; 
-  font-size: 1em; 
-  font-weight: 700; 
-  cursor: pointer; 
-  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.4); 
+  width: 100%; padding: 14px; background: linear-gradient(135deg, #00e5ff, #7b61ff); 
+  color: white; border: none; border-radius: 12px; font-size: 1em; font-weight: 700; 
+  cursor: pointer; box-shadow: 0 4px 20px rgba(0, 229, 255, 0.4); 
 }
 .login-box button:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0, 229, 255, 0.6); }
 .login-error { color: #ff3d71; font-size: 0.9em; margin-top: 10px; display: none; }
 
 /* Основной контейнер */
-.container { 
-  max-width: 900px; 
-  margin: 0 auto; 
-  position: relative; 
-  z-index: 1; 
-}
+.container { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
 
 /* Шапка */
 .header { 
-  text-align: center; 
-  padding: 30px 20px; 
+  text-align: center; padding: 30px 20px; 
   background: rgba(255, 255, 255, 0.03); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
   border: 1px solid rgba(255, 255, 255, 0.1); 
-  border-radius: 24px; 
-  margin-bottom: 24px; 
+  border-radius: 24px; margin-bottom: 24px; 
   box-shadow: 0 20px 60px rgba(0,0,0,0.4);
 }
 .header-icon { font-size: 3em; margin-bottom: 10px; filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.5)); }
 .header h1 { 
-  font-size: 1.8em; 
-  font-weight: 800; 
+  font-size: 1.8em; font-weight: 800; 
   background: linear-gradient(135deg, #00e5ff 0%, #ff9100 100%); 
-  -webkit-background-clip: text; 
-  -webkit-text-fill-color: transparent; 
-  background-clip: text; 
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; 
   margin-bottom: 8px; 
 }
 .header h2 { font-size: 1.2em; color: #fff; font-weight: 600; margin-bottom: 4px; }
 .header .subtitle { font-size: 0.9em; color: #ff9100; font-weight: 700; letter-spacing: 1px; }
 
-/* Сетка индикаторов (2x2 на мобильных, 4 в ряд на ПК) */
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-bottom: 24px;
+/* Карточки-показатели */
+.summary-grid { 
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; 
 }
-@media (min-width: 768px) {
-  .summary-grid { grid-template-columns: repeat(4, 1fr); }
-}
+@media (min-width: 600px) { .summary-grid { grid-template-columns: repeat(4, 1fr); } }
 
 .summary-card { 
-  background: rgba(255, 255, 255, 0.05); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  border-radius: 16px; 
-  padding: 18px 12px; 
-  text-align: center; 
-  position: relative; 
+  background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); 
+  -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); 
+  border-radius: 16px; padding: 16px 12px; text-align: center; position: relative; 
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
 }
-.summary-card::before { 
-  content: '◈'; 
-  position: absolute; 
-  top: 8px; 
-  left: 10px; 
-  font-size: 0.7em; 
-  opacity: 0.5; 
-}
+.summary-card::before { content: '◈'; position: absolute; top: 8px; left: 10px; font-size: 0.7em; opacity: 0.5; }
 .summary-card.blue { border-color: #7b61ff; box-shadow: 0 0 20px rgba(123, 97, 255, 0.2); }
 .summary-card.green { border-color: #00ff88; box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
 .summary-card.orange { border-color: #ff9100; box-shadow: 0 0 20px rgba(255, 145, 0, 0.2); }
 .summary-card.red { border-color: #ff3d71; box-shadow: 0 0 20px rgba(255, 61, 113, 0.2); }
 
-.summary-label { 
-  font-size: 0.65em; 
-  text-transform: uppercase; 
-  letter-spacing: 1px; 
-  margin-bottom: 6px; 
-  opacity: 0.8; 
-  font-weight: 600;
-}
+.summary-label { font-size: 0.65em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; opacity: 0.8; font-weight: 600; }
 .summary-card.blue .summary-label { color: #7b61ff; }
 .summary-card.green .summary-label { color: #00ff88; }
 .summary-card.orange .summary-label { color: #ff9100; }
 .summary-card.red .summary-label { color: #ff3d71; }
 
-.summary-value { 
-  font-size: 1.5em; 
-  font-weight: 800; 
-  font-family: 'Courier New', monospace;
-  text-shadow: 0 0 10px currentColor; 
-}
+.summary-value { font-size: 1.4em; font-weight: 800; font-family: 'Courier New', monospace; text-shadow: 0 0 10px currentColor; }
 .summary-card.blue .summary-value { color: #7b61ff; }
 .summary-card.green .summary-value { color: #00ff88; }
 .summary-card.orange .summary-value { color: #ff9100; }
 .summary-card.red .summary-value { color: #ff3d71; }
 
-/* Прогресс-бар */
-.progress-section { 
-  background: rgba(255, 255, 255, 0.03); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  border-radius: 16px; 
-  padding: 20px; 
-  margin-bottom: 24px; 
+/* КОСМИЧЕСКИЙ ПРОГРЕСС (Реактор) */
+.progress-container {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 24px; background: rgba(255, 255, 255, 0.03);
+  border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 24px; position: relative; overflow: hidden;
 }
-.progress-title { font-size: 1.1em; font-weight: 700; margin-bottom: 12px; color: #fff; text-align: center; }
-.progress-bar { 
-  width: 100%; 
-  height: 20px; 
-  background: rgba(0, 0, 0, 0.3); 
-  border-radius: 10px; 
-  overflow: hidden; 
-  position: relative; 
+.progress-container::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(0, 229, 255, 0.05) 0%, transparent 60%);
+  animation: pulse-bg 4s ease-in-out infinite;
 }
-.progress-fill { 
-  height: 100%; 
-  background: linear-gradient(90deg, #ff3d71 0%, #ff9100 50%, #00ff88 100%); 
-  border-radius: 10px; 
-  transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); 
-  box-shadow: 0 0 15px rgba(0, 255, 136, 0.5); 
+@keyframes pulse-bg { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.8; } }
+
+.progress-ring { position: relative; width: 160px; height: 160px; z-index: 1; }
+.progress-ring svg { transform: rotate(-90deg); }
+.progress-ring-circle-bg { fill: none; stroke: rgba(255, 255, 255, 0.1); stroke-width: 8; }
+.progress-ring-circle {
+  fill: none; stroke: url(#gradient); stroke-width: 8; stroke-linecap: round;
+  stroke-dasharray: 440; /* 2 * PI * 70 ≈ 440 */
+  stroke-dashoffset: 440;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));
 }
-.progress-percent { 
-  text-align: center; 
-  margin-top: 8px; 
-  font-size: 1.2em; 
-  font-weight: 800; 
-  color: #00e5ff; 
+.progress-center {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  text-align: center; z-index: 2;
+}
+.progress-percent {
+  font-size: 2.2em; font-weight: 800;
+  background: linear-gradient(135deg, #00e5ff, #ff9100);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   font-family: 'Courier New', monospace;
 }
+.progress-label { font-size: 0.75em; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
 
-/* Секции */
+.progress-stats {
+  display: flex; justify-content: space-around; width: 100%;
+  margin-top: 20px; padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1); z-index: 1;
+}
+.progress-stat-item { text-align: center; }
+.progress-stat-value { font-size: 1.3em; font-weight: 700; color: #00ff88; font-family: 'Courier New', monospace; }
+.progress-stat-value.remaining { color: #ff9100; }
+.progress-stat-label { font-size: 0.75em; color: rgba(255, 255, 255, 0.6); margin-top: 4px; }
+
+/* Секции и Таблица */
 .section { 
-  background: rgba(255, 255, 255, 0.03); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  border-radius: 16px; 
-  padding: 20px; 
-  margin-bottom: 24px; 
+  background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); 
+  -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); 
+  border-radius: 20px; padding: 20px; margin-bottom: 24px; 
 }
 .section-title { 
-  font-size: 1.1em; 
-  font-weight: 700; 
-  margin-bottom: 16px; 
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
-  padding-bottom: 8px; 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-  color: #fff;
+  font-size: 1.1em; font-weight: 700; margin-bottom: 16px; 
+  display: flex; align-items: center; gap: 8px; 
+  padding-bottom: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); color: #fff;
 }
 
-/* Таблица */
 table { width: 100%; border-collapse: collapse; margin-top: 10px; }
 th { 
-  background: rgba(0, 229, 255, 0.1); 
-  color: #00e5ff; 
-  padding: 10px; 
-  text-align: left; 
-  font-size: 0.75em; 
-  text-transform: uppercase; 
-  letter-spacing: 1px; 
-  font-weight: 700; 
+  background: rgba(0, 229, 255, 0.1); color: #00e5ff; padding: 12px; 
+  text-align: left; font-size: 0.75em; text-transform: uppercase; 
+  letter-spacing: 1px; font-weight: 700; 
 }
-td { padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.9em; }
+td { padding: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.9em; }
+tr:hover { background: rgba(255, 255, 255, 0.03); }
+
 .status-paid { 
-  color: #00ff88; 
-  font-weight: 700; 
-  background: rgba(0, 255, 136, 0.1); 
-  padding: 4px 8px; 
-  border-radius: 6px; 
-  display: inline-block; 
-  font-size: 0.8em; 
+  color: #00ff88; font-weight: 700; background: rgba(0, 255, 136, 0.1); 
+  padding: 4px 10px; border-radius: 6px; display: inline-block; font-size: 0.8em; 
 }
 .status-unpaid { 
-  color: #ff9100; 
-  font-weight: 700; 
-  background: rgba(255, 145, 0, 0.1); 
-  padding: 4px 8px; 
-  border-radius: 6px; 
-  display: inline-block; 
-  font-size: 0.8em; 
+  color: #ff9100; font-weight: 700; background: rgba(255, 145, 0, 0.1); 
+  padding: 4px 10px; border-radius: 6px; display: inline-block; font-size: 0.8em; 
 }
 .amount { font-weight: 600; text-align: right; font-family: 'Courier New', monospace; }
 
-/* Списки */
-.lists-grid { 
-  display: grid; 
-  grid-template-columns: 1fr; 
-  gap: 16px; 
-}
-@media (min-width: 768px) {
-  .lists-grid { grid-template-columns: 1fr 1fr; }
-}
-
-.list-card { 
-  background: rgba(255, 255, 255, 0.03); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  border-radius: 16px; 
-  padding: 16px; 
-}
-.list-card.paid { border-left: 4px solid #00ff88; }
-.list-card.unpaid { border-left: 4px solid #ff9100; }
-
-.list-title { 
-  font-size: 1em; 
-  font-weight: 700; 
-  margin-bottom: 12px; 
-  display: flex; 
-  align-items: center; 
-  gap: 8px; 
-}
-.list-card.paid .list-title { color: #00ff88; }
-.list-card.unpaid .list-title { color: #ff9100; }
-
-.person { 
-  padding: 8px 0; 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  font-size: 0.9em; 
-}
-.person:last-child { border-bottom: none; }
-.person-name { font-weight: 500; color: #e8e8ff; }
-.person-amount { font-weight: 700; color: rgba(255, 255, 255, 0.7); font-family: 'Courier New', monospace; }
-
 /* Комментарий */
 .comment-box { 
-  background: rgba(255, 145, 0, 0.08); 
-  border: 1px solid rgba(255, 145, 0, 0.3); 
-  border-radius: 12px; 
-  padding: 16px; 
-  margin-bottom: 24px; 
-  position: relative; 
+  background: rgba(255, 145, 0, 0.08); border: 1px solid rgba(255, 145, 0, 0.3); 
+  border-radius: 12px; padding: 16px; margin-bottom: 24px; position: relative; 
 }
 .comment-box::before { 
-  content: '📡'; 
-  position: absolute; 
-  top: -12px; 
-  left: 15px; 
-  font-size: 1.2em; 
-  background: #1a1a3e; 
-  padding: 0 6px; 
-  border-radius: 50%; 
+  content: '📡'; position: absolute; top: -12px; left: 15px; 
+  font-size: 1.2em; background: #1a1a3e; padding: 0 6px; border-radius: 50%; 
 }
 .comment-text { color: rgba(255, 255, 255, 0.9); line-height: 1.5; font-style: italic; padding-left: 8px; }
 
 /* Футер */
 .footer { 
-  text-align: center; 
-  padding: 20px; 
-  color: rgba(255, 255, 255, 0.4); 
-  font-size: 0.8em; 
-  margin-top: 20px; 
-  border-top: 1px solid rgba(0, 229, 255, 0.2);
-  letter-spacing: 1px;
+  text-align: center; padding: 20px; color: rgba(255, 255, 255, 0.4); 
+  font-size: 0.8em; margin-top: 20px; border-top: 1px solid rgba(0, 229, 255, 0.2); letter-spacing: 1px;
 }
 .footer strong { color: #00e5ff; }
 
 /* Кнопка печати */
 .print-button { 
-  position: fixed; 
-  top: 20px; 
-  right: 20px; 
-  background: linear-gradient(135deg, #00e5ff, #7b61ff); 
-  color: white; 
-  border: none; 
-  padding: 12px 24px; 
-  border-radius: 12px; 
-  font-size: 0.9em; 
-  font-weight: 700; 
-  cursor: pointer; 
-  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.4); 
-  z-index: 1000; 
-  transition: all 0.3s ease; 
+  position: fixed; top: 20px; right: 20px; 
+  background: linear-gradient(135deg, #00e5ff, #7b61ff); color: white; 
+  border: none; padding: 12px 24px; border-radius: 12px; font-size: 0.9em; 
+  font-weight: 700; cursor: pointer; box-shadow: 0 4px 20px rgba(0, 229, 255, 0.4); 
+  z-index: 1000; transition: all 0.3s ease; 
 }
 .print-button:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0, 229, 255, 0.6); }
 
 /* Адаптив */
-@media (max-width: 768px) { 
+@media (max-width: 600px) { 
   body { padding: 12px; } 
   .header { padding: 20px 16px; } 
   .header h1 { font-size: 1.4em; } 
   .print-button { top: 10px; right: 10px; padding: 10px 16px; font-size: 0.8em; } 
-  th, td { padding: 8px; font-size: 0.85em; }
+  th, td { padding: 10px 8px; font-size: 0.85em; }
+  .progress-ring { width: 140px; height: 140px; }
+  .progress-percent { font-size: 1.8em; }
 }
 
-/* ПЕЧАТЬ — Сохранение тёмного фона */
+/* ПЕЧАТЬ */
 @media print {
-  * { 
-    -webkit-print-color-adjust: exact !important; 
-    print-color-adjust: exact !important; 
-    color-adjust: exact !important; 
-  }
-  body { 
-    background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%) !important; 
-    padding: 10mm; 
-  }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+  body { background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%) !important; padding: 10mm; }
   body::before { display: none; }
   .container { max-width: 100%; }
   .print-button { display: none; }
-  .summary-card, .section, .list-card, .progress-section, .comment-box, .header { 
-    page-break-inside: avoid; 
-  }
+  .section, .summary-card, .progress-container, .comment-box, .header { page-break-inside: avoid; }
 }
 </style>
 </head>
@@ -397,7 +254,7 @@ td { padding: 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-siz
 <!-- Экран входа -->
 <div id="loginView" class="login-screen">
     <div class="login-box">
-        <div style="font-size:3em; margin-bottom:12px;"></div>
+        <div style="font-size:3em; margin-bottom:12px;">🚀</div>
         <h2>Отчёт по взносам</h2>
         <p>Введите пароль для доступа</p>
         <input type="password" id="pwdInput" placeholder="Пароль" onkeypress="if(event.key==='Enter')tryLogin()">
@@ -450,25 +307,13 @@ async function tryLogin() {
     const errEl = document.getElementById('loginError');
     errEl.style.display = 'none';
     
-    if (!reportId) {
-        errEl.textContent = ' Ссылка недействительна';
-        errEl.style.display = 'block';
-        return;
-    }
+    if (!reportId) { errEl.textContent = '❌ Ссылка недействительна'; errEl.style.display = 'block'; return; }
     
     try {
         const doc = await db.collection('contributions_reports').doc(reportId).get();
-        if (!doc.exists) {
-            errEl.textContent = '❌ Отчёт не найден';
-            errEl.style.display = 'block';
-            return;
-        }
+        if (!doc.exists) { errEl.textContent = '❌ Отчёт не найден'; errEl.style.display = 'block'; return; }
         reportData = doc.data();
-        if (reportData.password !== pwd) {
-            errEl.textContent = '❌ Неверный пароль';
-            errEl.style.display = 'block';
-            return;
-        }
+        if (reportData.password !== pwd) { errEl.textContent = '❌ Неверный пароль'; errEl.style.display = 'block'; return; }
         document.getElementById('loginView').style.display = 'none';
         document.getElementById('reportView').style.display = 'block';
         renderReport();
@@ -476,6 +321,19 @@ async function tryLogin() {
         errEl.textContent = '❌ Ошибка: ' + e.message;
         errEl.style.display = 'block';
     }
+}
+
+function animateValueText(element, start, end, duration, suffix = '') {
+    const startTime = performance.now();
+    const update = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.round(start + (end - start) * eased);
+        element.textContent = current + suffix;
+        if (progress < 1) requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
 }
 
 function renderReport() {
@@ -493,7 +351,6 @@ function renderReport() {
         if (s.paid) { paidCount++; totalPaid += amount; }
     });
     const remaining = totalExpected - totalPaid;
-    const unpaidCount = students.length - paidCount;
     const percent = totalExpected > 0 ? Math.round((totalPaid / totalExpected) * 100) : 0;
     
     let html = '';
@@ -503,29 +360,51 @@ function renderReport() {
         html += '<div class="comment-box"><div class="comment-text">' + escapeHtml(r.comment) + '</div></div>';
     }
     
-    // 4 карточки-показателя (сетка 2x2 на мобильных)
+    // 4 карточки-показателя
     html += '<div class="summary-grid">';
-    html += '<div class="summary-card blue"><div class="summary-label">◈ Участвовали</div><div class="summary-value">' + paidCount + '</div></div>';
-    html += '<div class="summary-card red"><div class="summary-label">◈ Не участвовали</div><div class="summary-value">' + unpaidCount + '</div></div>';
-    html += '<div class="summary-card orange"><div class="summary-label">◈ Ожидалось</div><div class="summary-value">' + formatMoney(totalExpected) + ' ₽</div></div>';
-    html += '<div class="summary-card green"><div class="summary-label">◈ Осталось</div><div class="summary-value">' + formatMoney(remaining) + ' ₽</div></div>';
+    html += '<div class="summary-card blue"><div class="summary-label">Всего человек</div><div class="summary-value">' + students.length + '</div></div>';
+    html += '<div class="summary-card green"><div class="summary-label">Участвовали</div><div class="summary-value">' + paidCount + '</div></div>';
+    html += '<div class="summary-card orange"><div class="summary-label">Ожидалось</div><div class="summary-value">' + formatMoney(totalExpected) + ' ₽</div></div>';
+    html += '<div class="summary-card red"><div class="summary-label">Осталось</div><div class="summary-value">' + formatMoney(remaining) + ' ₽</div></div>';
     html += '</div>';
     
-    // Прогресс-бар
-    html += '<div class="progress-section">';
-    html += '<div class="progress-title">📊 Прогресс сбора</div>';
-    html += '<div class="progress-bar"><div class="progress-fill" style="width: ' + percent + '%;"></div></div>';
-    html += '<div class="progress-percent">' + percent + '%</div>';
+    // КОСМИЧЕСКИЙ ПРОГРЕСС (Реактор)
+    html += '<div class="progress-container">';
+    html += '  <div class="progress-ring">';
+    html += '    <svg width="160" height="160">';
+    html += '      <defs>';
+    html += '        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">';
+    html += '          <stop offset="0%" stop-color="#00e5ff" />';
+    html += '          <stop offset="100%" stop-color="#ff9100" />';
+    html += '        </linearGradient>';
+    html += '      </defs>';
+    html += '      <circle class="progress-ring-circle-bg" cx="80" cy="80" r="70"></circle>';
+    html += '      <circle class="progress-ring-circle" cx="80" cy="80" r="70" id="progressCircle"></circle>';
+    html += '    </svg>';
+    html += '    <div class="progress-center">';
+    html += '      <div class="progress-percent" id="progressPercent">0%</div>';
+    html += '      <div class="progress-label">Собрано</div>';
+    html += '    </div>';
+    html += '  </div>';
+    html += '  <div class="progress-stats">';
+    html += '    <div class="progress-stat-item">';
+    html += '      <div class="progress-stat-value" id="statCollected">0 ₽</div>';
+    html += '      <div class="progress-stat-label">Собрано</div>';
+    html += '    </div>';
+    html += '    <div class="progress-stat-item">';
+    html += '      <div class="progress-stat-value remaining" id="statRemaining">0 ₽</div>';
+    html += '      <div class="progress-stat-label">Осталось</div>';
+    html += '    </div>';
+    html += '  </div>';
     html += '</div>';
     
-    // Таблица всех участников
+    // ЕДИНАЯ ТАБЛИЦА СПИСКА УЧАСТНИКОВ
     html += '<div class="section"><div class="section-title">📋 Список участников</div>';
     if (students.length === 0) {
         html += '<div style="text-align:center; color:rgba(255,255,255,0.5); padding:30px;">Нет данных</div>';
     } else {
-        html += '<div style="overflow-x:auto;"><table><thead><tr><th style="width:40px;">№</th><th>ФИО ребёнка</th><th style="width:100px; text-align:right;">Сумма</th><th style="width:110px; text-align:center;">Статус</th></tr></thead><tbody>';
+        html += '<div style="overflow-x:auto;"><table><thead><tr><th style="width:40px;">№</th><th>ФИО ребёнка</th><th style="width:110px; text-align:right;">Сумма</th><th style="width:120px; text-align:center;">Статус</th></tr></thead><tbody>';
         students.forEach((s, i) => {
-            // Мягкие формулировки
             const statusText = s.paid ? '✔ Участвовал' : '⏳ Ожидается';
             const statusClass = s.paid ? 'status-paid' : 'status-unpaid';
             html += '<tr>';
@@ -543,39 +422,17 @@ function renderReport() {
     }
     html += '</div>';
     
-    // Два списка: Участвовали / Не участвовали
-    const paidList = students.filter(s => s.paid);
-    const unpaidList = students.filter(s => !s.paid);
-    
-    html += '<div class="lists-grid">';
-    
-    // Список участвовавших
-    html += '<div class="list-card paid">';
-    html += '<div class="list-title">✅ Участвовали в сборе <span style="background:rgba(0,255,136,0.1); padding:2px 8px; border-radius:8px; font-size:0.8em;">' + paidList.length + '</span></div>';
-    if (paidList.length === 0) {
-        html += '<div style="color:rgba(255,255,255,0.5); font-size:0.9em; text-align:center; padding:10px;">Пока никто не участвовал</div>';
-    } else {
-        paidList.forEach(s => {
-            html += '<div class="person"><span class="person-name">✔ ' + escapeHtml(s.name) + '</span><span class="person-amount">' + (s.amount ? formatMoney(s.amount) + ' ₽' : '') + '</span></div>';
-        });
-    }
-    html += '</div>';
-    
-    // Список не участвовавших
-    html += '<div class="list-card unpaid">';
-    html += '<div class="list-title">⏳ Не участвовали в сборе <span style="background:rgba(255,145,0,0.1); padding:2px 8px; border-radius:8px; font-size:0.8em;">' + unpaidList.length + '</span></div>';
-    if (unpaidList.length === 0) {
-        html += '<div style="color:rgba(255,255,255,0.5); font-size:0.9em; text-align:center; padding:10px;">🎉 Все участвовали! Спасибо!</div>';
-    } else {
-        unpaidList.forEach(s => {
-            html += '<div class="person"><span class="person-name">⏳ ' + escapeHtml(s.name) + '</span><span class="person-amount">' + (s.amount ? formatMoney(s.amount) + ' ₽' : '') + '</span></div>';
-        });
-    }
-    html += '</div>';
-    
-    html += '</div>';
-    
     document.getElementById('content').innerHTML = html;
+
+    // Запуск анимации прогресса
+    setTimeout(() => {
+        const circumference = 440;
+        const offset = circumference - (percent / 100) * circumference;
+        document.getElementById('progressCircle').style.strokeDashoffset = offset;
+        animateValueText(document.getElementById('progressPercent'), 0, percent, 1500, '%');
+        document.getElementById('statCollected').textContent = formatMoney(totalPaid) + ' ₽';
+        document.getElementById('statRemaining').textContent = formatMoney(remaining) + ' ₽';
+    }, 300);
 }
 </script>
 </body>
