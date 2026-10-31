@@ -489,11 +489,13 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 <button class="reports-subtab" onclick="showReportsTab('short', this)">📝 Краткие сводки</button>
 <button class="reports-subtab" onclick="showReportsTab('month-close', this)"> Отчёт закрытия</button>
 <button class="reports-subtab" onclick="showReportsTab('cash', this)">💵 Кассовый отчёт</button>
+<button class="reports-subtab" onclick="showReportsTab('contributions', this)">💰 По взносам</button>
 </div>
 <div id="reports-public" class="reports-section active"></div>
 <div id="reports-short" class="reports-section"></div>
 <div id="reports-month-close" class="reports-section"></div>
 <div id="reports-cash" class="reports-section"></div>
+<div id="reports-contributions" class="reports-section"></div>
 </div>
 <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
 <button class="btn btn-success" onclick="saveAll()" id="saveBtn">💾 Сохранить</button>
@@ -550,6 +552,30 @@ input, textarea, select { user-select:text; -webkit-user-select:text; }
 </div>
 <button class="btn btn-success btn-block" onclick="confirmEditCashReport()"> Сохранить</button>
 <button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('editCashReportModal')">Отмена</button>
+</div>
+</div>
+<div class="modal-overlay" id="createContributionsReportModal">
+<div class="modal" style="max-width:500px;">
+<h2>💰 Создание отчёта по взносам</h2>
+<div class="hint">💡 Создайте ссылку, по которой будет виден список: кто сдал, кто нет. Открывается по ссылке + паролю.</div>
+<div class="form-group"><label>📅 Выберите месяц</label><select id="cr-month"></select></div>
+<div class="form-group"><label>💬 Комментарий (необязательно)</label><textarea id="cr-comment" rows="3" placeholder="Уважаемые родители, направляем отчёт по взносам..."></textarea></div>
+<div class="form-group"><label>🔑 Пароль для доступа</label>
+<div style="display:flex;gap:8px"><input type="text" id="cr-password"><button class="btn btn-secondary btn-sm" onclick="document.getElementById('cr-password').value=genPassword()">🎲</button></div>
+</div>
+<button class="btn btn-success btn-block" onclick="confirmCreateContributionsReport()">💰 Создать отчёт</button>
+<button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('createContributionsReportModal')">Отмена</button>
+</div>
+</div>
+<div class="modal-overlay" id="editContributionsReportModal">
+<div class="modal" style="max-width:500px;">
+<h2>✏️ Редактирование отчёта по взносам</h2>
+<div class="form-group"><label>💬 Комментарий</label><textarea id="ecr2-comment" rows="3"></textarea></div>
+<div class="form-group"><label>🔑 Пароль</label>
+<div style="display:flex;gap:8px"><input type="text" id="ecr2-password"><button class="btn btn-secondary btn-sm" onclick="document.getElementById('ecr2-password').value=genPassword()">🎲</button></div>
+</div>
+<button class="btn btn-success btn-block" onclick="confirmEditContributionsReport()">💾 Сохранить</button>
+<button class="btn btn-secondary btn-block" style="margin-top:8px" onclick="closeModal('editContributionsReportModal')">Отмена</button>
 </div>
 </div>
 <div class="modal-overlay" id="accessRequestModal">
@@ -727,8 +753,8 @@ let sectionChanges = { news: 0, contributions: 0, expenses: 0 };
 let currentEditingReportId = null;
 let currentEditingCashReportId = null;
 let currentEditingShortReportId = null;
+let currentEditingContributionsReportId = null;
 let currentReportsTab = 'public';
-
 function requestNotificationPermission() {
 if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
 Notification.requestPermission();
@@ -958,14 +984,12 @@ const currentHashes = { news: computeSectionHash('news'), contributions: compute
 const changes = countChanges(section, lastSectionState[section], currentHashes[section]);
 sectionChanges[section] = changes;
 });
-// Бейдж раздела "Бюджет" (сумма изменений в приходе и расходе)
 const budgetChanges = (sectionChanges.contributions || 0) + (sectionChanges.expenses || 0);
 const budgetBadge = document.getElementById('budgetBadge');
 if (budgetBadge) {
 if (budgetChanges > 0) { budgetBadge.textContent = budgetChanges; budgetBadge.style.display = 'inline-block'; }
 else { budgetBadge.style.display = 'none'; }
 }
-// Бейдж новостей
 const newsBadge = document.getElementById('newsBadge');
 if (newsBadge) {
 if (sectionChanges.news > 0) { newsBadge.textContent = sectionChanges.news; newsBadge.style.display = 'inline-block'; }
@@ -1411,6 +1435,7 @@ if (tab === 'public') renderAdminReports();
 if (tab === 'short') renderAdminShortReports();
 if (tab === 'month-close') renderAdminMonthClose();
 if (tab === 'cash') renderAdminCashReports();
+if (tab === 'contributions') renderAdminContributionsReports();
 }
 function showOwnerTab(tab, btn) {
 document.querySelectorAll('#owner .admin-section').forEach(s => s.classList.remove('active'));
@@ -1755,7 +1780,10 @@ function getCashReportUrl(reportId) {
 const base = window.location.href.split('?')[0].replace(/index\.html$/, '');
 return base + 'cash-report.html?id=' + reportId;
 }
-
+function getContributionsReportUrl(reportId) {
+const base = window.location.href.split('?')[0].replace(/index\.html$/, '');
+return base + 'contributions-report.html?id=' + reportId;
+}
 async function renderAdminReports() {
 const container = document.getElementById('reports-public');
 if (!container) return;
@@ -1970,7 +1998,6 @@ showToast('🗑 Удалено', 'Сводка удалена', 'info');
 renderAdminReports();
 } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
-
 // ============ КРАТКИЕ СВОДКИ ============
 async function renderAdminShortReports() {
 const container = document.getElementById('reports-short');
@@ -2097,7 +2124,6 @@ showToast('🗑 Удалено', 'Сводка удалена', 'info');
 renderAdminShortReports();
 } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
-
 // ============ ОТЧЁТ ЗАКРЫТИЯ МЕСЯЦА ============
 async function renderAdminMonthClose() {
 const container = document.getElementById('reports-month-close');
@@ -2229,7 +2255,6 @@ renderAdminMonthClose();
 } catch(e) { alert('❌ Ошибка: ' + e.message); }
 }
 document.getElementById('mcm-month').addEventListener('change', updateMonthClosePreview);
-
 // ============ КАССОВЫЙ ОТЧЁТ ============
 async function renderAdminCashReports() {
 const container = document.getElementById('reports-cash');
@@ -2272,7 +2297,7 @@ container.innerHTML = '<p style="color:var(--danger)">Ошибка: ' + e.messag
 }
 }
 async function updateCashReportData(reportId) {
-if (!confirm('Обновить данные кассового отчёта из текущих данных группы?\n\n⚠️ Это перезапишет сохранённые суммы и списки расходов/взносов актуальными данными.')) return;
+if (!confirm('Обновить данные кассового отчёта из текущих данных группы?\n⚠️ Это перезапишет сохранённые суммы и списки расходов/взносов актуальными данными.')) return;
 try {
 const doc = await db.collection('cash_reports').doc(reportId).get();
 if (!doc.exists) { alert('❌ Отчёт не найден'); return; }
@@ -2492,6 +2517,177 @@ try {
 await db.collection('cash_reports').doc(reportId).delete();
 showToast('🗑 Удалено', 'Отчёт удалён', 'info');
 renderAdminCashReports();
+} catch(e) {
+alert('❌ Ошибка: ' + e.message);
+}
+}
+// ============ ОТЧЁТЫ ПО ВЗНОСАМ ============
+async function renderAdminContributionsReports() {
+const container = document.getElementById('reports-contributions');
+if (!container) return;
+container.innerHTML = '<p style="color:var(--gray)">Загрузка...</p>';
+try {
+const snap = await db.collection('contributions_reports').where('groupId', '==', currentGroupId).orderBy('createdAt', 'desc').get();
+const reports = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+let html = '<div class="admin-card"><div class="admin-card-title">💰 Отчёты по взносам</div>';
+html += '<div class="hint">💡 Создавайте отчёты "Кто сдал / кто не сдал". Родители откроют по ссылке + паролю.</div>';
+html += '<button class="btn btn-success" onclick="openCreateContributionsReportModal()">➕ Создать отчёт по взносам</button></div>';
+if (reports.length === 0) {
+html += '<div class="news-empty" style="padding:30px;">Отчётов по взносам ещё нет</div>';
+} else {
+reports.forEach(r => {
+let createdDate = '';
+if (r.createdAt) {
+if (r.createdAt.toDate) createdDate = formatDateTime(r.createdAt.toDate().toISOString());
+else if (typeof r.createdAt === 'string') createdDate = formatDateTime(r.createdAt);
+}
+const paidCount = (r.students || []).filter(s => s.paid).length;
+const totalCount = (r.students || []).filter(s => s.name).length;
+html += '<div class="report-card active">';
+html += '<div class="report-card-header"><div><div class="report-card-title">💰 ' + escapeHtml(r.monthName || 'Без названия') + '</div>';
+html += '<div class="report-card-meta">📅 Создан: ' + createdDate + ' · Сдали: <b style="color:var(--success);">' + paidCount + '</b> из <b>' + totalCount + '</b></div>';
+if (r.comment) html += '<div class="report-card-meta">💬 ' + escapeHtml(r.comment) + '</div>';
+html += '</div></div>';
+html += '<div class="report-link-box">🔗 ' + escapeHtml(getContributionsReportUrl(r.id)) + '</div>';
+html += '<div class="report-card-actions">';
+html += '<button class="btn btn-info btn-sm" onclick="copyContributionsReportLink(\'' + r.id + '\')">📋 Копировать ссылку</button>';
+html += '<button class="btn btn-primary btn-sm" onclick="openEditContributionsReportModal(\'' + r.id + '\')">✏️ Редактировать</button>';
+html += '<button class="btn btn-gold btn-sm" onclick="changeContributionsReportPassword(\'' + r.id + '\')">🔑 Сменить пароль</button>';
+html += '<button class="btn btn-danger btn-sm" onclick="deleteContributionsReport(\'' + r.id + '\')">🗑 Удалить</button>';
+html += '</div></div>';
+});
+}
+container.innerHTML = html;
+} catch(e) {
+container.innerHTML = '<p style="color:var(--danger)">Ошибка: ' + e.message + '</p>';
+}
+}
+function openCreateContributionsReportModal() {
+const monthSelect = document.getElementById('cr-month');
+monthSelect.innerHTML = '';
+const optgroupCurrent = document.createElement('optgroup');
+optgroupCurrent.label = '📅 Текущие месяцы';
+data.months.forEach(m => {
+const o = document.createElement('option');
+o.value = 'current_' + m.id;
+o.textContent = m.name + (m.id === currentMonthId ? ' (текущий)' : '');
+if (m.id === currentMonthId) o.selected = true;
+optgroupCurrent.appendChild(o);
+});
+monthSelect.appendChild(optgroupCurrent);
+if (data.archive && data.archive.length) {
+const optgroupArchive = document.createElement('optgroup');
+optgroupArchive.label = '📦 Архив';
+data.archive.slice().reverse().forEach(m => {
+const o = document.createElement('option');
+o.value = 'archive_' + m.id;
+o.textContent = m.name;
+optgroupArchive.appendChild(o);
+});
+monthSelect.appendChild(optgroupArchive);
+}
+document.getElementById('cr-comment').value = '';
+document.getElementById('cr-password').value = genPassword();
+document.getElementById('createContributionsReportModal').classList.add('active');
+}
+function getContributionsMonthData(monthValue) {
+if (!monthValue) return null;
+const parts = monthValue.split('_');
+const type = parts[0];
+const id = parts.slice(1).join('_');
+if (type === 'current') return data.months.find(m => m.id === id) || null;
+if (type === 'archive') return (data.archive || []).find(m => m.id === id) || null;
+return null;
+}
+async function confirmCreateContributionsReport() {
+const monthValue = document.getElementById('cr-month').value;
+const comment = document.getElementById('cr-comment').value.trim();
+const password = document.getElementById('cr-password').value.trim();
+if (!password) { alert('Задайте пароль'); return; }
+const m = getContributionsMonthData(monthValue);
+if (!m) { alert('Месяц не найден'); return; }
+const g = getGroup(currentGroupId);
+const reportData = {
+groupId: currentGroupId,
+monthId: m.id,
+monthName: m.name,
+groupInfo: { number: g ? g.number : '', name: g ? g.name : '' },
+password: password,
+comment: comment,
+students: JSON.parse(JSON.stringify(m.students)),
+createdBy: currentUserId,
+createdAt: firebase.firestore.FieldValue.serverTimestamp()
+};
+try {
+await db.collection('contributions_reports').add(reportData);
+closeModal('createContributionsReportModal');
+showToast('✅ Готово', 'Отчёт по взносам создан! Скопируйте ссылку.', 'success');
+renderAdminContributionsReports();
+} catch(e) {
+alert('❌ Ошибка: ' + e.message);
+}
+}
+async function copyContributionsReportLink(reportId) {
+const url = getContributionsReportUrl(reportId);
+try {
+await navigator.clipboard.writeText(url);
+showToast('📋 Скопировано', 'Ссылка скопирована в буфер обмена', 'info');
+} catch(e) {
+prompt('Скопируйте ссылку вручную:', url);
+}
+}
+async function openEditContributionsReportModal(reportId) {
+try {
+const doc = await db.collection('contributions_reports').doc(reportId).get();
+if (!doc.exists) { alert('Отчёт не найден'); return; }
+const r = doc.data();
+currentEditingContributionsReportId = reportId;
+document.getElementById('ecr2-comment').value = r.comment || '';
+document.getElementById('ecr2-password').value = r.password || '';
+document.getElementById('editContributionsReportModal').classList.add('active');
+} catch(e) {
+alert('❌ Ошибка: ' + e.message);
+}
+}
+async function confirmEditContributionsReport() {
+if (!currentEditingContributionsReportId) return;
+const comment = document.getElementById('ecr2-comment').value.trim();
+const password = document.getElementById('ecr2-password').value.trim();
+if (!password) { alert('Задайте пароль'); return; }
+try {
+await db.collection('contributions_reports').doc(currentEditingContributionsReportId).update({
+comment: comment,
+password: password,
+updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+});
+closeModal('editContributionsReportModal');
+showToast('✅ Сохранено', 'Изменения применены', 'success');
+renderAdminContributionsReports();
+} catch(e) {
+alert('❌ Ошибка: ' + e.message);
+}
+}
+async function changeContributionsReportPassword(reportId) {
+const newPwd = prompt('Новый пароль для отчёта:', genPassword());
+if (!newPwd || !newPwd.trim()) return;
+try {
+await db.collection('contributions_reports').doc(reportId).update({
+password: newPwd.trim(),
+updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+});
+showToast('🔑 Пароль изменён', 'Новый пароль: ' + newPwd.trim(), 'info');
+renderAdminContributionsReports();
+} catch(e) {
+alert('❌ Ошибка: ' + e.message);
+}
+}
+async function deleteContributionsReport(reportId) {
+if (!confirm('Удалить отчёт по взносам? Это действие нельзя отменить.')) return;
+if (!confirm('Точно удалить?')) return;
+try {
+await db.collection('contributions_reports').doc(reportId).delete();
+showToast('🗑 Удалено', 'Отчёт удалён', 'info');
+renderAdminContributionsReports();
 } catch(e) {
 alert('❌ Ошибка: ' + e.message);
 }
