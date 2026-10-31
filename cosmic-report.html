@@ -772,7 +772,7 @@ function renderReport() {
     if (paidList.length === 0) html += '<div style="color:rgba(255,255,255,0.5); font-size:0.9em; text-align:center; padding:10px;">Пока никто не сдал</div>';
     else paidList.forEach(s => { html += '<div class="person"><span class="person-name">✔ ' + escapeHtml(s.name) + '</span><span class="person-amount">' + (s.amount ? formatMoney(s.amount) + ' ₽' : '') + '</span></div>'; });
     html += '</div>';
-    html += '<div class="list-card unpaid"><div class="list-title">⏳ Ожидают оплаты <span class="list-count">' + unpaidList.length + '</span></div>';
+    html += '<div class="list-card unpaid"><div class="list-title">⏳ Ожидается <span class="list-count">' + unpaidList.length + '</span></div>';
     if (unpaidList.length === 0) html += '<div style="color:rgba(255,255,255,0.5); font-size:0.9em; text-align:center; padding:10px;">🎉 Все сдали! Спасибо!</div>';
     else unpaidList.forEach(s => { html += '<div class="person"><span class="person-name">⏳ ' + escapeHtml(s.name) + '</span><span class="person-amount">' + (s.amount ? formatMoney(s.amount) + ' ₽' : '') + '</span></div>'; });
     html += '</div></div>';
