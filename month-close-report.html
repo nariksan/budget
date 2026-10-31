@@ -41,23 +41,19 @@ body::before {
   margin: 0 auto; 
   position: relative; 
   z-index: 1; 
-  background: rgba(255, 255, 255, 0.03); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  border-radius: 24px; 
-  overflow: hidden; 
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-  animation: fadeIn 0.6s ease;
 }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Шапка */
 .header { 
   text-align: center; 
   padding: 30px 20px; 
-  background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(123, 97, 255, 0.1)); 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+  background: rgba(255, 255, 255, 0.03); 
+  backdrop-filter: blur(20px); 
+  -webkit-backdrop-filter: blur(20px); 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  border-radius: 24px; 
+  margin-bottom: 24px; 
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
 }
 .header-icon { font-size: 3em; margin-bottom: 10px; filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.5)); }
 .header h1 { 
@@ -73,41 +69,61 @@ body::before {
 
 .content { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
 
-/* 1. Комментарий */
-.comment-block { 
-  background: rgba(255, 145, 0, 0.08); 
-  border: 1px solid rgba(255, 145, 0, 0.3); 
-  border-left: 4px solid #ff9100; 
-  padding: 16px; 
-  border-radius: 12px; 
-  font-style: italic; 
-  color: rgba(255, 255, 255, 0.9); 
-  line-height: 1.5;
+/* Индикаторы */
+.indicators-panel {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
 }
 
-/* 2. Финансовая сводка */
-.summary-card { 
-  background: rgba(255, 255, 255, 0.05); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  border-radius: 16px; 
-  padding: 20px; 
+.indicator {
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
 }
-.row { 
-  display: flex; 
-  justify-content: space-between; 
-  align-items: center; 
-  padding: 12px 0; 
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.1); 
+.indicator::before {
+  content: '◈';
+  position: absolute;
+  top: 5px;
+  left: 8px;
+  font-size: 0.8em;
+  opacity: 0.5;
 }
-.row:last-child { border-bottom: none; }
-.label { font-weight: 500; color: rgba(255, 255, 255, 0.7); display: flex; align-items: center; gap: 8px; font-size: 0.95em; }
-.value { font-weight: 700; font-size: 1.1em; font-family: 'Courier New', monospace; }
-.val-green { color: #00ff88; text-shadow: 0 0 10px rgba(0, 255, 136, 0.4); }
-.val-red { color: #ff3d71; text-shadow: 0 0 10px rgba(255, 61, 113, 0.4); }
-.val-cyan { color: #00e5ff; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
 
-/* 3. Итоговый перенос (Реактор) */
-.total-block { 
+.indicator.prev { border-color: #7b61ff; box-shadow: 0 0 20px rgba(123, 97, 255, 0.2); }
+.indicator.income { border-color: #00ff88; box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
+.indicator.add { border-color: #00e5ff; box-shadow: 0 0 20px rgba(0, 229, 255, 0.2); }
+.indicator.expense { border-color: #ff3d71; box-shadow: 0 0 20px rgba(255, 61, 113, 0.2); }
+
+.indicator-label {
+  font-size: 0.7em;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  opacity: 0.7;
+}
+.indicator.prev .indicator-label { color: #7b61ff; }
+.indicator.income .indicator-label { color: #00ff88; }
+.indicator.add .indicator-label { color: #00e5ff; }
+.indicator.expense .indicator-label { color: #ff3d71; }
+
+.indicator-value {
+  font-size: 1.4em;
+  font-weight: 800;
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 10px currentColor;
+}
+.indicator.prev .indicator-value { color: #7b61ff; }
+.indicator.income .indicator-value { color: #00ff88; }
+.indicator.add .indicator-value { color: #00e5ff; }
+.indicator.expense .indicator-value { color: #ff3d71; }
+
+/* Итоговый блок (Реактор) */
+.reactor-block { 
   background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, rgba(0,0,0,0) 70%);
   border: 2px solid #00ff88; 
   border-radius: 20px; 
@@ -117,7 +133,7 @@ body::before {
   position: relative;
   overflow: hidden;
 }
-.total-block::before {
+.reactor-block::before {
   content: '';
   position: absolute;
   top: -50%; left: -50%; width: 200%; height: 200%;
@@ -126,8 +142,8 @@ body::before {
 }
 @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.8; } }
 
-.total-title { 
-  font-size: 0.85em; 
+.reactor-title { 
+  font-size: 0.8em; 
   text-transform: uppercase; 
   letter-spacing: 2px; 
   color: #00ff88; 
@@ -136,8 +152,8 @@ body::before {
   position: relative;
   z-index: 1;
 }
-.total-amount { 
-  font-size: 2.5em; 
+.reactor-amount { 
+  font-size: 2.2em; 
   font-weight: 800; 
   color: #00ff88; 
   margin: 4px 0; 
@@ -146,10 +162,10 @@ body::before {
   position: relative;
   z-index: 1;
 }
-.total-sub { font-size: 0.85em; color: rgba(255, 255, 255, 0.6); position: relative; z-index: 1; }
+.reactor-sub { font-size: 0.85em; color: rgba(255, 255, 255, 0.6); position: relative; z-index: 1; }
 
-/* 4. Детализация расходов */
-.details-block { 
+/* Детализация */
+.details-section { 
   background: rgba(255, 61, 113, 0.05); 
   border: 1px solid rgba(255, 61, 113, 0.2); 
   border-left: 4px solid #ff3d71; 
@@ -180,12 +196,26 @@ body::before {
   font-family: 'Courier New', monospace; 
 }
 
+/* Комментарий */
+.comment-box { 
+  background: rgba(255, 145, 0, 0.08); 
+  border: 1px solid rgba(255, 145, 0, 0.3); 
+  border-left: 4px solid #ff9100; 
+  border-radius: 12px; 
+  padding: 16px; 
+  font-style: italic; 
+  color: rgba(255, 255, 255, 0.9); 
+  line-height: 1.5;
+}
+
+/* Футер */
 .footer { 
   text-align: center; 
   padding: 20px; 
   color: rgba(255, 255, 255, 0.4); 
   font-size: 0.8em; 
-  border-top: 1px solid rgba(255, 255, 255, 0.1); 
+  margin-top: 20px; 
+  border-top: 1px solid rgba(0, 229, 255, 0.2);
 }
 
 .loading { text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.6); font-style: italic; }
@@ -194,7 +224,8 @@ body::before {
 @media (max-width: 480px) {
   body { padding: 12px; }
   .header h1 { font-size: 1.3em; }
-  .total-amount { font-size: 2em; }
+  .reactor-amount { font-size: 1.8em; }
+  .indicators-panel { grid-template-columns: 1fr; }
 }
 
 /* Печать — сохранение тёмного фона */
@@ -205,7 +236,7 @@ body::before {
     padding: 10mm; 
   }
   body::before { display: none; }
-  .container { box-shadow: none; border: 1px solid #333; }
+  .container { max-width: 100%; }
 }
 </style>
 </head>
@@ -243,13 +274,13 @@ function formatMoney(n) {
     return Number(n || 0).toLocaleString('ru-RU', { maximumFractionDigits: 0 }); 
 }
 
-// Анимация счётчика для итоговой суммы
+// Анимация счётчика
 function animateValue(element, start, end, duration) {
     const startTime = performance.now();
     const update = (currentTime) => {
         const elapsed = currentTime - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+        const eased = 1 - Math.pow(1 - progress, 3);
         const current = start + (end - start) * eased;
         element.textContent = formatMoney(current) + ' ₽';
         if (progress < 1) requestAnimationFrame(update);
@@ -281,43 +312,43 @@ async function loadReport() {
         
         let html = '';
         
-        // 1. КОММЕНТАРИЙ
+        // Комментарий
         if (r.comment) {
-            html += `<div class="comment-block">💬 ${r.comment}</div>`;
+            html += `<div class="comment-box">💬 ${r.comment}</div>`;
         }
         
-        // 2. ФИНАНСОВАЯ СВОДКА
+        // Индикаторы
         html += `
-        <div class="summary-card">
-            <div class="row">
-                <span class="label">💰 Остаток с прошлого месяца:</span>
-                <span class="value val-cyan">${formatMoney(r.prevBalance)} ₽</span>
+        <div class="indicators-panel">
+            <div class="indicator prev">
+                <div class="indicator-label">◈ Остаток с прошл. месяца</div>
+                <div class="indicator-value" data-target="${r.prevBalance || 0}">0 ₽</div>
             </div>
-            <div class="row">
-                <span class="label">📥 Приход (взносы):</span>
-                <span class="value val-green">+${formatMoney(r.income)} ₽</span>
+            <div class="indicator income">
+                <div class="indicator-label">◈ Приход (взносы)</div>
+                <div class="indicator-value" data-target="${r.income || 0}">0 ₽</div>
             </div>
-            <div class="row">
-                <span class="label">💳 Доп. приход:</span>
-                <span class="value val-green">+${formatMoney(r.additionalIncome)} ₽</span>
+            <div class="indicator add">
+                <div class="indicator-label">◈ Доп. приход</div>
+                <div class="indicator-value" data-target="${r.additionalIncome || 0}">0 ₽</div>
             </div>
-            <div class="row">
-                <span class="label">📤 Расход:</span>
-                <span class="value val-red">-${formatMoney(r.expense)} ₽</span>
+            <div class="indicator expense">
+                <div class="indicator-label">◈ Расход</div>
+                <div class="indicator-value" data-target="${r.expense || 0}">0 ₽</div>
             </div>
         </div>`;
         
-        // 3. ИТОГОВЫЙ ПЕРЕНОС
+        // Реактор (итог)
         html += `
-        <div class="total-block">
-            <div class="total-title">Переносится на следующий месяц</div>
-            <div class="total-amount" id="totalAmount">0 ₽</div>
-            <div class="total-sub">Итоговый остаток</div>
+        <div class="reactor-block">
+            <div class="reactor-title">Переносится на следующий месяц</div>
+            <div class="reactor-amount" id="reactorAmount">0 ₽</div>
+            <div class="reactor-sub">Итоговый остаток</div>
         </div>`;
         
-        // 4. ДЕТАЛИЗАЦИЯ РАСХОДОВ
+        // Детализация расходов
         if (r.expenses && r.expenses.length > 0) {
-            html += `<div class="details-block"><div class="details-title">📊 Детализация расходов</div>`;
+            html += `<div class="details-section"><div class="details-title">📊 Детализация расходов</div>`;
             r.expenses.forEach(e => {
                 html += `<div class="detail-item"><span>${e.description}</span><span>-${formatMoney(e.amount)} ₽</span></div>`;
             });
@@ -326,10 +357,14 @@ async function loadReport() {
         
         document.getElementById('reportContent').innerHTML = html;
         
-        // Запуск анимации итоговой суммы
+        // Запуск анимации
         setTimeout(() => {
-            const totalEl = document.getElementById('totalAmount');
-            if (totalEl) animateValue(totalEl, 0, balance, 1500);
+            document.querySelectorAll('.indicator-value').forEach(el => {
+                const target = parseFloat(el.dataset.target);
+                animateValue(el, 0, target, 1500);
+            });
+            const reactorEl = document.getElementById('reactorAmount');
+            if (reactorEl) animateValue(reactorEl, 0, balance, 1500);
         }, 300);
         
     } catch(e) {
