@@ -879,7 +879,7 @@ async function renderAdminCosmicReports() {
     try {
         const snap = await db.collection('cosmic_reports').where('groupId', '==', currentGroupId).orderBy('createdAt', 'desc').get();
         const reports = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        let html = '<div class="admin-card"><div class="admin-card-title">🌌 Космические сводки</div>';
+        let html = '<div class="admin-card"><div class="admin-card-title">🌌 Финансовая сводка</div>';
         html += '<div class="hint">💡 Красивый отчёт в космическом дизайне. Открывается по ссылке + паролю. При печати сохраняется тёмный фон.</div>';
         html += '<button class="btn btn-success" onclick="openCreateCosmicReportModal()">➕ Создать космическую сводку</button></div>';
         if (reports.length === 0) {
