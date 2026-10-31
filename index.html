@@ -881,7 +881,7 @@ async function renderAdminCosmicReports() {
         const reports = snap.docs.map(d => ({ id: d.id, ...d.data() }));
         let html = '<div class="admin-card"><div class="admin-card-title">🌌 Финансовая сводка</div>';
         html += '<div class="hint">💡 Красивый отчёт в космическом дизайне. Открывается по ссылке + паролю. При печати сохраняется тёмный фон.</div>';
-        html += '<button class="btn btn-success" onclick="openCreateCosmicReportModal()">➕ Создать космическую сводку</button></div>';
+        html += '<button class="btn btn-success" onclick="openCreateCosmicReportModal()">➕ Создать Финансовую сводку</button></div>';
         if (reports.length === 0) {
             html += '<div class="news-empty" style="padding:30px;">Космических сводок ещё нет</div>';
         } else {
