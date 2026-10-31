@@ -92,7 +92,7 @@ body::before {
 .header h2 { font-size: 1.2em; color: #fff; font-weight: 600; margin-bottom: 4px; }
 .header .subtitle { font-size: 0.9em; color: #ff9100; font-weight: 700; letter-spacing: 1px; }
 
-/* Карточки-показатели */
+/* Карточки-показатели (сетка 2x2 на мобильных, 4 в ряд на ПК) */
 .summary-grid { 
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; 
 }
@@ -105,22 +105,22 @@ body::before {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
 }
 .summary-card::before { content: '◈'; position: absolute; top: 8px; left: 10px; font-size: 0.7em; opacity: 0.5; }
-.summary-card.blue { border-color: #7b61ff; box-shadow: 0 0 20px rgba(123, 97, 255, 0.2); }
 .summary-card.green { border-color: #00ff88; box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
-.summary-card.orange { border-color: #ff9100; box-shadow: 0 0 20px rgba(255, 145, 0, 0.2); }
 .summary-card.red { border-color: #ff3d71; box-shadow: 0 0 20px rgba(255, 61, 113, 0.2); }
+.summary-card.orange { border-color: #ff9100; box-shadow: 0 0 20px rgba(255, 145, 0, 0.2); }
+.summary-card.blue { border-color: #7b61ff; box-shadow: 0 0 20px rgba(123, 97, 255, 0.2); }
 
 .summary-label { font-size: 0.65em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; opacity: 0.8; font-weight: 600; }
-.summary-card.blue .summary-label { color: #7b61ff; }
 .summary-card.green .summary-label { color: #00ff88; }
-.summary-card.orange .summary-label { color: #ff9100; }
 .summary-card.red .summary-label { color: #ff3d71; }
+.summary-card.orange .summary-label { color: #ff9100; }
+.summary-card.blue .summary-label { color: #7b61ff; }
 
 .summary-value { font-size: 1.4em; font-weight: 800; font-family: 'Courier New', monospace; text-shadow: 0 0 10px currentColor; }
-.summary-card.blue .summary-value { color: #7b61ff; }
 .summary-card.green .summary-value { color: #00ff88; }
-.summary-card.orange .summary-value { color: #ff9100; }
 .summary-card.red .summary-value { color: #ff3d71; }
+.summary-card.orange .summary-value { color: #ff9100; }
+.summary-card.blue .summary-value { color: #7b61ff; }
 
 /* Космический прогресс (Реактор) */
 .progress-container {
@@ -350,6 +350,7 @@ function renderReport() {
         if (s.paid) { paidCount++; totalPaid += amount; }
     });
     const remaining = totalExpected - totalPaid;
+    const unpaidCount = students.length - paidCount;
     const percent = totalExpected > 0 ? Math.round((totalPaid / totalExpected) * 100) : 0;
     
     let html = '';
@@ -359,12 +360,12 @@ function renderReport() {
         html += '<div class="comment-box"><div class="comment-text">' + escapeHtml(r.comment) + '</div></div>';
     }
     
-    // 4 карточки-показателя
+    // 4 карточки-показателя (сетка 2x2 на мобильных)
     html += '<div class="summary-grid">';
-    html += '<div class="summary-card blue"><div class="summary-label">Всего человек</div><div class="summary-value">' + students.length + '</div></div>';
-    html += '<div class="summary-card green"><div class="summary-label">Участвовали</div><div class="summary-value">' + paidCount + '</div></div>';
-    html += '<div class="summary-card orange"><div class="summary-label">Ожидалось</div><div class="summary-value">' + formatMoney(totalExpected) + ' ₽</div></div>';
-    html += '<div class="summary-card red"><div class="summary-label">Осталось</div><div class="summary-value">' + formatMoney(remaining) + ' ₽</div></div>';
+    html += '<div class="summary-card green"><div class="summary-label">◈ Участвовали</div><div class="summary-value">' + paidCount + '</div></div>';
+    html += '<div class="summary-card red"><div class="summary-label">◈ Не участвовали</div><div class="summary-value">' + unpaidCount + '</div></div>';
+    html += '<div class="summary-card orange"><div class="summary-label">◈ Ожидалось</div><div class="summary-value">' + formatMoney(totalExpected) + ' ₽</div></div>';
+    html += '<div class="summary-card blue"><div class="summary-label">◈ Осталось</div><div class="summary-value">' + formatMoney(remaining) + ' ₽</div></div>';
     html += '</div>';
     
     // Космический прогресс (только процент, без дублирования сумм)
