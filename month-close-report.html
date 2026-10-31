@@ -3,54 +3,226 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Отчёт закрытия месяца</title>
+<title>Отчёт закрытия месяца — Звездочки</title>
 <style>
-    :root { --green: #2d8b4d; --orange: #e87722; --bg: #f8f9fa; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #333; line-height: 1.5; }
-    .container { max-width: 600px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
-    .header { background: linear-gradient(135deg, var(--green), var(--orange)); color: white; padding: 24px; text-align: center; }
-    .header h1 { margin: 0; font-size: 1.4em; }
-    .header p { margin: 4px 0 0; opacity: 0.9; font-size: 0.9em; }
-    .content { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-    
-    /* 1. Комментарий */
-    .comment-block { background: #eef7ff; border-left: 4px solid #17a2b8; padding: 16px; border-radius: 8px; font-style: italic; color: #444; }
-    
-    /* 2. Сводка */
-    .summary-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-    .row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px dashed #eee; }
-    .row:last-child { border-bottom: none; }
-    .label { font-weight: 500; color: #666; display: flex; align-items: center; gap: 8px; }
-    .value { font-weight: 700; font-size: 1.1em; }
-    .val-green { color: var(--green); }
-    .val-red { color: #dc3545; }
-    
-    /* 3. Итог */
-    .total-block { background: #e8f5e9; border: 2px solid var(--green); border-radius: 16px; padding: 20px; text-align: center; }
-    .total-title { font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; color: var(--green); font-weight: 700; margin-bottom: 8px; }
-    .total-amount { font-size: 2.2em; font-weight: 800; color: var(--green); margin: 4px 0; }
-    .total-sub { font-size: 0.85em; color: #666; }
-    
-    /* 4. Детализация */
-    .details-block { background: #fff9e6; border-left: 4px solid var(--orange); border-radius: 8px; padding: 16px; }
-    .details-title { font-weight: 700; color: #856404; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-    .detail-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.95em; }
-    .detail-item:last-child { border-bottom: none; }
-    
-    .footer { text-align: center; padding: 20px; color: #999; font-size: 0.8em; border-top: 1px solid #eee; }
-    .loading { text-align: center; padding: 40px; color: #666; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+  min-height: 100vh; 
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%); 
+  color: #e8e8ff; 
+  padding: 20px; 
+  overflow-x: hidden; 
+  position: relative; 
+}
+
+/* Звёздный фон */
+body::before { 
+  content: ''; 
+  position: fixed; 
+  top: 0; left: 0; right: 0; bottom: 0; 
+  background-image: 
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 33% 80%, white, transparent);
+  background-size: 200% 200%;
+  animation: stars 20s linear infinite;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes stars { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
+
+.container { 
+  max-width: 600px; 
+  margin: 0 auto; 
+  position: relative; 
+  z-index: 1; 
+  background: rgba(255, 255, 255, 0.03); 
+  backdrop-filter: blur(20px); 
+  -webkit-backdrop-filter: blur(20px); 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  border-radius: 24px; 
+  overflow: hidden; 
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  animation: fadeIn 0.6s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Шапка */
+.header { 
+  text-align: center; 
+  padding: 30px 20px; 
+  background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(123, 97, 255, 0.1)); 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+}
+.header-icon { font-size: 3em; margin-bottom: 10px; filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.5)); }
+.header h1 { 
+  font-size: 1.5em; 
+  font-weight: 800; 
+  background: linear-gradient(135deg, #00e5ff 0%, #ff9100 100%); 
+  -webkit-background-clip: text; 
+  -webkit-text-fill-color: transparent; 
+  background-clip: text; 
+  margin-bottom: 6px; 
+}
+.header p { color: rgba(255, 255, 255, 0.7); font-size: 0.9em; letter-spacing: 0.5px; }
+
+.content { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+
+/* 1. Комментарий */
+.comment-block { 
+  background: rgba(255, 145, 0, 0.08); 
+  border: 1px solid rgba(255, 145, 0, 0.3); 
+  border-left: 4px solid #ff9100; 
+  padding: 16px; 
+  border-radius: 12px; 
+  font-style: italic; 
+  color: rgba(255, 255, 255, 0.9); 
+  line-height: 1.5;
+}
+
+/* 2. Финансовая сводка */
+.summary-card { 
+  background: rgba(255, 255, 255, 0.05); 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  border-radius: 16px; 
+  padding: 20px; 
+}
+.row { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 12px 0; 
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1); 
+}
+.row:last-child { border-bottom: none; }
+.label { font-weight: 500; color: rgba(255, 255, 255, 0.7); display: flex; align-items: center; gap: 8px; font-size: 0.95em; }
+.value { font-weight: 700; font-size: 1.1em; font-family: 'Courier New', monospace; }
+.val-green { color: #00ff88; text-shadow: 0 0 10px rgba(0, 255, 136, 0.4); }
+.val-red { color: #ff3d71; text-shadow: 0 0 10px rgba(255, 61, 113, 0.4); }
+.val-cyan { color: #00e5ff; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); }
+
+/* 3. Итоговый перенос (Реактор) */
+.total-block { 
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, rgba(0,0,0,0) 70%);
+  border: 2px solid #00ff88; 
+  border-radius: 20px; 
+  padding: 24px; 
+  text-align: center; 
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+.total-block::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 60%);
+  animation: pulse 3s ease-in-out infinite;
+}
+@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.8; } }
+
+.total-title { 
+  font-size: 0.85em; 
+  text-transform: uppercase; 
+  letter-spacing: 2px; 
+  color: #00ff88; 
+  font-weight: 700; 
+  margin-bottom: 8px; 
+  position: relative;
+  z-index: 1;
+}
+.total-amount { 
+  font-size: 2.5em; 
+  font-weight: 800; 
+  color: #00ff88; 
+  margin: 4px 0; 
+  font-family: 'Courier New', monospace;
+  text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+  position: relative;
+  z-index: 1;
+}
+.total-sub { font-size: 0.85em; color: rgba(255, 255, 255, 0.6); position: relative; z-index: 1; }
+
+/* 4. Детализация расходов */
+.details-block { 
+  background: rgba(255, 61, 113, 0.05); 
+  border: 1px solid rgba(255, 61, 113, 0.2); 
+  border-left: 4px solid #ff3d71; 
+  border-radius: 16px; 
+  padding: 20px; 
+}
+.details-title { 
+  font-weight: 700; 
+  color: #ff3d71; 
+  margin-bottom: 16px; 
+  display: flex; 
+  align-items: center; 
+  gap: 8px; 
+  font-size: 1.05em;
+}
+.detail-item { 
+  display: flex; 
+  justify-content: space-between; 
+  padding: 10px 0; 
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+  font-size: 0.95em; 
+}
+.detail-item:last-child { border-bottom: none; }
+.detail-item span:first-child { color: rgba(255, 255, 255, 0.85); }
+.detail-item span:last-child { 
+  color: #ff3d71; 
+  font-weight: 700; 
+  font-family: 'Courier New', monospace; 
+}
+
+.footer { 
+  text-align: center; 
+  padding: 20px; 
+  color: rgba(255, 255, 255, 0.4); 
+  font-size: 0.8em; 
+  border-top: 1px solid rgba(255, 255, 255, 0.1); 
+}
+
+.loading { text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.6); font-style: italic; }
+
+/* Адаптив */
+@media (max-width: 480px) {
+  body { padding: 12px; }
+  .header h1 { font-size: 1.3em; }
+  .total-amount { font-size: 2em; }
+}
+
+/* Печать — сохранение тёмного фона */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+  body { 
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%) !important; 
+    padding: 10mm; 
+  }
+  body::before { display: none; }
+  .container { box-shadow: none; border: 1px solid #333; }
+}
 </style>
 </head>
 <body>
+
 <div class="container">
     <div class="header">
+        <div class="header-icon">🚀</div>
         <h1 id="reportTitle">Загрузка...</h1>
         <p id="reportGroup">Группа</p>
     </div>
+    
     <div class="content" id="reportContent">
         <div class="loading">Загрузка данных отчёта...</div>
     </div>
-    <div class="footer">Родительский комитет · Отчёт сформирован автоматически</div>
+    
+    <div class="footer">Родительский комитет «Звездочки» · Отчёт сформирован автоматически</div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -67,7 +239,23 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-function formatMoney(n) { return Number(n || 0).toLocaleString('ru-RU', { maximumFractionDigits: 0 }); }
+function formatMoney(n) { 
+    return Number(n || 0).toLocaleString('ru-RU', { maximumFractionDigits: 0 }); 
+}
+
+// Анимация счётчика для итоговой суммы
+function animateValue(element, start, end, duration) {
+    const startTime = performance.now();
+    const update = (currentTime) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+        const current = start + (end - start) * eased;
+        element.textContent = formatMoney(current) + ' ₽';
+        if (progress < 1) requestAnimationFrame(update);
+    };
+    requestAnimationFrame(update);
+}
 
 async function loadReport() {
     const params = new URLSearchParams(window.location.search);
@@ -88,9 +276,8 @@ async function loadReport() {
         const r = doc.data();
         const balance = (r.prevBalance || 0) + (r.income || 0) + (r.additionalIncome || 0) - (r.expense || 0);
         
-        // Обновляем заголовок
-        document.getElementById('reportTitle').textContent = r.monthName || 'Отчёт';
-        document.getElementById('reportGroup').textContent = `Группа №${r.groupInfo?.number || ''} ${r.groupInfo?.name || ''}`;
+        document.getElementById('reportTitle').textContent = r.monthName || 'Отчёт закрытия';
+        document.getElementById('reportGroup').textContent = `Группа №${r.groupInfo?.number || ''} «${r.groupInfo?.name || 'Звездочки'}»`;
         
         let html = '';
         
@@ -104,7 +291,7 @@ async function loadReport() {
         <div class="summary-card">
             <div class="row">
                 <span class="label">💰 Остаток с прошлого месяца:</span>
-                <span class="value">${formatMoney(r.prevBalance)} ₽</span>
+                <span class="value val-cyan">${formatMoney(r.prevBalance)} ₽</span>
             </div>
             <div class="row">
                 <span class="label">📥 Приход (взносы):</span>
@@ -123,21 +310,27 @@ async function loadReport() {
         // 3. ИТОГОВЫЙ ПЕРЕНОС
         html += `
         <div class="total-block">
-            <div class="total-title"> Переносится на следующий месяц</div>
-            <div class="total-amount">${formatMoney(balance)} ₽</div>
+            <div class="total-title">Переносится на следующий месяц</div>
+            <div class="total-amount" id="totalAmount">0 ₽</div>
             <div class="total-sub">Итоговый остаток</div>
         </div>`;
         
         // 4. ДЕТАЛИЗАЦИЯ РАСХОДОВ
         if (r.expenses && r.expenses.length > 0) {
-            html += `<div class="details-block"><div class="details-title"> Детализация расходов</div>`;
+            html += `<div class="details-block"><div class="details-title">📊 Детализация расходов</div>`;
             r.expenses.forEach(e => {
-                html += `<div class="detail-item"><span>${e.description}</span><span class="val-red">-${formatMoney(e.amount)} ₽</span></div>`;
+                html += `<div class="detail-item"><span>${e.description}</span><span>-${formatMoney(e.amount)} ₽</span></div>`;
             });
             html += `</div>`;
         }
         
         document.getElementById('reportContent').innerHTML = html;
+        
+        // Запуск анимации итоговой суммы
+        setTimeout(() => {
+            const totalEl = document.getElementById('totalAmount');
+            if (totalEl) animateValue(totalEl, 0, balance, 1500);
+        }, 300);
         
     } catch(e) {
         console.error(e);
@@ -149,4 +342,3 @@ loadReport();
 </script>
 </body>
 </html>
-
