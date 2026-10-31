@@ -54,7 +54,10 @@ body::before {
   border-radius: 24px; 
   margin-bottom: 24px; 
   box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  animation: fadeIn 0.6s ease;
 }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
 .header-icon { font-size: 3em; margin-bottom: 10px; filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.5)); }
 .header h1 { 
   font-size: 1.5em; 
@@ -67,30 +70,34 @@ body::before {
 }
 .header p { color: rgba(255, 255, 255, 0.7); font-size: 0.9em; letter-spacing: 0.5px; }
 
-.content { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
-
-/* Индикаторы */
+/* Сетка индикаторов */
 .indicators-panel {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
+  margin-bottom: 24px;
 }
 
 .indicator {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 2px solid;
   border-radius: 16px;
-  padding: 16px;
+  padding: 16px 12px;
   text-align: center;
   position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.5s ease;
 }
+@keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
 .indicator::before {
   content: '◈';
   position: absolute;
-  top: 5px;
-  left: 8px;
-  font-size: 0.8em;
+  top: 8px;
+  left: 10px;
+  font-size: 0.7em;
   opacity: 0.5;
 }
 
@@ -100,11 +107,12 @@ body::before {
 .indicator.expense { border-color: #ff3d71; box-shadow: 0 0 20px rgba(255, 61, 113, 0.2); }
 
 .indicator-label {
-  font-size: 0.7em;
+  font-size: 0.65em;
   text-transform: uppercase;
   letter-spacing: 1px;
-  margin-bottom: 6px;
-  opacity: 0.7;
+  margin-bottom: 8px;
+  opacity: 0.8;
+  font-weight: 600;
 }
 .indicator.prev .indicator-label { color: #7b61ff; }
 .indicator.income .indicator-label { color: #00ff88; }
@@ -112,7 +120,7 @@ body::before {
 .indicator.expense .indicator-label { color: #ff3d71; }
 
 .indicator-value {
-  font-size: 1.4em;
+  font-size: 1.3em;
   font-weight: 800;
   font-family: 'Courier New', monospace;
   text-shadow: 0 0 10px currentColor;
@@ -124,7 +132,9 @@ body::before {
 
 /* Итоговый блок (Реактор) */
 .reactor-block { 
-  background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, rgba(0,0,0,0) 70%);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 2px solid #00ff88; 
   border-radius: 20px; 
   padding: 24px; 
@@ -132,6 +142,8 @@ body::before {
   box-shadow: 0 0 30px rgba(0, 255, 136, 0.15);
   position: relative;
   overflow: hidden;
+  margin-bottom: 24px;
+  animation: slideIn 0.6s ease;
 }
 .reactor-block::before {
   content: '';
@@ -164,13 +176,17 @@ body::before {
 }
 .reactor-sub { font-size: 0.85em; color: rgba(255, 255, 255, 0.6); position: relative; z-index: 1; }
 
-/* Детализация */
+/* Детализация расходов */
 .details-section { 
-  background: rgba(255, 61, 113, 0.05); 
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 61, 113, 0.2); 
   border-left: 4px solid #ff3d71; 
   border-radius: 16px; 
   padding: 20px; 
+  margin-bottom: 24px;
+  animation: slideIn 0.7s ease;
 }
 .details-title { 
   font-weight: 700; 
@@ -206,6 +222,7 @@ body::before {
   font-style: italic; 
   color: rgba(255, 255, 255, 0.9); 
   line-height: 1.5;
+  margin-bottom: 24px;
 }
 
 /* Футер */
@@ -220,12 +237,49 @@ body::before {
 
 .loading { text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.6); font-style: italic; }
 
-/* Адаптив */
-@media (max-width: 480px) {
+/* Адаптив для ПК — индикаторы в 2 колонки */
+@media (min-width: 769px) {
+  .indicators-panel {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Адаптив для мобильных — индикаторы в 2 колонки */
+@media (max-width: 768px) {
   body { padding: 12px; }
+  .header { padding: 20px 16px; }
   .header h1 { font-size: 1.3em; }
   .reactor-amount { font-size: 1.8em; }
-  .indicators-panel { grid-template-columns: 1fr; }
+  .indicators-panel { 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 10px;
+  }
+  .indicator {
+    padding: 14px 10px;
+  }
+  .indicator-label {
+    font-size: 0.6em;
+  }
+  .indicator-value {
+    font-size: 1.15em;
+  }
+}
+
+@media (max-width: 380px) {
+  .indicators-panel {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .indicator {
+    padding: 12px 8px;
+  }
+  .indicator-label {
+    font-size: 0.55em;
+    letter-spacing: 0.5px;
+  }
+  .indicator-value {
+    font-size: 1em;
+  }
 }
 
 /* Печать — сохранение тёмного фона */
@@ -237,6 +291,10 @@ body::before {
   }
   body::before { display: none; }
   .container { max-width: 100%; }
+  .indicators-panel { grid-template-columns: repeat(2, 1fr) !important; }
+  .indicator, .reactor-block, .details-section, .comment-box, .header { 
+    page-break-inside: avoid; 
+  }
 }
 </style>
 </head>
@@ -249,7 +307,7 @@ body::before {
         <p id="reportGroup">Группа</p>
     </div>
     
-    <div class="content" id="reportContent">
+    <div id="reportContent">
         <div class="loading">Загрузка данных отчёта...</div>
     </div>
     
@@ -317,7 +375,7 @@ async function loadReport() {
             html += `<div class="comment-box">💬 ${r.comment}</div>`;
         }
         
-        // Индикаторы
+        // Индикаторы (сетка 2x2)
         html += `
         <div class="indicators-panel">
             <div class="indicator prev">
