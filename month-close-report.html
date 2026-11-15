@@ -57,8 +57,6 @@ body {
 }
 
 .indicator {
-  background: #ffffff;
-  border: 2px solid #e0e0e0;
   border-radius: 12px;
   padding: 16px 12px;
   text-align: center;
@@ -67,7 +65,7 @@ body {
   animation: slideIn 0.5s ease;
 }
 @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.indicator:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
+.indicator:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); }
 
 .indicator::before {
   content: '◈';
@@ -75,41 +73,57 @@ body {
   top: 8px;
   left: 10px;
   font-size: 0.7em;
-  opacity: 0.3;
-  color: #999999;
+  opacity: 0.6;
 }
 
-/* Цветовые акценты для индикаторов (верхняя рамка) */
-.indicator.prev { border-top: 4px solid #ed6c02; }
-.indicator.income { border-top: 4px solid #2e7d32; }
-.indicator.add { border-top: 4px solid #1976d2; }
-.indicator.expense { border-top: 4px solid #c62828; }
+/* ✨ СВОЙ ЦВЕТ РАМКИ И ФОНА ДЛЯ КАЖДОГО БЛОКА */
+.indicator.prev {
+  border: 2px solid #ed6c02;          /* оранжевая рамка */
+  background: #fff3e0;                 /* лёгкий оранжевый фон */
+}
+.indicator.prev::before { color: #ed6c02; }
+
+.indicator.income {
+  border: 2px solid #2e7d32;           /* зелёная рамка */
+  background: #e8f5e9;                 /* лёгкий зелёный фон */
+}
+.indicator.income::before { color: #2e7d32; }
+
+.indicator.add {
+  border: 2px solid #1976d2;           /* синяя рамка */
+  background: #e3f2fd;                 /* лёгкий синий фон */
+}
+.indicator.add::before { color: #1976d2; }
+
+.indicator.expense {
+  border: 2px solid #c62828;           /* красная рамка */
+  background: #ffebee;                 /* лёгкий красный фон */
+}
+.indicator.expense::before { color: #c62828; }
 
 .indicator-label {
   font-size: 0.65em;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 8px;
-  font-weight: 600;
-  color: #666666;
+  font-weight: 700;
 }
-.indicator.prev .indicator-label { color: #ed6c02; }
-.indicator.income .indicator-label { color: #2e7d32; }
-.indicator.add .indicator-label { color: #1976d2; }
-.indicator.expense .indicator-label { color: #c62828; }
+.indicator.prev .indicator-label { color: #e65100; }
+.indicator.income .indicator-label { color: #1b5e20; }
+.indicator.add .indicator-label { color: #0d47a1; }
+.indicator.expense .indicator-label { color: #b71c1c; }
 
 .indicator-value {
   font-size: 1.3em;
   font-weight: 800;
   font-family: 'Courier New', monospace;
-  color: #1a1a1a;
 }
 .indicator.prev .indicator-value { color: #ed6c02; }
 .indicator.income .indicator-value { color: #2e7d32; }
 .indicator.add .indicator-value { color: #1976d2; }
 .indicator.expense .indicator-value { color: #c62828; }
 
-/* Итоговый блок (бывший Реактор) */
+/* Итоговый блок */
 .reactor-block { 
   background: #f0f7ff;
   border: 2px solid #1976d2; 
@@ -258,9 +272,12 @@ body {
   .indicator, .reactor-block, .details-section, .comment-box, .header { 
     page-break-inside: avoid; 
     box-shadow: none !important;
-    border: 1px solid #999999 !important;
   }
-  .indicator { border-top-width: 3px !important; }
+  /* На печати сохраняем цветные рамки индикаторов */
+  .indicator.prev { border: 2px solid #ed6c02 !important; }
+  .indicator.income { border: 2px solid #2e7d32 !important; }
+  .indicator.add { border: 2px solid #1976d2 !important; }
+  .indicator.expense { border: 2px solid #c62828 !important; }
   .detail-item:hover { background: transparent !important; margin: 0; padding: 12px 0; }
 }
 </style>
