@@ -9,34 +9,10 @@
 body { 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
   min-height: 100vh; 
-  background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%); 
-  color: #e8e8ff; 
+  background: #f0f2f5; 
+  color: #333333; 
   padding: 20px; 
-  overflow-x: hidden; 
   position: relative; 
-}
-body::before { 
-  content: ''; 
-  position: fixed; 
-  top: 0; left: 0; right: 0; bottom: 0; 
-  background-image: 
-    radial-gradient(2px 2px at 20% 30%, white, transparent),
-    radial-gradient(2px 2px at 60% 70%, white, transparent),
-    radial-gradient(1px 1px at 50% 50%, white, transparent),
-    radial-gradient(1px 1px at 80% 10%, white, transparent),
-    radial-gradient(2px 2px at 90% 60%, white, transparent),
-    radial-gradient(1px 1px at 33% 80%, white, transparent),
-    radial-gradient(1px 1px at 15% 90%, white, transparent),
-    radial-gradient(2px 2px at 70% 40%, white, transparent);
-  background-size: 200% 200%;
-  animation: stars 20s linear infinite;
-  opacity: 0.6;
-  pointer-events: none;
-  z-index: 0;
-}
-@keyframes stars { 
-  0% { background-position: 0% 0%; } 
-  100% { background-position: 200% 200%; } 
 }
 
 /* Экран входа */
@@ -50,64 +26,67 @@ body::before {
   z-index: 1; 
 }
 .login-box { 
-  background: rgba(255, 255, 255, 0.05); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
-  border: 1px solid rgba(255, 255, 255, 0.15); 
+  background: #ffffff; 
+  border: 2px solid #e0e0e0; 
+  border-top: 4px solid #1976d2; 
   padding: 40px 30px; 
-  border-radius: 24px; 
+  border-radius: 16px; 
   max-width: 400px; 
   width: 100%; 
   text-align: center; 
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); 
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); 
 }
 .login-box h2 { 
-  color: #00e5ff; 
+  color: #1a1a1a; 
   margin-bottom: 10px; 
-  text-shadow: 0 0 20px rgba(0, 229, 255, 0.5); 
+  font-weight: 700; 
 }
 .login-box p { 
-  color: rgba(255, 255, 255, 0.7); 
+  color: #666666; 
   margin-bottom: 20px; 
 }
 .login-box input { 
   width: 100%; 
   padding: 14px; 
-  background: rgba(255, 255, 255, 0.08); 
-  border: 1px solid rgba(255, 255, 255, 0.2); 
-  border-radius: 12px; 
-  color: white; 
+  background: #ffffff; 
+  border: 2px solid #e0e0e0; 
+  border-radius: 8px; 
+  color: #333333; 
   font-size: 1em; 
   margin-bottom: 12px; 
   text-align: center; 
+  transition: border-color 0.2s, box-shadow 0.2s; 
 }
-.login-box input::placeholder { color: rgba(255, 255, 255, 0.4); }
+.login-box input::placeholder { color: #999999; }
 .login-box input:focus { 
   outline: none; 
-  border-color: #00e5ff; 
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.3); 
+  border-color: #1976d2; 
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1); 
 }
 .login-box button { 
   width: 100%; 
   padding: 14px; 
-  background: linear-gradient(135deg, #00e5ff, #7b61ff); 
+  background: #1976d2; 
   color: white; 
   border: none; 
-  border-radius: 12px; 
+  border-radius: 8px; 
   font-size: 1em; 
-  font-weight: 700; 
+  font-weight: 600; 
   cursor: pointer; 
-  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.4); 
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2); 
+  transition: all 0.2s ease; 
 }
 .login-box button:hover { 
-  transform: translateY(-2px); 
-  box-shadow: 0 8px 32px rgba(0, 229, 255, 0.6); 
+  background: #1565c0; 
+  transform: translateY(-1px); 
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3); 
 }
 .login-error { 
-  color: #ff3d71; 
+  color: #c62828; 
   font-size: 0.9em; 
   margin-top: 10px; 
   display: none; 
+  font-weight: 600; 
 }
 
 /* Контейнер */
@@ -116,70 +95,44 @@ body::before {
   margin: 0 auto; 
   position: relative; 
   z-index: 1; 
+  background: #ffffff; 
+  border: 2px solid #d0d7de; 
+  border-radius: 20px; 
+  padding: 30px; 
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06); 
 }
 
 /* Шапка */
 .header { 
   text-align: center; 
-  padding: 40px 30px; 
-  background: rgba(255, 255, 255, 0.05); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  border-radius: 24px; 
+  padding: 30px 24px; 
+  background: #f8f9fa; 
+  border: 1px solid #e0e0e0; 
+  border-radius: 12px; 
   margin-bottom: 24px; 
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); 
-  position: relative; 
-  overflow: hidden; 
-}
-.header::before { 
-  content: ''; 
-  position: absolute; 
-  top: -50%; 
-  left: -50%; 
-  width: 200%; 
-  height: 200%; 
-  background: radial-gradient(circle, rgba(0, 229, 255, 0.1) 0%, transparent 70%); 
-  animation: glow 8s ease-in-out infinite; 
-}
-@keyframes glow { 
-  0%, 100% { transform: translate(0, 0); } 
-  50% { transform: translate(10%, 10%); } 
 }
 .header-icon { 
-  font-size: 3.5em; 
+  font-size: 3em; 
   margin-bottom: 12px; 
-  filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.5)); 
-  position: relative; 
-  z-index: 1; 
 }
 .header h1 { 
-  font-size: 2em; 
+  font-size: 1.8em; 
   font-weight: 800; 
-  background: linear-gradient(135deg, #00e5ff 0%, #ff9100 100%); 
-  -webkit-background-clip: text; 
-  -webkit-text-fill-color: transparent; 
-  background-clip: text; 
+  color: #1976d2; 
   margin-bottom: 8px; 
-  position: relative; 
-  z-index: 1; 
 }
 .header h2 { 
   font-size: 1.2em; 
-  color: rgba(255, 255, 255, 0.85); 
-  font-weight: 500; 
-  position: relative; 
-  z-index: 1; 
+  color: #333333; 
+  font-weight: 600; 
 }
 .header .subtitle { 
-  font-size: 0.9em; 
-  color: rgba(255, 255, 255, 0.6); 
+  font-size: 0.95em; 
+  color: #666666; 
   margin-top: 8px; 
-  position: relative; 
-  z-index: 1; 
 }
 
-/* Карточки-показатели */
+/* Карточки-показатели — каждая в своей цветной рамке */
 .stats-grid { 
   display: grid; 
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
@@ -187,79 +140,73 @@ body::before {
   margin-bottom: 24px; 
 }
 .stat-card { 
-  background: rgba(255, 255, 255, 0.05); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  border-radius: 20px; 
+  background: #ffffff; 
+  border: 2px solid #e0e0e0; 
+  border-radius: 12px; 
   padding: 24px 20px; 
   text-align: center; 
-  position: relative; 
-  overflow: hidden; 
-  transition: all 0.3s ease; 
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
+  transition: transform 0.2s ease, box-shadow 0.2s ease; 
 }
 .stat-card:hover { 
-  transform: translateY(-4px); 
-  border-color: rgba(0, 229, 255, 0.4); 
+  transform: translateY(-3px); 
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1); 
 }
-.stat-card::before { 
-  content: ''; 
-  position: absolute; 
-  top: 0; 
-  left: 0; 
-  right: 0; 
-  height: 3px; 
-  background: linear-gradient(90deg, transparent, var(--accent-color, #00e5ff), transparent); 
-}
-.stat-card.green { --accent-color: #00e5ff; }
-.stat-card.orange { --accent-color: #ff9100; }
-.stat-card.red { --accent-color: #ff3d71; }
-.stat-card.blue { --accent-color: #7b61ff; }
+
+.stat-card.green  { border-color: #2e7d32; background: #e8f5e9; }
+.stat-card.blue   { border-color: #1976d2; background: #e3f2fd; }
+.stat-card.red    { border-color: #c62828; background: #ffebee; }
+.stat-card.orange { border-color: #ed6c02; background: #fff3e0; }
+
 .stat-icon { 
   font-size: 2em; 
   margin-bottom: 8px; 
-  filter: drop-shadow(0 0 10px var(--accent-color)); 
 }
 .stat-label { 
   font-size: 0.75em; 
   text-transform: uppercase; 
-  letter-spacing: 1.5px; 
-  color: rgba(255, 255, 255, 0.6); 
+  letter-spacing: 0.5px; 
   margin-bottom: 8px; 
-  font-weight: 600; 
+  font-weight: 700; 
 }
+.stat-card.green .stat-label  { color: #1b5e20; }
+.stat-card.blue .stat-label   { color: #0d47a1; }
+.stat-card.red .stat-label    { color: #b71c1c; }
+.stat-card.orange .stat-label { color: #e65100; }
+
 .stat-value { 
-  font-size: 1.8em; 
+  font-size: 1.7em; 
   font-weight: 800; 
-  color: var(--accent-color, #fff); 
-  text-shadow: 0 0 20px var(--accent-color); 
+  font-family: 'Courier New', monospace; 
 }
+.stat-card.green .stat-value  { color: #2e7d32; }
+.stat-card.blue .stat-value   { color: #1976d2; }
+.stat-card.red .stat-value    { color: #c62828; }
+.stat-card.orange .stat-value { color: #ed6c02; }
+
 .stat-sub { 
   font-size: 0.8em; 
-  color: rgba(255, 255, 255, 0.5); 
+  color: #666666; 
   margin-top: 6px; 
 }
 
 /* Шкала прогресса */
 .progress-section { 
-  background: rgba(255, 255, 255, 0.05); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  border-radius: 20px; 
+  background: #ffffff; 
+  border: 2px solid #e0e0e0; 
+  border-radius: 12px; 
   padding: 24px; 
   margin-bottom: 24px; 
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
 }
 .progress-title { 
-  font-size: 1.2em; 
+  font-size: 1.1em; 
   font-weight: 700; 
   margin-bottom: 16px; 
   display: flex; 
   align-items: center; 
   gap: 10px; 
-  color: #fff; 
+  color: #1a1a1a; 
+  padding-bottom: 10px; 
+  border-bottom: 2px solid #f0f2f5; 
 }
 .progress-info { 
   display: flex; 
@@ -269,112 +216,94 @@ body::before {
   flex-wrap: wrap; 
   gap: 8px; 
 }
-.progress-collected { color: #00e5ff; font-weight: 700; }
-.progress-remaining { color: #ff9100; font-weight: 700; }
+.progress-collected { color: #2e7d32; font-weight: 700; }
+.progress-remaining { color: #ed6c02; font-weight: 700; }
 .progress-bar { 
   width: 100%; 
   height: 24px; 
-  background: rgba(255, 255, 255, 0.1); 
+  background: #f0f2f5; 
+  border: 1px solid #d0d7de; 
   border-radius: 12px; 
   overflow: hidden; 
-  position: relative; 
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3); 
 }
 .progress-fill { 
   height: 100%; 
-  background: linear-gradient(90deg, #00e5ff 0%, #7b61ff 50%, #ff9100 100%); 
+  background: linear-gradient(90deg, #1976d2 0%, #42a5f5 100%); 
   border-radius: 12px; 
-  position: relative; 
   transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); 
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.6); 
-  animation: progress-shine 2s ease-in-out infinite; 
-}
-@keyframes progress-shine { 
-  0%, 100% { box-shadow: 0 0 20px rgba(0, 229, 255, 0.6); } 
-  50% { box-shadow: 0 0 30px rgba(0, 229, 255, 0.9), 0 0 40px rgba(123, 97, 255, 0.5); } 
-}
-.progress-fill::after { 
-  content: ''; 
-  position: absolute; 
-  top: 0; left: 0; right: 0; bottom: 0; 
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); 
-  animation: shine 2s linear infinite; 
-}
-@keyframes shine { 
-  0% { transform: translateX(-100%); } 
-  100% { transform: translateX(100%); } 
 }
 .progress-percent { 
   text-align: center; 
   margin-top: 10px; 
   font-size: 1.3em; 
   font-weight: 800; 
-  background: linear-gradient(135deg, #00e5ff, #ff9100); 
-  -webkit-background-clip: text; 
-  -webkit-text-fill-color: transparent; 
-  background-clip: text; 
+  color: #1976d2; 
+  font-family: 'Courier New', monospace; 
 }
 
 /* Секции */
 .section { 
-  background: rgba(255, 255, 255, 0.05); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  border-radius: 20px; 
+  background: #ffffff; 
+  border: 2px solid #e0e0e0; 
+  border-radius: 12px; 
   padding: 24px; 
   margin-bottom: 24px; 
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
 }
 .section-title { 
-  font-size: 1.3em; 
+  font-size: 1.2em; 
   font-weight: 700; 
   margin-bottom: 16px; 
   display: flex; 
   align-items: center; 
   gap: 10px; 
   padding-bottom: 12px; 
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1); 
-  color: #fff; 
+  border-bottom: 2px solid #f0f2f5; 
+  color: #1a1a1a; 
 }
 .section-title .icon { 
-  font-size: 1.2em; 
-  filter: drop-shadow(0 0 10px rgba(0, 229, 255, 0.5)); 
+  font-size: 1.1em; 
 }
 
-/* Таблицы */
+/* Таблицы — выделенные, с рамкой и зеброй */
+.table-wrapper { 
+  border: 2px solid #d0d7de; 
+  border-radius: 12px; 
+  overflow: hidden; 
+  margin-top: 12px; 
+}
 table { 
   width: 100%; 
   border-collapse: collapse; 
-  margin-top: 12px; 
 }
 th { 
-  background: rgba(0, 229, 255, 0.1); 
-  color: #00e5ff; 
+  background: #ffebee; 
+  color: #b71c1c; 
   padding: 12px; 
   text-align: left; 
   font-size: 0.8em; 
   text-transform: uppercase; 
-  letter-spacing: 1px; 
+  letter-spacing: 0.5px; 
   font-weight: 700; 
-  border-bottom: 1px solid rgba(0, 229, 255, 0.2); 
+  border-bottom: 2px solid #ffcdd2; 
 }
 td { 
   padding: 12px; 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+  border-bottom: 1px solid #f0f0f0; 
   font-size: 0.95em; 
+  color: #333333; 
 }
-tr:hover { background: rgba(255, 255, 255, 0.03); }
-.amount { font-weight: 700; text-align: right; color: #fff; }
+tbody tr:nth-child(even) { background: #fafafa; }
+tbody tr:hover { background: #fff5f5; }
+.amount { font-weight: 700; text-align: right; font-family: 'Courier New', monospace; color: #1a1a1a; }
 .totals-row { 
-  background: rgba(0, 229, 255, 0.1) !important; 
+  background: #ffebee !important; 
   font-weight: 700; 
-  border-top: 2px solid rgba(0, 229, 255, 0.3); 
+  border-top: 2px solid #c62828; 
 }
-.totals-row td { padding: 16px 12px; color: #00e5ff; }
-.expense-amount { color: #ff3d71 !important; }
+.totals-row td { padding: 14px 12px; border-bottom: none; }
+.expense-amount { color: #c62828 !important; }
 
-/* Списки */
+/* Списки участников */
 .lists-grid { 
   display: grid; 
   grid-template-columns: 1fr 1fr; 
@@ -383,130 +312,136 @@ tr:hover { background: rgba(255, 255, 255, 0.03); }
 }
 @media (max-width: 768px) { .lists-grid { grid-template-columns: 1fr; } }
 .list-card { 
-  background: rgba(255, 255, 255, 0.05); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
-  border-radius: 20px; 
+  background: #ffffff; 
+  border: 2px solid #e0e0e0; 
+  border-radius: 12px; 
   padding: 20px; 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); 
 }
 .list-card.paid { 
-  border-left: 4px solid #00e5ff; 
-  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.1); 
+  border-color: #a5d6a7; 
+  border-left: 4px solid #2e7d32; 
+  background: #f4fbf4; 
 }
 .list-card.unpaid { 
-  border-left: 4px solid #ff9100; 
-  box-shadow: 0 4px 20px rgba(255, 145, 0, 0.1); 
+  border-color: #ffcc80; 
+  border-left: 4px solid #ed6c02; 
+  background: #fffaf3; 
 }
 .list-title { 
-  font-size: 1.1em; 
+  font-size: 1.05em; 
   font-weight: 700; 
   margin-bottom: 14px; 
   display: flex; 
   align-items: center; 
   gap: 8px; 
+  padding-bottom: 10px; 
+  border-bottom: 1px solid #f0f0f0; 
 }
-.list-card.paid .list-title { color: #00e5ff; }
-.list-card.unpaid .list-title { color: #ff9100; }
+.list-card.paid .list-title { color: #2e7d32; }
+.list-card.unpaid .list-title { color: #ed6c02; }
 .list-count { 
-  background: rgba(255, 255, 255, 0.1); 
+  background: #f0f2f5; 
+  color: #555555; 
   padding: 2px 10px; 
   border-radius: 10px; 
   font-size: 0.85em; 
+  font-weight: 600; 
 }
 .person { 
   padding: 10px 0; 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+  border-bottom: 1px solid #f0f0f0; 
   display: flex; 
   justify-content: space-between; 
   align-items: center; 
   font-size: 0.95em; 
 }
 .person:last-child { border-bottom: none; }
-.person-name { font-weight: 500; color: #e8e8ff; }
+.person-name { font-weight: 500; color: #333333; }
 .person-amount { 
   font-weight: 700; 
-  color: rgba(255, 255, 255, 0.7); 
+  color: #555555; 
   font-family: 'Courier New', monospace; 
 }
 
 /* Комментарий */
 .comment-box { 
-  background: linear-gradient(135deg, rgba(255, 145, 0, 0.1), rgba(123, 97, 255, 0.1)); 
-  border: 1px solid rgba(255, 145, 0, 0.3); 
-  border-radius: 16px; 
+  background: #fff8e1; 
+  border: 2px solid #ffe082; 
+  border-radius: 12px; 
   padding: 20px; 
   margin-bottom: 24px; 
   position: relative; 
 }
 .comment-box::before { 
-  content: '💬'; 
+  content: '💬 Примечание'; 
   position: absolute; 
-  top: -15px; 
-  left: 20px; 
-  font-size: 1.5em; 
-  background: #1a1a3e; 
+  top: -12px; 
+  left: 15px; 
+  font-size: 0.8em; 
+  font-weight: 700; 
+  color: #f57f17; 
+  background: #ffffff; 
   padding: 0 8px; 
-  border-radius: 50%; 
 }
 .comment-text { 
-  color: rgba(255, 255, 255, 0.85); 
+  color: #5d4037; 
   line-height: 1.6; 
   font-style: italic; 
-  padding-left: 8px; 
 }
 
 /* Футер */
 .footer { 
   text-align: center; 
-  padding: 24px; 
-  color: rgba(255, 255, 255, 0.5); 
+  padding: 20px; 
+  color: #666666; 
   font-size: 0.85em; 
   margin-top: 20px; 
+  border-top: 2px solid #e0e0e0; 
 }
-.footer strong { color: #00e5ff; }
+.footer strong { color: #1976d2; }
 
 /* Подсказка о печати */
 .print-hint {
-  background: rgba(255, 145, 0, 0.15);
-  border: 1px solid rgba(255, 145, 0, 0.4);
-  border-radius: 12px;
+  background: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 10px;
   padding: 12px 16px;
   margin-bottom: 20px;
   font-size: 0.88em;
-  color: rgba(255, 255, 255, 0.85);
+  color: #0d47a1;
   display: flex;
   align-items: center;
   gap: 10px;
 }
-.print-hint .hint-icon { font-size: 1.5em; }
+.print-hint .hint-icon { font-size: 1.4em; }
 
 /* Кнопка печати */
 .print-button { 
   position: fixed; 
   top: 20px; 
   right: 20px; 
-  background: linear-gradient(135deg, #00e5ff, #7b61ff); 
+  background: #1976d2; 
   color: white; 
   border: none; 
   padding: 12px 24px; 
-  border-radius: 12px; 
+  border-radius: 8px; 
   font-size: 0.95em; 
-  font-weight: 700; 
+  font-weight: 600; 
   cursor: pointer; 
-  box-shadow: 0 4px 20px rgba(0, 229, 255, 0.4); 
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3); 
   z-index: 1000; 
-  transition: all 0.3s ease; 
+  transition: all 0.2s ease; 
 }
 .print-button:hover { 
-  transform: translateY(-2px); 
-  box-shadow: 0 8px 32px rgba(0, 229, 255, 0.6); 
+  background: #1565c0; 
+  transform: translateY(-1px); 
+  box-shadow: 0 6px 16px rgba(25, 118, 210, 0.4); 
 }
 
 /* Адаптив */
 @media (max-width: 768px) { 
   body { padding: 12px; } 
+  .container { padding: 16px; }
   .header { padding: 24px 16px; } 
   .header h1 { font-size: 1.5em; } 
   .header h2 { font-size: 1em; } 
@@ -520,52 +455,38 @@ tr:hover { background: rgba(255, 255, 255, 0.03); }
   } 
 }
 
-/* ============================================ */
-/* ПЕЧАТЬ — СОХРАНЕНИЕ ТЁМНОГО КОСМИЧЕСКОГО ФОНА */
-/* ============================================ */
+/* Печать — светлый деловой стиль */
 @media print {
-  /* Принудительно сохраняем все цвета и фоны для ВСЕХ элементов */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     color-adjust: exact !important;
   }
-  
   body { 
-    background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%) !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    padding: 10mm;
+    background: #ffffff !important; 
+    padding: 10mm; 
   }
-  
-  /* Звёзды не печатаются */
-  body::before { display: none; }
-  
-  /* Все карточки и секции сохраняют фон */
+  .container { 
+    max-width: 100%; 
+    border: 2px solid #000000 !important; 
+    box-shadow: none !important; 
+    padding: 10mm; 
+  }
+  .print-button { display: none; }
+  .print-hint { display: none; }
   .stat-card, 
   .section, 
   .list-card, 
   .progress-section, 
   .comment-box, 
-  .header,
-  .login-box,
-  .print-hint {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    page-break-inside: avoid;
+  .header {
+    page-break-inside: avoid; 
+    box-shadow: none !important; 
   }
-  
-  .print-button { display: none; }
-  .print-hint { display: none; }
-  
-  /* Предотвращаем разрыв блоков между страницами */
   .lists-grid { page-break-inside: avoid; }
-  .list-card { page-break-inside: avoid; }
-  .stats-grid { page-break-inside: avoid; }
   table { page-break-inside: auto; }
   tr { page-break-inside: avoid; }
+  tbody tr:nth-child(even) { background: #f5f5f5 !important; }
 }
 </style>
 </head>
@@ -574,7 +495,7 @@ tr:hover { background: rgba(255, 255, 255, 0.03); }
 <!-- ЭКРАН ВХОДА -->
 <div id="loginView" class="login-screen">
     <div class="login-box">
-        <div style="font-size:3em; margin-bottom:12px; filter: drop-shadow(0 0 20px rgba(0, 229, 255, 0.5));">🌌</div>
+        <div style="font-size:3em; margin-bottom:12px;">📊</div>
         <h2>Финансовая сводка</h2>
         <p>Введите пароль для доступа</p>
         <input type="password" id="pwdInput" placeholder="Пароль" onkeypress="if(event.key==='Enter')tryLogin()">
@@ -588,7 +509,7 @@ tr:hover { background: rgba(255, 255, 255, 0.03); }
     <button class="print-button" onclick="window.print()">🖨️ Распечатать / PDF</button>
     <div class="container">
         <div class="header">
-            <div class="header-icon">🌌</div>
+            <div class="header-icon">💰</div>
             <h1 id="reportTitle">Финансовая сводка</h1>
             <h2 id="monthName">—</h2>
             <div class="subtitle" id="groupInfo"></div>
@@ -596,7 +517,7 @@ tr:hover { background: rgba(255, 255, 255, 0.03); }
         
         <div class="print-hint">
             <span class="hint-icon">💡</span>
-            <span>При сохранении в PDF тёмный космический фон сохранится автоматически. Если фон белый — включите в настройках печати опцию <b>«Фоновые изображения»</b> (Background graphics).</span>
+            <span>Документ оформлен в светлом стиле. Чтобы при печати сохранились цветные рамки и подсветка блоков, включите опцию <b>«Фоновые изображения»</b> (Background graphics).</span>
         </div>
         
         <div id="content"></div>
@@ -648,7 +569,7 @@ function renderReport() {
     const r = reportData;
     const g = r.groupInfo || {};
     const m = r.monthData;
-    if (!m) { document.getElementById('content').innerHTML = '<div style="text-align:center; padding:40px; color:#ff3d71;">❌ Нет данных месяца</div>'; return; }
+    if (!m) { document.getElementById('content').innerHTML = '<div style="text-align:center; padding:40px; color:#c62828;">❌ Нет данных месяца</div>'; return; }
     document.getElementById('reportTitle').textContent = r.title || 'Финансовая сводка';
     document.getElementById('monthName').textContent = m.name || '—';
     document.getElementById('groupInfo').textContent = 'Группа №' + g.number + ' «' + g.name + '»';
@@ -690,9 +611,9 @@ function renderReport() {
     // Таблица расходов месяца
     html += '<div class="section"><div class="section-title"><span class="icon">💸</span><span>Расходы месяца</span></div>';
     if (expenses.length === 0) { 
-        html += '<div style="text-align:center; padding:30px; color:rgba(255,255,255,0.5);">Расходов в этом месяце не было</div>'; 
+        html += '<div style="text-align:center; padding:30px; color:#666666;">Расходов в этом месяце не было</div>'; 
     } else {
-        html += '<div style="overflow-x:auto;"><table><thead><tr><th style="width:40px;">№</th><th>На что потрачено</th><th style="width:130px; text-align:right;">Сумма</th></tr></thead><tbody>';
+        html += '<div class="table-wrapper"><table><thead><tr><th style="width:40px;">№</th><th>На что потрачено</th><th style="width:130px; text-align:right;">Сумма</th></tr></thead><tbody>';
         expenses.forEach((e, i) => { 
             html += '<tr><td>' + (i + 1) + '</td><td style="font-weight:500;">' + escapeHtml(e.description || '—') + '</td><td class="amount expense-amount">- ' + (e.amount ? formatMoney(e.amount) + ' ₽' : '—') + '</td></tr>'; 
         });
@@ -708,7 +629,7 @@ function renderReport() {
     // Участвовали в сборе
     html += '<div class="list-card paid"><div class="list-title">✅ Участвовали в сборе <span class="list-count">' + paidList.length + '</span></div>';
     if (paidList.length === 0) {
-        html += '<div style="color:rgba(255,255,255,0.5); font-size:0.9em; text-align:center; padding:10px;">Пока никто не участвовал</div>';
+        html += '<div style="color:#666666; font-size:0.9em; text-align:center; padding:10px;">Пока никто не участвовал</div>';
     } else {
         paidList.forEach(s => { 
             html += '<div class="person"><span class="person-name">✔ ' + escapeHtml(s.name) + '</span><span class="person-amount">' + (s.amount ? formatMoney(s.amount) + ' ₽' : '') + '</span></div>'; 
@@ -719,7 +640,7 @@ function renderReport() {
     // Не участвовали в сборе
     html += '<div class="list-card unpaid"><div class="list-title">⏳ Не участвовали в сборе <span class="list-count">' + unpaidList.length + '</span></div>';
     if (unpaidList.length === 0) {
-        html += '<div style="color:rgba(255,255,255,0.5); font-size:0.9em; text-align:center; padding:10px;">🎉 Все участвовали! Спасибо!</div>';
+        html += '<div style="color:#2e7d32; font-size:0.9em; text-align:center; padding:10px;">🎉 Все участвовали! Спасибо!</div>';
     } else {
         unpaidList.forEach(s => { 
             html += '<div class="person"><span class="person-name">⏳ ' + escapeHtml(s.name) + '</span><span class="person-amount">' + (s.amount ? formatMoney(s.amount) + ' ₽' : '') + '</span></div>'; 
