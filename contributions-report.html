@@ -23,7 +23,7 @@ body {
 .login-box { 
   background: #ffffff; 
   border: 2px solid #e0e0e0; 
-  border-top: 4px solid #1976d2; /* Акцентная рамка сверху */
+  border-top: 4px solid #1976d2;
   padding: 40px 30px; 
   border-radius: 16px; 
   max-width: 400px; 
@@ -57,7 +57,7 @@ body {
   position: relative; 
   z-index: 1; 
   background: #ffffff;
-  border: 2px solid #d0d7de; /* Чёткая рамка вокруг всего отчёта */
+  border: 2px solid #d0d7de;
   border-radius: 20px;
   padding: 30px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
@@ -160,7 +160,7 @@ body {
 }
 table { width: 100%; border-collapse: collapse; }
 th { 
-  background: #f0f7ff; /* Выделенный фон шапки */
+  background: #f0f7ff;
   color: #1565c0; 
   padding: 14px 12px; 
   text-align: left; 
@@ -177,9 +177,13 @@ td {
   color: #333333; 
 }
 tr:last-child td { border-bottom: none; }
-tr:hover { background: #f9fbff; }
 
-/* Итоговая строка таблицы */
+/* ✨ ЛЁГКОЕ ЧЕРЕДОВАНИЕ СТРОК (zebra) */
+.table-wrapper tbody tr:nth-child(even) { background: #f6f9fd; }
+.table-wrapper tbody tr:hover { background: #eaf3fe; }
+.table-wrapper tbody tr { transition: background 0.15s ease; }
+
+/* Итоговая строка таблицы — своя подсветка, не перекрывается чётностью */
 tr.total-row {
   background: #f0f7ff !important;
   font-weight: 700;
@@ -271,6 +275,8 @@ tr.total-row td {
   .table-wrapper { border: 1px solid #000000 !important; }
   th { background: #e0e0e0 !important; color: #000000 !important; border-bottom: 1px solid #000000 !important; }
   td { border-bottom: 1px solid #cccccc !important; color: #000000 !important; }
+  /* На печати чередование убираем, чтобы не расходовала краску */
+  .table-wrapper tbody tr:nth-child(even) { background: transparent !important; }
   tr.total-row { background: #f0f0f0 !important; border-top: 2px solid #000000 !important; }
   tr.total-row td { color: #000000 !important; }
 }
