@@ -9,7 +9,7 @@
 body { 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
   min-height: 100vh; 
-  background: #f5f7fa; 
+  background: #f0f2f5; 
   color: #333333; 
   padding: 20px; 
   position: relative; 
@@ -22,19 +22,20 @@ body {
 }
 .login-box { 
   background: #ffffff; 
-  border: 1px solid #e0e0e0; 
+  border: 2px solid #e0e0e0; 
+  border-top: 4px solid #1976d2; /* Акцентная рамка сверху */
   padding: 40px 30px; 
   border-radius: 16px; 
   max-width: 400px; 
   width: 100%; 
   text-align: center; 
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06); 
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08); 
 }
 .login-box h2 { color: #1a1a1a; margin-bottom: 10px; font-weight: 700; }
 .login-box p { color: #666666; margin-bottom: 20px; }
 .login-box input { 
   width: 100%; padding: 14px; background: #ffffff; 
-  border: 1px solid #d0d0d0; border-radius: 8px; 
+  border: 2px solid #e0e0e0; border-radius: 8px; 
   color: #333333; font-size: 1em; margin-bottom: 12px; text-align: center; 
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -47,18 +48,27 @@ body {
   transition: all 0.2s ease;
 }
 .login-box button:hover { background: #1565c0; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3); }
-.login-error { color: #c62828; font-size: 0.9em; margin-top: 10px; display: none; }
+.login-error { color: #c62828; font-size: 0.9em; margin-top: 10px; display: none; font-weight: 600; }
 
-/* Основной контейнер */
-.container { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+/* Основной контейнер с общей рамкой */
+.container { 
+  max-width: 800px; 
+  margin: 0 auto; 
+  position: relative; 
+  z-index: 1; 
+  background: #ffffff;
+  border: 2px solid #d0d7de; /* Чёткая рамка вокруг всего отчёта */
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
 
 /* Шапка */
 .header { 
-  text-align: center; padding: 30px 20px; 
-  background: #ffffff; 
+  text-align: center; padding: 24px 20px; 
+  background: #f8f9fa; 
   border: 1px solid #e0e0e0; 
-  border-radius: 16px; margin-bottom: 24px; 
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border-radius: 12px; margin-bottom: 24px; 
 }
 .header-icon { font-size: 3em; margin-bottom: 10px; }
 .header h1 { 
@@ -69,7 +79,7 @@ body {
 .header h2 { font-size: 1.2em; color: #333333; font-weight: 600; margin-bottom: 4px; }
 .header .subtitle { font-size: 0.9em; color: #666666; font-weight: 600; letter-spacing: 0.5px; }
 
-/* Карточки-показатели (сетка 2x2 на мобильных, 4 в ряд на ПК) */
+/* Карточки-показатели */
 .summary-grid { 
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; 
 }
@@ -77,18 +87,17 @@ body {
 
 .summary-card { 
   background: #ffffff; 
-  border: 1px solid #e0e0e0; 
+  border: 2px solid #e0e0e0; 
   border-radius: 12px; padding: 16px 12px; text-align: center; position: relative; 
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); 
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .summary-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
 .summary-card::before { content: '◈'; position: absolute; top: 8px; left: 10px; font-size: 0.7em; opacity: 0.3; color: #999999; }
 
-.summary-card.green { border-top: 3px solid #2e7d32; }
-.summary-card.red { border-top: 3px solid #c62828; }
-.summary-card.orange { border-top: 3px solid #ed6c02; }
-.summary-card.blue { border-top: 3px solid #1976d2; }
+.summary-card.green { border-top: 4px solid #2e7d32; }
+.summary-card.red { border-top: 4px solid #c62828; }
+.summary-card.orange { border-top: 4px solid #ed6c02; }
+.summary-card.blue { border-top: 4px solid #1976d2; }
 
 .summary-label { font-size: 0.65em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; opacity: 0.8; font-weight: 600; color: #666666; }
 .summary-card.green .summary-label { color: #2e7d32; }
@@ -106,9 +115,9 @@ body {
 .progress-container {
   display: flex; flex-direction: column; align-items: center;
   padding: 24px; background: #ffffff;
-  border-radius: 16px; border: 1px solid #e0e0e0;
+  border: 2px solid #e0e0e0;
+  border-radius: 16px; 
   margin-bottom: 24px; position: relative; 
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 .progress-ring { position: relative; width: 160px; height: 160px; z-index: 1; }
 .progress-ring svg { transform: rotate(-90deg); }
@@ -130,53 +139,85 @@ body {
 }
 .progress-label { font-size: 0.75em; color: #666666; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
 
-/* Секции и Таблица */
+/* Секции */
 .section { 
   background: #ffffff; 
-  border: 1px solid #e0e0e0; 
+  border: 2px solid #e0e0e0; 
   border-radius: 16px; padding: 20px; margin-bottom: 24px; 
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 .section-title { 
   font-size: 1.1em; font-weight: 700; margin-bottom: 16px; 
   display: flex; align-items: center; gap: 8px; 
-  padding-bottom: 10px; border-bottom: 1px solid #e0e0e0; color: #1a1a1a;
+  padding-bottom: 10px; border-bottom: 2px solid #e0e0e0; color: #1a1a1a;
 }
 
-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-th { 
-  background: #f5f7fa; color: #333333; padding: 12px; 
-  text-align: left; font-size: 0.75em; text-transform: uppercase; 
-  letter-spacing: 0.5px; font-weight: 700; border-bottom: 2px solid #e0e0e0;
+/* Выделенная таблица */
+.table-wrapper {
+  border: 2px solid #d0d7de;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 10px;
 }
-td { padding: 12px; border-bottom: 1px solid #f0f0f0; font-size: 0.9em; color: #333333; }
-tr:hover { background: #f9fafb; }
+table { width: 100%; border-collapse: collapse; }
+th { 
+  background: #f0f7ff; /* Выделенный фон шапки */
+  color: #1565c0; 
+  padding: 14px 12px; 
+  text-align: left; 
+  font-size: 0.8em; 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+  font-weight: 700; 
+  border-bottom: 2px solid #bbdefb;
+}
+td { 
+  padding: 12px; 
+  border-bottom: 1px solid #eeeeee; 
+  font-size: 0.9em; 
+  color: #333333; 
+}
+tr:last-child td { border-bottom: none; }
+tr:hover { background: #f9fbff; }
+
+/* Итоговая строка таблицы */
+tr.total-row {
+  background: #f0f7ff !important;
+  font-weight: 700;
+  border-top: 2px solid #1976d2;
+}
+tr.total-row td {
+  border-bottom: none;
+  padding: 14px 12px;
+  color: #1565c0;
+}
 
 .status-paid { 
   color: #2e7d32; font-weight: 600; background: #e8f5e9; 
   padding: 4px 10px; border-radius: 6px; display: inline-block; font-size: 0.8em; 
+  border: 1px solid #c8e6c9;
 }
 .status-unpaid { 
   color: #ed6c02; font-weight: 600; background: #fff3e0; 
   padding: 4px 10px; border-radius: 6px; display: inline-block; font-size: 0.8em; 
+  border: 1px solid #ffe0b2;
 }
 .amount { font-weight: 600; text-align: right; font-family: 'Courier New', monospace; color: #1a1a1a; }
 
 /* Комментарий */
 .comment-box { 
-  background: #fff8e1; border: 1px solid #ffe082; 
+  background: #fff8e1; border: 2px solid #ffe082; 
   border-radius: 12px; padding: 16px; margin-bottom: 24px; position: relative; 
 }
 .comment-box::before { 
-  content: '📡'; position: absolute; top: -12px; left: 15px; 
-  font-size: 1.2em; background: #ffffff; padding: 0 6px; border-radius: 50%; 
+  content: '📡'; position: absolute; top: -14px; left: 15px; 
+  font-size: 1.2em; background: #ffffff; padding: 0 6px; border-radius: 50%; border: 2px solid #ffe082;
 }
 .comment-text { color: #5d4037; line-height: 1.5; font-style: italic; padding-left: 8px; }
 
 /* Футер */
 .footer { 
   text-align: center; padding: 20px; color: #666666; 
-  font-size: 0.8em; margin-top: 20px; border-top: 1px solid #e0e0e0; letter-spacing: 0.5px;
+  font-size: 0.8em; margin-top: 20px; border-top: 2px solid #e0e0e0; letter-spacing: 0.5px;
 }
 .footer strong { color: #1976d2; }
 
@@ -184,15 +225,16 @@ tr:hover { background: #f9fafb; }
 .print-button { 
   position: fixed; top: 20px; right: 20px; 
   background: #1976d2; color: white; 
-  border: none; padding: 12px 24px; border-radius: 8px; font-size: 0.9em; 
-  font-weight: 600; cursor: pointer; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); 
+  border: 2px solid #1565c0; padding: 12px 24px; border-radius: 8px; font-size: 0.9em; 
+  font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3); 
   z-index: 1000; transition: all 0.2s ease; 
 }
-.print-button:hover { background: #1565c0; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+.print-button:hover { background: #1565c0; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(25, 118, 210, 0.4); }
 
 /* Адаптив */
 @media (max-width: 600px) { 
   body { padding: 12px; } 
+  .container { padding: 16px; }
   .header { padding: 20px 16px; } 
   .header h1 { font-size: 1.4em; } 
   .print-button { top: 10px; right: 10px; padding: 10px 16px; font-size: 0.8em; } 
@@ -201,7 +243,7 @@ tr:hover { background: #f9fafb; }
   .progress-percent { font-size: 1.8em; }
 }
 
-/* ПЕЧАТЬ — Оптимизация для белого фона */
+/* ПЕЧАТЬ */
 @media print {
   * { 
     -webkit-print-color-adjust: exact !important; 
@@ -213,16 +255,24 @@ tr:hover { background: #f9fafb; }
     color: #000000 !important;
     padding: 10mm; 
   }
-  .container { max-width: 100%; }
+  .container { 
+    max-width: 100%; 
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+    padding: 10mm;
+  }
   .print-button { display: none; }
   .summary-card, .section, .progress-container, .comment-box, .header { 
     page-break-inside: avoid; 
     box-shadow: none !important;
-    border: 1px solid #cccccc !important;
+    border: 1px solid #999999 !important;
   }
   .summary-card { border-top-width: 3px !important; }
-  table { border: 1px solid #cccccc; }
-  th, td { border: 1px solid #cccccc; }
+  .table-wrapper { border: 1px solid #000000 !important; }
+  th { background: #e0e0e0 !important; color: #000000 !important; border-bottom: 1px solid #000000 !important; }
+  td { border-bottom: 1px solid #cccccc !important; color: #000000 !important; }
+  tr.total-row { background: #f0f0f0 !important; border-top: 2px solid #000000 !important; }
+  tr.total-row td { color: #000000 !important; }
 }
 </style>
 </head>
@@ -338,7 +388,7 @@ function renderReport() {
         html += '<div class="comment-box"><div class="comment-text">' + escapeHtml(r.comment) + '</div></div>';
     }
     
-    // 4 карточки-показателя (сетка 2x2 на мобильных)
+    // 4 карточки-показателя
     html += '<div class="summary-grid">';
     html += '<div class="summary-card green"><div class="summary-label">◈ Участвовали</div><div class="summary-value">' + paidCount + '</div></div>';
     html += '<div class="summary-card red"><div class="summary-label">◈ Не участвовали</div><div class="summary-value">' + unpaidCount + '</div></div>';
@@ -346,7 +396,7 @@ function renderReport() {
     html += '<div class="summary-card blue"><div class="summary-label">◈ Осталось</div><div class="summary-value">' + formatMoney(remaining) + ' ₽</div></div>';
     html += '</div>';
     
-    // Прогресс (только процент, без дублирования сумм)
+    // Прогресс
     html += '<div class="progress-container">';
     html += '  <div class="progress-ring">';
     html += '    <svg width="160" height="160">';
@@ -371,7 +421,7 @@ function renderReport() {
     if (students.length === 0) {
         html += '<div style="text-align:center; color:#666666; padding:30px;">Нет данных</div>';
     } else {
-        html += '<div style="overflow-x:auto;"><table><thead><tr><th style="width:40px;">№</th><th>ФИО ребёнка</th><th style="width:110px; text-align:right;">Сумма</th><th style="width:120px; text-align:center;">Статус</th></tr></thead><tbody>';
+        html += '<div class="table-wrapper"><table><thead><tr><th style="width:40px;">№</th><th>ФИО ребёнка</th><th style="width:110px; text-align:right;">Сумма</th><th style="width:120px; text-align:center;">Статус</th></tr></thead><tbody>';
         students.forEach((s, i) => {
             const statusText = s.paid ? '✔ Участвовал' : '⏳ Ожидается';
             const statusClass = s.paid ? 'status-paid' : 'status-unpaid';
@@ -382,9 +432,9 @@ function renderReport() {
             html += '<td style="text-align:center;"><span class="' + statusClass + '">' + statusText + '</span></td>';
             html += '</tr>';
         });
-        html += '<tr style="background:#f5f7fa; font-weight:700; border-top:2px solid #e0e0e0;">';
+        html += '<tr class="total-row">';
         html += '<td colspan="2">ИТОГО: участвовали ' + paidCount + ' из ' + students.length + '</td>';
-        html += '<td class="amount" style="color:#1976d2;">' + formatMoney(totalPaid) + ' ₽</td>';
+        html += '<td class="amount">' + formatMoney(totalPaid) + ' ₽</td>';
         html += '<td style="text-align:center;"><small style="color:#666666;">из ' + formatMoney(totalExpected) + ' ₽</small></td></tr>';
         html += '</tbody></table></div>';
     }
