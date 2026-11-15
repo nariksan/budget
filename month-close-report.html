@@ -9,66 +9,44 @@
 body { 
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
   min-height: 100vh; 
-  background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%); 
-  color: #e8e8ff; 
+  background: #f0f2f5; 
+  color: #333333; 
   padding: 20px; 
-  overflow-x: hidden; 
   position: relative; 
 }
-
-/* Звёздный фон */
-body::before { 
-  content: ''; 
-  position: fixed; 
-  top: 0; left: 0; right: 0; bottom: 0; 
-  background-image: 
-    radial-gradient(2px 2px at 20% 30%, white, transparent),
-    radial-gradient(2px 2px at 60% 70%, white, transparent),
-    radial-gradient(1px 1px at 50% 50%, white, transparent),
-    radial-gradient(1px 1px at 80% 10%, white, transparent),
-    radial-gradient(2px 2px at 90% 60%, white, transparent),
-    radial-gradient(1px 1px at 33% 80%, white, transparent);
-  background-size: 200% 200%;
-  animation: stars 20s linear infinite;
-  opacity: 0.6;
-  pointer-events: none;
-  z-index: 0;
-}
-@keyframes stars { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
 
 .container { 
   max-width: 600px; 
   margin: 0 auto; 
   position: relative; 
   z-index: 1; 
+  background: #ffffff;
+  border: 2px solid #d0d7de;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
 
 /* Шапка */
 .header { 
   text-align: center; 
-  padding: 30px 20px; 
-  background: rgba(255, 255, 255, 0.03); 
-  backdrop-filter: blur(20px); 
-  -webkit-backdrop-filter: blur(20px); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  border-radius: 24px; 
+  padding: 24px 20px; 
+  background: #f8f9fa; 
+  border: 1px solid #e0e0e0; 
+  border-radius: 12px; 
   margin-bottom: 24px; 
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
   animation: fadeIn 0.6s ease;
 }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-.header-icon { font-size: 3em; margin-bottom: 10px; filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.5)); }
+.header-icon { font-size: 2.5em; margin-bottom: 10px; }
 .header h1 { 
   font-size: 1.5em; 
   font-weight: 800; 
-  background: linear-gradient(135deg, #00e5ff 0%, #ff9100 100%); 
-  -webkit-background-clip: text; 
-  -webkit-text-fill-color: transparent; 
-  background-clip: text; 
+  color: #1976d2; 
   margin-bottom: 6px; 
 }
-.header p { color: rgba(255, 255, 255, 0.7); font-size: 0.9em; letter-spacing: 0.5px; }
+.header p { color: #666666; font-size: 0.95em; font-weight: 500; }
 
 /* Сетка индикаторов */
 .indicators-panel {
@@ -79,18 +57,17 @@ body::before {
 }
 
 .indicator {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2px solid;
-  border-radius: 16px;
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
   padding: 16px 12px;
   text-align: center;
   position: relative;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   animation: slideIn 0.5s ease;
 }
-@keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.indicator:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); }
 
 .indicator::before {
   content: '◈';
@@ -98,203 +75,193 @@ body::before {
   top: 8px;
   left: 10px;
   font-size: 0.7em;
-  opacity: 0.5;
+  opacity: 0.3;
+  color: #999999;
 }
 
-.indicator.prev { border-color: #7b61ff; box-shadow: 0 0 20px rgba(123, 97, 255, 0.2); }
-.indicator.income { border-color: #00ff88; box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
-.indicator.add { border-color: #00e5ff; box-shadow: 0 0 20px rgba(0, 229, 255, 0.2); }
-.indicator.expense { border-color: #ff3d71; box-shadow: 0 0 20px rgba(255, 61, 113, 0.2); }
+/* Цветовые акценты для индикаторов (верхняя рамка) */
+.indicator.prev { border-top: 4px solid #ed6c02; }
+.indicator.income { border-top: 4px solid #2e7d32; }
+.indicator.add { border-top: 4px solid #1976d2; }
+.indicator.expense { border-top: 4px solid #c62828; }
 
 .indicator-label {
   font-size: 0.65em;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   margin-bottom: 8px;
-  opacity: 0.8;
   font-weight: 600;
+  color: #666666;
 }
-.indicator.prev .indicator-label { color: #7b61ff; }
-.indicator.income .indicator-label { color: #00ff88; }
-.indicator.add .indicator-label { color: #00e5ff; }
-.indicator.expense .indicator-label { color: #ff3d71; }
+.indicator.prev .indicator-label { color: #ed6c02; }
+.indicator.income .indicator-label { color: #2e7d32; }
+.indicator.add .indicator-label { color: #1976d2; }
+.indicator.expense .indicator-label { color: #c62828; }
 
 .indicator-value {
   font-size: 1.3em;
   font-weight: 800;
   font-family: 'Courier New', monospace;
-  text-shadow: 0 0 10px currentColor;
+  color: #1a1a1a;
 }
-.indicator.prev .indicator-value { color: #7b61ff; }
-.indicator.income .indicator-value { color: #00ff88; }
-.indicator.add .indicator-value { color: #00e5ff; }
-.indicator.expense .indicator-value { color: #ff3d71; }
+.indicator.prev .indicator-value { color: #ed6c02; }
+.indicator.income .indicator-value { color: #2e7d32; }
+.indicator.add .indicator-value { color: #1976d2; }
+.indicator.expense .indicator-value { color: #c62828; }
 
-/* Итоговый блок (Реактор) */
+/* Итоговый блок (бывший Реактор) */
 .reactor-block { 
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 2px solid #00ff88; 
-  border-radius: 20px; 
+  background: #f0f7ff;
+  border: 2px solid #1976d2; 
+  border-radius: 12px; 
   padding: 24px; 
   text-align: center; 
-  box-shadow: 0 0 30px rgba(0, 255, 136, 0.15);
-  position: relative;
-  overflow: hidden;
   margin-bottom: 24px;
   animation: slideIn 0.6s ease;
 }
-.reactor-block::before {
-  content: '';
-  position: absolute;
-  top: -50%; left: -50%; width: 200%; height: 200%;
-  background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 60%);
-  animation: pulse 3s ease-in-out infinite;
-}
-@keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.8; } }
 
 .reactor-title { 
   font-size: 0.8em; 
   text-transform: uppercase; 
-  letter-spacing: 2px; 
-  color: #00ff88; 
+  letter-spacing: 1px; 
+  color: #1976d2; 
   font-weight: 700; 
   margin-bottom: 8px; 
-  position: relative;
-  z-index: 1;
 }
 .reactor-amount { 
-  font-size: 2.2em; 
+  font-size: 2em; 
   font-weight: 800; 
-  color: #00ff88; 
+  color: #1976d2; 
   margin: 4px 0; 
   font-family: 'Courier New', monospace;
-  text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
-  position: relative;
-  z-index: 1;
 }
-.reactor-sub { font-size: 0.85em; color: rgba(255, 255, 255, 0.6); position: relative; z-index: 1; }
+.reactor-sub { font-size: 0.85em; color: #666666; }
 
 /* Детализация расходов */
 .details-section { 
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 61, 113, 0.2); 
-  border-left: 4px solid #ff3d71; 
-  border-radius: 16px; 
+  background: #ffffff;
+  border: 2px solid #ffcdd2; 
+  border-radius: 12px; 
   padding: 20px; 
   margin-bottom: 24px;
   animation: slideIn 0.7s ease;
 }
 .details-title { 
   font-weight: 700; 
-  color: #ff3d71; 
+  color: #c62828; 
   margin-bottom: 16px; 
   display: flex; 
   align-items: center; 
   gap: 8px; 
   font-size: 1.05em;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f2f5;
 }
 .detail-item { 
   display: flex; 
   justify-content: space-between; 
-  padding: 10px 0; 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+  align-items: center;
+  padding: 12px 0; 
+  border-bottom: 1px solid #f0f0f0; 
   font-size: 0.95em; 
+  transition: background 0.15s ease;
+}
+.detail-item:hover {
+  background: #fff5f5;
+  margin: 0 -10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 6px;
 }
 .detail-item:last-child { border-bottom: none; }
-.detail-item span:first-child { color: rgba(255, 255, 255, 0.85); }
+.detail-item span:first-child { color: #333333; font-weight: 500; }
 .detail-item span:last-child { 
-  color: #ff3d71; 
+  color: #c62828; 
   font-weight: 700; 
   font-family: 'Courier New', monospace; 
+  white-space: nowrap;
 }
 
 /* Комментарий */
 .comment-box { 
-  background: rgba(255, 145, 0, 0.08); 
-  border: 1px solid rgba(255, 145, 0, 0.3); 
-  border-left: 4px solid #ff9100; 
+  background: #fff8e1; 
+  border: 2px solid #ffe082; 
   border-radius: 12px; 
   padding: 16px; 
   font-style: italic; 
-  color: rgba(255, 255, 255, 0.9); 
+  color: #5d4037; 
   line-height: 1.5;
   margin-bottom: 24px;
+  position: relative;
+}
+.comment-box::before {
+  content: '💬 Примечание';
+  position: absolute;
+  top: -12px;
+  left: 15px;
+  background: #ffffff;
+  padding: 0 8px;
+  color: #f57f17;
+  font-size: 0.8em;
+  font-weight: 700;
 }
 
 /* Футер */
 .footer { 
   text-align: center; 
   padding: 20px; 
-  color: rgba(255, 255, 255, 0.4); 
-  font-size: 0.8em; 
+  color: #666666; 
+  font-size: 0.85em; 
   margin-top: 20px; 
-  border-top: 1px solid rgba(0, 229, 255, 0.2);
+  border-top: 2px solid #e0e0e0;
 }
 
-.loading { text-align: center; padding: 40px; color: rgba(255, 255, 255, 0.6); font-style: italic; }
+.loading { text-align: center; padding: 40px; color: #666666; font-style: italic; }
 
-/* Адаптив для ПК — индикаторы в 2 колонки */
-@media (min-width: 769px) {
-  .indicators-panel {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Адаптив для мобильных — индикаторы в 2 колонки */
+/* Адаптив */
 @media (max-width: 768px) {
   body { padding: 12px; }
+  .container { padding: 16px; }
   .header { padding: 20px 16px; }
   .header h1 { font-size: 1.3em; }
-  .reactor-amount { font-size: 1.8em; }
+  .reactor-amount { font-size: 1.6em; }
   .indicators-panel { 
     grid-template-columns: repeat(2, 1fr); 
     gap: 10px;
   }
-  .indicator {
-    padding: 14px 10px;
-  }
-  .indicator-label {
-    font-size: 0.6em;
-  }
-  .indicator-value {
-    font-size: 1.15em;
-  }
+  .indicator { padding: 14px 10px; }
+  .indicator-label { font-size: 0.6em; }
+  .indicator-value { font-size: 1.15em; }
 }
 
 @media (max-width: 380px) {
-  .indicators-panel {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-  .indicator {
-    padding: 12px 8px;
-  }
-  .indicator-label {
-    font-size: 0.55em;
-    letter-spacing: 0.5px;
-  }
-  .indicator-value {
-    font-size: 1em;
-  }
+  .indicators-panel { gap: 8px; }
+  .indicator { padding: 12px 8px; }
+  .indicator-label { font-size: 0.55em; letter-spacing: 0.5px; }
+  .indicator-value { font-size: 1em; }
 }
 
-/* Печать — сохранение тёмного фона */
+/* Печать */
 @media print {
   * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
   body { 
-    background: linear-gradient(135deg, #0a0e27 0%, #1a1a3e 50%, #2d1b4e 100%) !important; 
+    background: #ffffff !important; 
     padding: 10mm; 
   }
-  body::before { display: none; }
-  .container { max-width: 100%; }
+  .container { 
+    max-width: 100%; 
+    border: 2px solid #000000 !important;
+    box-shadow: none !important;
+    padding: 10mm;
+  }
   .indicators-panel { grid-template-columns: repeat(2, 1fr) !important; }
   .indicator, .reactor-block, .details-section, .comment-box, .header { 
     page-break-inside: avoid; 
+    box-shadow: none !important;
+    border: 1px solid #999999 !important;
   }
+  .indicator { border-top-width: 3px !important; }
+  .detail-item:hover { background: transparent !important; margin: 0; padding: 12px 0; }
 }
 </style>
 </head>
@@ -302,7 +269,7 @@ body::before {
 
 <div class="container">
     <div class="header">
-        <div class="header-icon">🚀</div>
+        <div class="header-icon">📊</div>
         <h1 id="reportTitle">Загрузка...</h1>
         <p id="reportGroup">Группа</p>
     </div>
@@ -372,31 +339,31 @@ async function loadReport() {
         
         // Комментарий
         if (r.comment) {
-            html += `<div class="comment-box">💬 ${r.comment}</div>`;
+            html += `<div class="comment-box">${r.comment}</div>`;
         }
         
         // Индикаторы (сетка 2x2)
         html += `
         <div class="indicators-panel">
             <div class="indicator prev">
-                <div class="indicator-label">◈ Остаток с прошл. месяца</div>
+                <div class="indicator-label">Остаток на начало</div>
                 <div class="indicator-value" data-target="${r.prevBalance || 0}">0 ₽</div>
             </div>
             <div class="indicator income">
-                <div class="indicator-label">◈ Приход (взносы)</div>
+                <div class="indicator-label">Приход (взносы)</div>
                 <div class="indicator-value" data-target="${r.income || 0}">0 ₽</div>
             </div>
             <div class="indicator add">
-                <div class="indicator-label">◈ Доп. приход</div>
+                <div class="indicator-label">Доп. приход</div>
                 <div class="indicator-value" data-target="${r.additionalIncome || 0}">0 ₽</div>
             </div>
             <div class="indicator expense">
-                <div class="indicator-label">◈ Расход</div>
+                <div class="indicator-label">Расход</div>
                 <div class="indicator-value" data-target="${r.expense || 0}">0 ₽</div>
             </div>
         </div>`;
         
-        // Реактор (итог)
+        // Итоговый блок
         html += `
         <div class="reactor-block">
             <div class="reactor-title">Переносится на следующий месяц</div>
@@ -406,7 +373,7 @@ async function loadReport() {
         
         // Детализация расходов
         if (r.expenses && r.expenses.length > 0) {
-            html += `<div class="details-section"><div class="details-title">📊 Детализация расходов</div>`;
+            html += `<div class="details-section"><div class="details-title">📋 Детализация расходов</div>`;
             r.expenses.forEach(e => {
                 html += `<div class="detail-item"><span>${e.description}</span><span>-${formatMoney(e.amount)} ₽</span></div>`;
             });
